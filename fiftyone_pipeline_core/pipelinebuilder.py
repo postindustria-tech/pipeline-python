@@ -68,4 +68,5 @@ class PipelineBuilder:
 
     def buildFromConfig(self, file):
         # TODO
+        pass
 
