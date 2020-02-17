@@ -31,7 +31,7 @@ class AspectDataDictionary(AspectData):
         """
         Constructor for element data dictionary
         param: flowElement
-        param: mixed[] dicitonary contents
+        param: mixed[] dictionary contents
         """
 
         self.contents = {}

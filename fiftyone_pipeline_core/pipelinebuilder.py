@@ -25,6 +25,17 @@ from .logger import Logger
 import json
 
 class PipelineBuilder:
+    """
+    Used to construct instances of the Pipeline. This class follows the fluent builder pattern. 
+
+    Can take a FlowElement and add it as a direct child of the Pipeline.
+
+    Can add a Logger to the Pipeline.
+
+    Builds a Pipeline. Flow elements (and Engines) and Loggers are always executed sequentially in the order they were added.
+
+    Returns the completed Pipeline.
+    """
 
     def __init__(self):
 
@@ -33,8 +44,11 @@ class PipelineBuilder:
 
     def add(self, flowElement):
         """
-        add - Add flowElement to be used in pipeline
-        param: flowElement
+        Add flowElement to be used in pipeline
+        
+        :param flowElement: flowElement to be added to the pipeline
+
+        :type flowElement: object 
         """
 
         self.flowElements.append(flowElement)
