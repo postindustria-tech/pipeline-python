@@ -9,6 +9,12 @@
 
 All tests are currently in the root level tests folder (in various subfolders) to run:
 
+To run all tests:
+
+`python -m unittest discover -s tests -p test*.py`
+
+Individual tests
+
 * `python -m unittest tests.core.test_core`
 * `python -m unittest tests.engines.test_engines`
 * `python -m unittest tests.javascriptbundler.test_javascriptbundler`
