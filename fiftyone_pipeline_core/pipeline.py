@@ -25,11 +25,18 @@ from .logger import Logger
 
 
 class Pipeline:
+    """An immutable collection of FlowElements to enable the user to do all the processing they require on `FlowData` with a single call."""
+
     def __init__(self, flowElements, logger=Logger()):
         """
-        Pipeline constructor
-        param: array list of flowElements
-        param: array settings array
+        Pipeline constructor.
+
+        :param flowElements: array list of flowElements
+        :type flowElements: list
+        :param logger: settings for a logger
+        :type logger: list of tuples
+        :returns: a Pipeline
+        :rtype: :class: `Pipeline` instance
         """
 
         self.flowElements = flowElements
@@ -48,31 +55,49 @@ class Pipeline:
 
     def createFlowData(self):
         """
-        createFlowData - Create a flowData based on what's in the pipeline
+        Create a `FlowData` based on what's in the pipeline
         
-        returns: FlowData
+        :returns: a FlowData
+        :rtype: :class: `FlowData` instance
         """
 
         return FlowData(self)
 
     def log(self, level, message):
+        """
+        Log a message using the `Logger.log` :method: of the pipeline's Logger.
+
+        :param level: level of log message
+        :type level: string
+        :param message: content of log message
+        :type message: string
+        """
 
         self.logger.log(level, message)
 
     def getElement(self, key):
         """
-        getElement - Get a flowElement by its name
-        param: String name
-        returns: flowElement
+        Get a flowElement by its name.
+
+        :param key: name of flowElement
+        :type key: string
+        :returns: the :class:`FlowElement` instance indicated
+        :rtype: `FlowElement`
         """
 
         return self.flowElementsList[key]
 
 
     def getProperties(self):
+        """
+        Get all properties of all flowElements in the pipeline.
 
-        # Loop over all of self.flowElements, run getProperties() on all of them to get a dictionary 
-        # And merge all of these dictionaries into one
+        Loop over all of `self.flowElements`:instance_attribute:, run `FlowElement.getProperties()`:method: on all of them to get a dictionary. 
+        And merge all of these dictionaries into one.
+
+        :returns: a dictionary of all properties in a pipeline keyed by each flowElement's `FlowElement.dataKey`:instance_attribute: .
+        :rtype: dict
+        """
 
         output = {}
 
