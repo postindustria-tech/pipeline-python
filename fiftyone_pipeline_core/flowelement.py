@@ -26,17 +26,24 @@ from .evidence_keyfilter import EvidenceKeyFilter
 
 
 class FlowElement(object): 
+    """A black box that accepts Flow Data and performs some operation. It may or may not populate the Flow Data with Aspect property values."""
+
 
     def __init__(self):
-        
+        """Initialise construction of `FlowElement`."""
         self.pipelines = []
         self.properties = {} 
         self.dataKey = ""
     
+
     def process(self, flowData):
         """
-        process: General wrapper function that calls a flowElement's processInternal method     
-        param: flowData
+        General wrapper function that calls a `FlowElement`:class: instance's `FlowElement.processInternal`:method: 
+
+        :param flowData: FlowData to be processed
+        :type flowData: `FlowData`:class: instance
+        :returns: whatever the `self.processInternal` method is set to return
+        :rtype: mixed
         """
 
         return self.processInternal(flowData)
@@ -45,9 +52,11 @@ class FlowElement(object):
 
     def getEvidenceKeyFilter(self):
         """
-        getEvidenceKeyFilter - Function for getting the flowElement's evidenceKeyFilter
-        Used by the filterEvidence method
-        returns: evidenceKeyFilter
+        Function for getting a `FlowElement`:class: instance's `EvidenceKeyFilter`. 
+
+        Used by :method:`FlowElement.filterEvidence` method
+        :returns: evidenceKeyFilter
+        :rtype: `EvidenceKeyFilter`:class: instance
         """
 
         return EvidenceKeyFilter()
@@ -56,9 +65,11 @@ class FlowElement(object):
 
     def filterEvidence(self, flowData):
         """
-        filterEvidence - Filter flowData evidence using the flowElement's evidenceKeyFilter
-        param: flowData
-        returns: mixed
+        Filter `FlowData.evidence`:instance_attribute: using the flowElement's `EvidenceKeyFilter`
+
+        :param flowData: a FlowData that has some `Evidence` set
+        :returns: a dictionary of evidence that has passed the filter
+        :rtype: dict
         """
 
         filter = self.getEvidenceKeyFilter()
@@ -69,9 +80,11 @@ class FlowElement(object):
 
     def filterEvidenceKey(self, key):
         """
-        filterEvidenceKey - Filter flowData evidence using the flowElement's evidenceKeyFilter
-        param: flowData
-        returns: mixed
+        Filter `FlowData.evidence`:instance_attribute: using the flowElement's `EvidenceKeyFilter` with the property key of evidence of interest.
+
+        :param key: the property key being sought in the `FlowData.evidence`:instance_attribute: 
+        :returns: a dictionary containing the property key and the evidence related to it as it's value
+        :rtype: dict
         """
 
         filter = self.getEvidenceKeyFilter()
@@ -82,9 +95,12 @@ class FlowElement(object):
 
     def processInternal(self, flowData):
         """
-        processInternal - Process flowData - this is process function
-        is usually overriden by specific flowElements to do their core work
-        param: flowData
+        The method behind `FlowElement.Process`:method: - it is called by the process() function.
+        It is usually overriden by specific flowElements to do their core work.
+
+        :param flowData: FlowData to be processed
+        :type flowData: :class:`FlowData` instance
+        :returns: True
         """
 
         return True
@@ -93,8 +109,11 @@ class FlowElement(object):
 
     def getProperties(self):
         """
-        getProperties - Get properties is usually overriden by specific flowElements
-        returns $
+        Get the `FlowElement.properties`:instance_attribute: of a :class:`FlowElement` instance. 
+        
+        This is usually overriden by specific flowElements.
+        :returns: dictionary of the `FlowElement`s properites
+        :rtype: dict
         """
 
         if self.properties is not None:
