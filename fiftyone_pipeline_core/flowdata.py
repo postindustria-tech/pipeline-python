@@ -24,12 +24,20 @@ from .evidence import Evidence
 import math
 
 class FlowData:
+    """A user facing data object containing both the evidence, and the Aspect properties based on the evidence.
+    
+    :attribute evidence: Instance of :class: `Evidence` - Data that a web application receives as part of a web request.
+    
+    An Aspect refers to a discrete item of interest within the end-to-end context of a web request. E.g. The hardware device used to make the request or the mobile network that the device is currently using.
+    """
 
 
     def __init__(self, pipeline):
         """
-        Constructor for flowData
+        FlowData constructor.
+
         :param pipeline: parent pipeline
+        :type pipeline: :class:`Pipeline` class instance
         """
 
         self.data = {}
@@ -42,10 +50,11 @@ class FlowData:
 
     def process(self):
         """
-        process function runs the process function on every attached flowElement 
-        allowing data to be changed based on evidence
-        This can only be run once per flowData instance
-        :returns flowData
+        Runs the process function on every attached flowElement allowing data to be changed based on evidence.
+
+        This can only be run once per flowData instance.
+        :returns: flowData
+        :rtype: :class:`FlowData` instance.
         """
 
         if not self.processed:
@@ -75,7 +84,8 @@ class FlowData:
 
     def getFromElement(self, flowElement):
         """
-        Retrieve data by flowElement object
+        Retrieve data by flowElement object.
+        
         :param: flowElement
         :returns: elementData
         """
