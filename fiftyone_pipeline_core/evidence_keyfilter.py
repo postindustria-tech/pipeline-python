@@ -24,7 +24,7 @@
 class EvidenceKeyFilter:
     def filterEvidence(self, evidenceKeyObject):
         """
-        filterEvidence - filterevidence from an object
+        Filterevidence from an object
         param: mixed[] evidence dicitonary contents
         returns: mixed[] filtered evidence dictionary contents
         """

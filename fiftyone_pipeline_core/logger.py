@@ -52,8 +52,10 @@ class Logger:
         """
         Log a message
 
-        :param string: message level
-        :param string: message
+        :param level: level of log message
+        :type level: string
+        :param message: content of log message
+        :type message: string
         """
  
         levelIndex = self.allowedLevels.index(str(level).lower())
