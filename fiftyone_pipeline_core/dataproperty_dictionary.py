@@ -21,8 +21,8 @@
 # ********************************************************************
 
 
-class DataPropertyDictionary():
-
+class DataPropertyDictionary:
+        
     def __init__(self, flowElement):
 
         self.flowElement = flowElement
