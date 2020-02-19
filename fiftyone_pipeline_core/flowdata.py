@@ -164,8 +164,6 @@ class FlowData:
         """
 
         requestedEvidence = list()
-        evidence = self.evidence.getAll()
-        # TODO: check use of "evidence" here. Also check naming convention violation.
 
         for flowElement in self.pipeline.flowElements:
             requestedEvidence = requestedEvidence.extend(flowElement.filterEvidence(self))
