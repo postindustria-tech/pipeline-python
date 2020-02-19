@@ -39,7 +39,6 @@ class EvidenceKeyFilter:
 
         return filtered
 
-
     def filterEvidenceKey(self, key):
         """
         filterEvidenceKey - see if a property key should be in the filtered evidence

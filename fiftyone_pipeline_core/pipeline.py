@@ -25,7 +25,10 @@ from .logger import Logger
 
 
 class Pipeline:
-    """An immutable collection of FlowElements to enable the user to do all the processing they require on `FlowData` with a single call."""
+    """
+    An immutable collection of FlowElements
+    to enable the user to do all the processing they require on `FlowData` with a single call.
+    """
 
     def __init__(self, flowElements, logger=Logger()):
         """
@@ -86,7 +89,6 @@ class Pipeline:
         """
 
         return self.flowElementsList[key]
-
 
     def getProperties(self):
         """
