@@ -28,7 +28,7 @@ class DataPropertyDictionary:
 
     def __init__(self, flowElement):
         """
-        # TODO: definition
+        Construct DataPropertyDictionary
 
         :param flowElement:
         :type flowElement:
@@ -42,8 +42,6 @@ class DataPropertyDictionary:
         """
         # TODO: definition
 
-        :return:
-        :rtype:
         """
 
         for x in self.contents.items():
@@ -51,14 +49,13 @@ class DataPropertyDictionary:
 
     def addProperty(self, propertyKey, metaDataDictionary):
         """
-        # TODO: definition
+        Add meta data dictionary keyed by property name
+        # TODO: check definition
 
         :param propertyKey:
         :type propertyKey:
         :param metaDataDictionary:
         :type metaDataDictionary:
-        :return:
-        :rtype:
         """
 
         self.contents[propertyKey.lower()] = metaDataDictionary
@@ -69,25 +66,25 @@ class DataPropertyDictionary:
         # TODO: definition
 
         :return:
-        :rtype:
+        :rtype: dict
         """
 
         return self.contents
 
-    def getFiltered(self, filter):
+    def getFiltered(self, propertyFilter):
         """
         # TODO: definition
 
-        :param filter:
-        :type filter: tuple(key, value)
+        :param propertyFilter:
+        :type propertyFilter: tuple(key, value)
         :return:
-        :rtype:
+        :rtype: dict
         """
 
         filtered = {}
 
         for key, value in self.getContents().items():
-            if filter[0] in value and value[filter[0]] == filter[1]:
+            if propertyFilter[0] in value and value[propertyFilter[0]] == propertyFilter[1]:
                 filtered[key] = value
 
         return filtered
