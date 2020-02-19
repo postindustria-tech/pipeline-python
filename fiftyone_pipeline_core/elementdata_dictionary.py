@@ -56,17 +56,21 @@ class ElementDataDictionary(ElementData):
         of keys and values.
 
         :returns: a dictionary of mixed[]
+        :rtype: dict
         """
         return self.contents
 
     def getInternal(self, key):
         """
-        getInternal - Internal getter for contents
-        param: string key
-        returns: mixed
+        Internal getter for contents
+
+        :param key:
+        :type key: basestring
+        :return:
+        :rtype: mixed
         """
 
-        if (key in self.contents):
+        if key in self.contents:
 
             return self.contents[key]
 

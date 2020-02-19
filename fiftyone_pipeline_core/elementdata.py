@@ -42,7 +42,8 @@ class ElementData(object):
         return self.getInternal(key.lower())
 
     def __getattr__(self, key):
-        """Magic getter for a property from the data
+        """
+        Magic getter for a property from the data
 
         :param key: property
         :type key: basestring

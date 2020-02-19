@@ -22,29 +22,62 @@
 
 
 class DataPropertyDictionary:
+    """
+
+    """
         
     def __init__(self, flowElement):
+        """
+
+        :param flowElement:
+        :type flowElement:
+        """
 
         self.flowElement = flowElement
 
         self.contents = {}
 
     def __iter__(self):
+        """
+
+        :return:
+        :rtype:
+        """
+
         for x in self.contents.items():
             yield x
 
     def addProperty(self, propertyKey, metaDataDictionary):
+        """
+
+        :param propertyKey:
+        :type propertyKey:
+        :param metaDataDictionary:
+        :type metaDataDictionary:
+        :return:
+        :rtype:
+        """
 
         self.contents[propertyKey.lower()] = metaDataDictionary
         self.contents[propertyKey.lower()]["flowElement"] = self.flowElement.dataKey
 
     def getContents(self):
+        """
+
+        :return:
+        :rtype:
+        """
 
         return self.contents
 
     def getFiltered(self, filter):
+        """
 
-        # Fitlter = (key, value)
+        :param filter:
+        :type filter: tuple(key, value)
+        :return:
+        :rtype:
+        """
 
         filtered = {}
 
