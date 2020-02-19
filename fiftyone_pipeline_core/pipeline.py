@@ -34,12 +34,12 @@ class Pipeline:
         """
         Pipeline constructor.
 
-        :param flowElements: array list of flowElements
-        :type flowElements: list
-        :param logger: settings for a logger
-        :type logger: list of tuples
+        :param flowElements: list of flowElements
+        :type flowElements: list[FlowElement]
+        :param logger: a logger to attach to the pipeline
+        :type logger: Logger
         :returns: a Pipeline
-        :rtype: :class: `Pipeline` instance
+        :rtype: Pipeline
         """
 
         self.flowElements = flowElements
@@ -61,14 +61,14 @@ class Pipeline:
         Create a `FlowData` based on what's in the pipeline
         
         :returns: a FlowData
-        :rtype: :class: `FlowData` instance
+        :rtype: FlowData
         """
 
         return FlowData(self)
 
     def log(self, level, message):
         """
-        Log a message using the `Logger.log` :method: of the pipeline's Logger.
+        Log a message using the `Logger.log`:method: of the pipeline's Logger.
 
         :param level: level of log message
         :type level: string
@@ -84,8 +84,8 @@ class Pipeline:
 
         :param key: name of flowElement
         :type key: string
-        :returns: the :class:`FlowElement` instance indicated
-        :rtype: `FlowElement`
+        :returns: the `FlowElement` indicated
+        :rtype: FlowElement
         """
 
         return self.flowElementsList[key]
@@ -94,11 +94,8 @@ class Pipeline:
         """
         Get all properties of all flowElements in the pipeline.
 
-        Loop over all of `self.flowElements`:instance_attribute:, run `FlowElement.getProperties()`:method: on all of them to get a dictionary. 
-        And merge all of these dictionaries into one.
-
         :returns: a dictionary of all properties in a pipeline keyed by each flowElement's `FlowElement.dataKey`:instance_attribute: .
-        :rtype: dict
+        :rtype: dict of {string : DataPropertyDictionary}  # TODO: check dict type syntax
         """
 
         output = {}

@@ -29,7 +29,7 @@ class PipelineBuilder:
     """
     Used to construct instances of the Pipeline. This class follows the fluent builder pattern. 
 
-    Can take a FlowElement and add it as a direct child of the Pipeline.
+    Can take FlowElements and add them as a direct children of the Pipeline.
     Can add a Logger to the Pipeline.
     Builds a Pipeline. Flow elements (and Engines) and Loggers are always executed sequentially in the order they were added.
 
@@ -40,8 +40,8 @@ class PipelineBuilder:
         """
         Pipeline Builder constructor.
 
-        :returns: a Pipelne Builder
-        :rtype: PipelineBuilder class instance
+        :returns: a Pipeline Builder
+        :rtype: PipelineBuilder
         """
 
         self.flowElements = []
@@ -52,9 +52,9 @@ class PipelineBuilder:
         Add a flowElement to a list of flowElements be used in a pipeline.
         
         :param flowElement: flowElement to be added to the pipeline
-        :type flowElement: FlowElement class instance
+        :type flowElement: FlowElement
         :returns: the pipleine builder with the specified flowElement added to it's list of flowElements.
-        :rtype: PipelineBuilder class instance
+        :rtype: PipelineBuilder
         """
 
         self.flowElements.append(flowElement)
@@ -63,11 +63,11 @@ class PipelineBuilder:
 
     def build(self):
         """
-        Construct a Pipeline using the list of flowElements, (Engines) and (Logger) currently in this Pipeline Builder.
+        Construct an immutable Pipeline using the list of flowElements, (Engines) and (Logger) currently in this Pipeline Builder.
         Call build after all items to be included in the pipeline have been added.
 
         :returns: a Pipeline
-        :rtype: an immutable Pipeline class instance
+        :rtype: Pipeline
         """
 
         return Pipeline(self.flowElements, logger=self.logger)
@@ -77,10 +77,9 @@ class PipelineBuilder:
         Add an instance of the logger class to the pipeline.
 
         :param logger: Logger to be added to the pipeline
-        :type logger: Logger class instance
-        :returns: the pipleine builder with the specified Logger added.
-        :rtype: PipelineBuilder class instance
-
+        :type logger: Logger
+        :returns: the pipeline builder with the specified Logger added.
+        :rtype: PipelineBuilder
         """
 
         self.logger = logger

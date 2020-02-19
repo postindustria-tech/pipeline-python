@@ -23,17 +23,17 @@
 
 class EvidenceKeyFilter:
     """
-
+    # TODO: definition
     """
 
     def filterEvidence(self, evidenceKeyObject):
         """
         Filter evidence from an object
 
-        :param evidenceKeyObject: evidence dicitonary contents
-        :type evidenceKeyObject: mixed[]    # TODO:
+        :param evidenceKeyObject: evidence dictionary contents
+        :type evidenceKeyObject: dict
         :return: filtered evidence dictionary contents
-        :rtype:  mixed[]    # TODO:
+        :rtype: dict
         """
 
         filtered = {}
@@ -50,11 +50,11 @@ class EvidenceKeyFilter:
         """
         See if a property key should be in the filtered evidence
 
-        # TODO: returns: boolean should this be filtered out or not?
-
         :param key: property name
-        :type key: basestring
+        :type key: str
         :return: True
+
+        # TODO: returns: boolean should this be filtered out or not?
         """
 
         return True

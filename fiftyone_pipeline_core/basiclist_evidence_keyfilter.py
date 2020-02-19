@@ -26,22 +26,24 @@ from .evidence_keyfilter import EvidenceKeyFilter
 class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
     """Basic version of an EvidenceKeyFilter - used to identify the evidence keys a Flow Element can work with."""
 
-    def __init__(self, list):
+    def __init__(self, keysList):
         """
-        :param list: an array of keys to keep.
-        :type list: list[mixed]
+        BasicListEvidenceKeyFilter constructor
+
+        :param keysList: a list of keys to keep.
+        :type keysList: list[mixed]
         """
 
-        self.list = list
+        self.list = keysList
 
     def filterEvidenceKey(self, key):
         """
-        Check if an evidence key is presant in a filter list.
+        Check if an evidence key is present in a filter list.
 
         :param key: key to check in the filter
-        :type key: string
+        :type key: str
         :return: is this key in the filter's keys list?
-        :rtype: boolean
+        :rtype: bool
         """
 
         if key in self.list:

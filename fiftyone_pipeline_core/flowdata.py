@@ -21,14 +21,13 @@
 # ********************************************************************
 
 from .evidence import Evidence
-import math
 
 
 class FlowData:
     """A user facing data object containing both the evidence, and the Aspect properties based on the evidence.
-    
-    :attribute evidence: Instance of :class: `Evidence` - Data that a web application receives as part of a web request.
-    
+
+    :attribute Evidence: Data that a web application receives as part of a web request.
+
     An Aspect refers to a discrete item of interest within the end-to-end context of a web request.
     E.g. The hardware device used to make the request or the mobile network that the device is currently using.
     """
@@ -38,7 +37,7 @@ class FlowData:
         FlowData constructor.
 
         :param pipeline: parent pipeline
-        :type pipeline: :class:`Pipeline` class instance
+        :type pipeline: Pipeline
         """
 
         self.data = {}
@@ -51,17 +50,17 @@ class FlowData:
     def process(self):
         """
         Runs the process function on every attached flowElement allowing data to be changed based on evidence.
-
         This can only be run once per flowData instance.
-        :returns: flowData
-        :rtype: :class:`FlowData` instance.
+
+        :return: flowData
+        :rtype: FlowData
         """
 
         if not self.processed:
 
             for flowElement in self.pipeline.flowElements:
                 if self.stopped is not True:
-                    # All errors are caught and stored in an errors array keyed by the 
+                    # All errors are caught and stored in an errors array keyed by the
                     # flowElement that set the error
 
                     try:
@@ -71,7 +70,7 @@ class FlowData:
 
                         key = flowElement.dataKey
 
-                        self.setError(key, inst)
+                        self.setError(key, str(inst))
 
             # Set processed flag to true. flowData can only be processed once
 
@@ -86,9 +85,9 @@ class FlowData:
         Retrieve data by flowElement object.
 
         :param flowElement: FlowElement that created the data of interest
-        :type flowElement: `FlowElement`:class: instance
-        :return: Data that was created by the flowElement held in the `FlowData`:class: instance
-        :rtype: `ElementData`:class: instance
+        :type flowElement: FlowElement
+        :return: Data that was created by the flowElement held in the FlowData
+        :rtype: ElementData
         """
 
         try:
@@ -99,13 +98,13 @@ class FlowData:
 
     def get(self, flowElementKey):
         """
-        Retrieve data by flowElement key. Called by `FlowData.getFromElement`:method:.
+        Retrieve data by flowElement key.
+        Called by FlowData.getFromElement method.
 
-        :param flowElementKey: FlowElement.dataKey:instance_attribute:
-        of the FlowElement:class: instance that created the data of interest
-        :type flowElementKey: basestring
-        :return: Data in the `FlowData`:class: instance that is under the specified key
-        :rtype: `ElementData`:class: instance
+        :param flowElementKey: FlowElement.dataKey of the FlowElement that created the data of interest
+        :type flowElementKey: str
+        :return: Data in the FlowData instance that is under the specified key
+        :rtype: ElementData
         """
 
         try:
@@ -116,23 +115,22 @@ class FlowData:
 
     def __getattr__(self, flowElementKey):
         """
-        Magic getter to allow retrieval of data from `FlowData.data[flowElementKey]`:instance_attribute:
-        by flowElement name.
+        Magic getter to allow retrieval of data from FlowData.data[flowElementKey] by flowElement name.
 
-        :param flowElementKey: dataKey of the FlowElement:class: instance that created the data of interest
-        :type flowElementKey: basestring
-        :return: Data in the `FlowData`:class: instance that is under the specified key
-        :rtype: `ElementData`:class: instance
+        :param flowElementKey: dataKey of the FlowElement that created the data of interest
+        :type flowElementKey: str
+        :return: Data in the FlowData that is under the specified key
+        :rtype: ElementData
         """
 
         return self.get(flowElementKey)
 
     def setElementData(self, elData):
         """
-        Set data (used by flowElement) within the `FlowData.data`:instance_attribute:
+        Set data (used by flowElement) within FlowData.data
 
         :param elData: elementData to be added to flowData
-        :type elData: `ElementData`:class: instance
+        :type elData: ElementData
         """
 
         self.data[elData.flowElement.dataKey] = elData
@@ -141,10 +139,10 @@ class FlowData:
         """
         Set error (should be keyed by flowElement dataKey)
 
-        :param key: flowElement.dataKey:instance_attribute:
-        :type key: basestring
+        :param key: a flowElement.dataKey
+        :type key: str
         :param error: Error message
-        :type error: basestring
+        :type error: str
         """
 
         if key not in self.errors:
@@ -162,6 +160,7 @@ class FlowData:
         :return: filtered evidence
         :rtype: list
         """
+        # TODO: check if required
 
         requestedEvidence = list()
 
@@ -180,9 +179,8 @@ class FlowData:
         Get data from flowElement based on property meta data
 
         :param propertyFilter: property (metakey, metavalue) shared by all data of interest
-        # TODO: this doesn't seem quite right
-        :type propertyFilter: tuple of (string, mixed)
-        :return: dictionary of data created by the flowElement that have the specified meta property 
+        :type propertyFilter: tuple of (str, mixed)
+        :return: dictionary of data created by the flowElement that have the specified meta property
         :rtype: dict
         """
 

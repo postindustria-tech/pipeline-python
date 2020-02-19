@@ -21,7 +21,6 @@
 # ********************************************************************
 
 from .dataproperty_dictionary import DataPropertyDictionary
-from .flowdata import FlowData
 from .evidence_keyfilter import EvidenceKeyFilter
 
 
@@ -30,17 +29,17 @@ class FlowElement(object):
     It may or may not populate the Flow Data with Aspect property values."""
 
     def __init__(self):
-        """Initialise construction of `FlowElement`."""
+        """Initialise construction of FlowElement """
         self.pipelines = []
         self.properties = {}
         self.dataKey = ""
 
     def process(self, flowData):
         """
-        General wrapper function that calls a `FlowElement`:class: instance's `FlowElement.processInternal`:method: 
+        General wrapper function that calls a FlowElement's FlowElement.processInternal method
 
         :param flowData: FlowData to be processed
-        :type flowData: `FlowData`:class: instance
+        :type flowData: FlowData
         :returns: whatever the `self.processInternal` method is set to return
         :rtype: mixed
         """
@@ -49,20 +48,21 @@ class FlowElement(object):
 
     def getEvidenceKeyFilter(self):
         """
-        Function for getting a `FlowElement`:class: instance's `EvidenceKeyFilter`. 
+        Function for getting a FlowElement's EvidenceKeyFilter.
 
-        Used by :method:`FlowElement.filterEvidence` method
-        :returns: evidenceKeyFilter
-        :rtype: `EvidenceKeyFilter`:class: instance
+        Used by FlowElement.filterEvidence method
+        :returns: an EvidenceKeyFilter
+        :rtype: EvidenceKeyFilter
         """
 
         return EvidenceKeyFilter()
 
     def filterEvidence(self, flowData):
         """
-        Filter `FlowData.evidence`:instance_attribute: using the flowElement's `EvidenceKeyFilter`
+        Filter FlowData.evidence using the flowElement's EvidenceKeyFilter
 
         :param flowData: a FlowData that has some `Evidence` set
+        :type flowData: FlowData
         :returns: a dictionary of evidence that has passed the filter
         :rtype: dict
         """
@@ -103,7 +103,7 @@ class FlowElement(object):
         
         This is usually overridden by specific flowElements.
         :returns: dictionary of the `FlowElement`s properties
-        :rtype: `DataPropertyDictionary`:class: dict iteration
+        :rtype: `DataPropertyDictionary`:class: dict instance
         """
 
         if self.properties is not None:

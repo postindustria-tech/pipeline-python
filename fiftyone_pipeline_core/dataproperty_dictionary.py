@@ -23,11 +23,12 @@
 
 class DataPropertyDictionary:
     """
-
+    # TODO: definition
     """
-        
+
     def __init__(self, flowElement):
         """
+        # TODO: definition
 
         :param flowElement:
         :type flowElement:
@@ -39,6 +40,7 @@ class DataPropertyDictionary:
 
     def __iter__(self):
         """
+        # TODO: definition
 
         :return:
         :rtype:
@@ -49,6 +51,7 @@ class DataPropertyDictionary:
 
     def addProperty(self, propertyKey, metaDataDictionary):
         """
+        # TODO: definition
 
         :param propertyKey:
         :type propertyKey:
@@ -63,6 +66,7 @@ class DataPropertyDictionary:
 
     def getContents(self):
         """
+        # TODO: definition
 
         :return:
         :rtype:
@@ -72,6 +76,7 @@ class DataPropertyDictionary:
 
     def getFiltered(self, filter):
         """
+        # TODO: definition
 
         :param filter:
         :type filter: tuple(key, value)

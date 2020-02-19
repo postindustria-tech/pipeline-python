@@ -32,9 +32,10 @@ class ElementData(object):
     def get(self, key):
         """
         Get a value from the elementData contents
-        This calls the `ElementData`:class: class' (often overridden) :method:`ElementData.getInternal` method
+        This calls the ElementData class' (often overridden) ElementData.getInternal method
+
         :param key: property
-        :type key: basestring
+        :type key: str
         :return: specified property from the data
         :rtype: mixed
         """
@@ -46,7 +47,7 @@ class ElementData(object):
         Magic getter for a property from the data
 
         :param key: property
-        :type key: basestring
+        :type key: str
         :return: specified property from the data
         :rtype: mixed
         """
@@ -55,12 +56,12 @@ class ElementData(object):
 
     def getInternal(self, key):
         """
-        The method behind `ElementData.get`:method: - it is called by the get() function.
+        The method behind ElementData.get - it is called by get().
         Returns the requested property from the data
-        It is frequently overridden by specific `ElementData`:class: instances.
+        It is frequently overridden by specific ElementData instances.
 
         :param key: property
-        :type key: basestring
+        :type key: str
         :return: requested property from data
         :rtype: mixed
         """
@@ -70,10 +71,11 @@ class ElementData(object):
     def getProperties(self):
         """
         Proxy to the data's flowElement properties.
-        Gets the `FlowElement.properties`:instance_attribute: of the parent :class:`FlowElement`.
+        Gets the FlowElement.properties of the parent FlowElement.
         Calls a method that is usually overridden by specific flowElements.
 
-        :return: dictionary of the parent `FlowElement`s properties
-        :rtype: `DataPropertyDictionary`:class: dict iteration
+        :return: dictionary of the parent FlowElement's properties
+        :rtype: DataPropertyDictionary
         """
+
         return self.flowElement.getProperties()

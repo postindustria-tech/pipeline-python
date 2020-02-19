@@ -25,7 +25,7 @@ from .elementdata import ElementData
 
 class ElementDataDictionary(ElementData):
     """
-    `ElementData`:class: class extension that stores content as dictionary
+    ElementData class extension that stores content as dictionary
     """
 
     def __init__(self, flowElement, contents):
@@ -33,14 +33,12 @@ class ElementDataDictionary(ElementData):
         Constructor for Element Data Dictionary
 
         :param flowElement: `FlowElement` that creates the data to be stored
-        :type flowElement: `FlowElement`:class: instance
+        :type flowElement: FlowElement
         :param contents: dictionary contents
-        :type contents: mixed dict
-        # TODO: contents type originally noted as "mixed[]" ?
+        :type contents: dict
         """
 
-        # TODO: Does this need a superclass call?
-
+        super(ElementDataDictionary, self).__init__(flowElement)
         self.contents = {}
 
         for key, value in contents.items():
@@ -65,7 +63,7 @@ class ElementDataDictionary(ElementData):
         Internal getter for contents
 
         :param key:
-        :type key: basestring
+        :type key: str
         :return:
         :rtype: mixed
         """
