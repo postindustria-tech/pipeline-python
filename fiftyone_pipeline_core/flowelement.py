@@ -40,7 +40,7 @@ class FlowElement(object):
 
         :param flowData: FlowData to be processed
         :type flowData: FlowData
-        :returns: whatever the `self.processInternal` method is set to return
+        :returns: whatever the self.processInternal method is set to return
         :rtype: mixed
         """
 
@@ -61,7 +61,7 @@ class FlowElement(object):
         """
         Filter FlowData.evidence using the flowElement's EvidenceKeyFilter
 
-        :param flowData: a FlowData that has some `Evidence` set
+        :param flowData: a FlowData that has some Evidence set
         :type flowData: FlowData
         :returns: a dictionary of evidence that has passed the filter
         :rtype: dict
@@ -73,10 +73,11 @@ class FlowElement(object):
 
     def filterEvidenceKey(self, key):
         """
-        Filter `FlowData.evidence`:instance_attribute: using the flowElement's `EvidenceKeyFilter`
+        Filter FlowData.evidence using the flowElement's EvidenceKeyFilter
         with the property key of evidence of interest.
 
-        :param key: the property key being sought in the `FlowData.evidence`:instance_attribute: 
+        :param key: the property key being sought within FlowData.evidence
+        :type key: str
         :returns: a dictionary containing the property key and the evidence related to it as it's value
         :rtype: dict
         """
@@ -87,11 +88,11 @@ class FlowElement(object):
 
     def processInternal(self, flowData):
         """
-        The method behind `FlowElement.Process`:method: - it is called by the process() function.
+        The method behind FlowElement.Process - it is called by the process() function.
         It is usually overridden by specific flowElements to do their core work.
 
         :param flowData: FlowData to be processed
-        :type flowData: :class:`FlowData` instance
+        :type flowData: FlowData
         :returns: True
         """
 
@@ -99,11 +100,11 @@ class FlowElement(object):
 
     def getProperties(self):
         """
-        Get the `FlowElement.properties`:instance_attribute: of a :class:`FlowElement` instance. 
+        Get the FlowElement.properties of a FlowElement.
         
         This is usually overridden by specific flowElements.
-        :returns: dictionary of the `FlowElement`s properties
-        :rtype: `DataPropertyDictionary`:class: dict instance
+        :returns: dictionary of the FlowElement's properties
+        :rtype: DataPropertyDictionary
         """
 
         if self.properties is not None:

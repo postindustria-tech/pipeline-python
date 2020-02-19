@@ -25,8 +25,10 @@ class Evidence:
 
     def __init__(self, flowData):
         """
-        evidence container constructor
-        param: flowData parent flowData
+        Constructor for Evidence container
+
+        :param flowData: parent FlowData
+        :type flowData: FlowData
         """
         self.evidence = {}
 
@@ -34,9 +36,12 @@ class Evidence:
 
     def set(self, key, value):
         """
-        set - Set a single piece of evidence by its element and value
-        param: string key
-        param: mixed value
+        Set a single piece of evidence by its element and value
+
+        :param key: a flowElement's dataKey
+        :type key: str
+        :param value: a piece of evidence
+        :type value: mixed
         """
 
         keep = False
@@ -49,22 +54,31 @@ class Evidence:
         if keep:
             self.evidence[key] = value
 
-    def setFromDict(self, incomingArray):
+    def setFromDict(self, incomingDict):
         """
-        setArray - Helper function to set multiple pieces of evidence from a dict
+        Helper function to set multiple pieces of evidence from a dict
+
         param: mixed[]
+        :param incomingDict:
+        :type incomingDict: dict of mixed
+
+        # TODO: this param was originally incomingArray but renamed it to make more sense - check this
         """
 
-        if not type(incomingArray) is dict:
+        if not type(incomingDict) is dict:
             self.flowData.setError("core", "Must pass valid dictionary.")
 
-        for key, value in incomingArray.items():
+        for key, value in incomingDict.items():
             self.set(key, value)
 
     def get(self, key):
         """
-        get - Get a piece of evidence by key
-        param: string key
+        Get a piece of evidence by key
+
+        :param key: a FlowElement's dataKey
+        :type key: str
+        :return: a piece of evidence
+        :rtype: dict
         """
 
         if key in self.evidence:
@@ -77,8 +91,10 @@ class Evidence:
 
     def getAll(self):
         """
-        getAll - Get all evidence
-        returns: mixed[]
+        Get all evidence
+
+        :return: everything in this Evidence.evidence
+        :rtype: dict
         """
 
         return self.evidence

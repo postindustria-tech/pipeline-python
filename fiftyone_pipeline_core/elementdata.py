@@ -22,10 +22,13 @@
 
 
 class ElementData(object):
-    """Core ElementData class"""
+    """Core ElementData class
+    # TODO: more explanatory definition
+
+    """
 
     def __init__(self, flowElement):
-        """Constructor for element data"""
+        """Constructor for ElementData"""
 
         self.flowElement = flowElement
 

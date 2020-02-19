@@ -32,7 +32,7 @@ class ElementDataDictionary(ElementData):
         """
         Constructor for Element Data Dictionary
 
-        :param flowElement: `FlowElement` that creates the data to be stored
+        :param flowElement: FlowElement that creates the data to be stored
         :type flowElement: FlowElement
         :param contents: dictionary contents
         :type contents: dict
@@ -50,22 +50,24 @@ class ElementDataDictionary(ElementData):
 
     def asDictionary(self):
         """"
-        Get the values contained in the elementData instance as a dictionary
+        Get the values contained in the ElementData instance as a dictionary
         of keys and values.
 
-        :returns: a dictionary of mixed[]
+        :returns: a dictionary of items in an ElementData
         :rtype: dict
         """
         return self.contents
 
     def getInternal(self, key):
         """
-        Internal getter for contents
+        Internal getter for ElementDataDictionary.contents
 
-        :param key:
+        :param key: key of a (key, value) item in the ElementDataDictionary. Usually a property name.
         :type key: str
-        :return:
+        :return: the data keyed under that property
         :rtype: mixed
+
+        # TODO: check these definitions
         """
 
         if key in self.contents:

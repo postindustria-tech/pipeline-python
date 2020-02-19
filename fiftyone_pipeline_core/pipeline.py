@@ -27,7 +27,7 @@ from .logger import Logger
 class Pipeline:
     """
     An immutable collection of FlowElements
-    to enable the user to do all the processing they require on `FlowData` with a single call.
+    to enable the user to do all the processing they require on FlowData with a single call.
     """
 
     def __init__(self, flowElements, logger=Logger()):
@@ -58,7 +58,7 @@ class Pipeline:
 
     def createFlowData(self):
         """
-        Create a `FlowData` based on what's in the pipeline
+        Create a FlowData based on what's in the pipeline
         
         :returns: a FlowData
         :rtype: FlowData
@@ -68,7 +68,7 @@ class Pipeline:
 
     def log(self, level, message):
         """
-        Log a message using the `Logger.log`:method: of the pipeline's Logger.
+        Log a message using the Logger.log of the pipeline's Logger.
 
         :param level: level of log message
         :type level: string
@@ -84,7 +84,7 @@ class Pipeline:
 
         :param key: name of flowElement
         :type key: string
-        :returns: the `FlowElement` indicated
+        :returns: the FlowElement indicated
         :rtype: FlowElement
         """
 
@@ -94,7 +94,7 @@ class Pipeline:
         """
         Get all properties of all flowElements in the pipeline.
 
-        :returns: a dictionary of all properties in a pipeline keyed by each flowElement's `FlowElement.dataKey`:instance_attribute: .
+        :returns: a dictionary of all properties in a pipeline keyed by each flowElement's FlowElement.dataKey .
         :rtype: dict of {string : DataPropertyDictionary}  # TODO: check dict type syntax
         """
 
