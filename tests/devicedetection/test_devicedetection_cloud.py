@@ -54,7 +54,7 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(fd.device.ismobile.hasValue(), False)
         
         try:
-            self.assertEqual(fd.device.ismobile.value())
+            fd.device.ismobile.value()
         except Exception as e:
             error = str(e)
 
