@@ -23,19 +23,23 @@
 
 class ElementData(object):
     """Core ElementData class
-    # TODO: more explanatory definition
+    # ElementData is where FlowElements store data (following processing via a FlowData and Pipeline)
+    # How that data is stored and retrieved is up to the ElementData class extension
 
     """
 
     def __init__(self, flowElement):
-        """Constructor for ElementData"""
+        """Constructor for ElementData""
+        :param flowElement: FlowElement that data has been created by
+        :type flowElement: FlowElement
+        """
 
         self.flowElement = flowElement
 
     def get(self, key):
         """
         Get a value from the elementData contents
-        This calls the ElementData class' (often overridden) ElementData.getInternal method
+        Proxy for the ElementData.getInternal method
 
         :param key: property
         :type key: str
@@ -48,6 +52,7 @@ class ElementData(object):
     def __getattr__(self, key):
         """
         Magic getter for a property from the data
+        Allowing  user to write for example Data.IsMobile rather than Data.get("IsMobile)
 
         :param key: property
         :type key: str
@@ -59,9 +64,8 @@ class ElementData(object):
 
     def getInternal(self, key):
         """
-        The method behind ElementData.get - it is called by get().
         Returns the requested property from the data
-        It is frequently overridden by specific ElementData instances.
+        Overridden by specific ElementData instances.
 
         :param key: property
         :type key: str
@@ -75,7 +79,6 @@ class ElementData(object):
         """
         Proxy to the data's flowElement properties.
         Gets the FlowElement.properties of the parent FlowElement.
-        Calls a method that is usually overridden by specific flowElements.
 
         :return: dictionary of the parent FlowElement's properties
         :rtype: DataPropertyDictionary

@@ -25,7 +25,7 @@ class Evidence:
 
     def __init__(self, flowData):
         """
-        Constructor for Evidence container
+        Constructor for Evidence container on a FlowData
 
         :param flowData: parent FlowData
         :type flowData: FlowData
@@ -54,21 +54,20 @@ class Evidence:
         if keep:
             self.evidence[key] = value
 
-    def setFromDict(self, incomingDict):
+    def setFromDict(self, evidenceDictionary):
         """
         Helper function to set multiple pieces of evidence from a dict
 
         param: mixed[]
-        :param incomingDict:
-        :type incomingDict: dict of mixed
+        :param evidenceDictionary:
+        :type evidenceDictionary: dict of evidence
 
-        # TODO: this param was originally incomingArray but renamed it to make more sense - check this
         """
 
-        if not type(incomingDict) is dict:
+        if not type(evidenceDictionary) is dict:
             self.flowData.setError("core", "Must pass valid dictionary.")
 
-        for key, value in incomingDict.items():
+        for key, value in evidenceDictionary.items():
             self.set(key, value)
 
     def get(self, key):
@@ -92,6 +91,8 @@ class Evidence:
     def getAll(self):
         """
         Get all evidence
+        TODO: Maybe extend from dictionary as this basically is one
+        or get rid of this class
 
         :return: everything in this Evidence.evidence
         :rtype: dict

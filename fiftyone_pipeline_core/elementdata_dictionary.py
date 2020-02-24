@@ -62,12 +62,11 @@ class ElementDataDictionary(ElementData):
         """
         Internal getter for ElementDataDictionary.contents
 
-        :param key: key of a (key, value) item in the ElementDataDictionary. Usually a property name.
+        :param key: key of an item in the ElementDataDictionary.
         :type key: str
         :return: the data keyed under that property
         :rtype: mixed
 
-        # TODO: check these definitions
         """
 
         if key in self.contents:

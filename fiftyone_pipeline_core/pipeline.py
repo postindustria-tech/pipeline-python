@@ -95,7 +95,7 @@ class Pipeline:
         Get all properties of all flowElements in the pipeline.
 
         :returns: a dictionary of all properties in a pipeline keyed by each flowElement's FlowElement.dataKey .
-        :rtype: dict of {string : DataPropertyDictionary}  # TODO: check dict type syntax
+        :rtype: dict of {string : DataPropertyDictionary}
         """
 
         output = {}

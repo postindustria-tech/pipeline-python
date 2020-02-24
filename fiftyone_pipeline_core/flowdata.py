@@ -24,12 +24,11 @@ from .evidence import Evidence
 
 
 class FlowData:
-    """A user facing data object containing both the evidence, and the Aspect properties based on the evidence.
-
-    :attribute Evidence: Data that a web application receives as part of a web request.
+    """A user facing data object containing both the evidence, and the data properties based on the evidence.
 
     An Aspect refers to a discrete item of interest within the end-to-end context of a web request.
     E.g. The hardware device used to make the request or the mobile network that the device is currently using.
+
     """
 
     def __init__(self, pipeline):
@@ -50,7 +49,7 @@ class FlowData:
     def process(self):
         """
         Runs the process function on every attached flowElement allowing data to be changed based on evidence.
-        This can only be run once per flowData instance.
+        This can only be run once per FlowData instance.
 
         :return: flowData
         :rtype: FlowData
@@ -82,7 +81,7 @@ class FlowData:
 
     def getFromElement(self, flowElement):
         """
-        Retrieve data by flowElement object.
+        Retrieve data by FlowElement object.
 
         :param flowElement: FlowElement that created the data of interest
         :type flowElement: FlowElement
@@ -116,6 +115,7 @@ class FlowData:
     def __getattr__(self, flowElementKey):
         """
         Magic getter to allow retrieval of data from FlowData.data[flowElementKey] by flowElement name.
+        For example, instead of `flowdata.get("device")` you can use `flowData.device`
 
         :param flowElementKey: dataKey of the FlowElement that created the data of interest
         :type flowElementKey: str
@@ -160,7 +160,7 @@ class FlowData:
         :return: filtered evidence
         :rtype: list
         """
-        # TODO: check if required
+        # TODO: check if required as we're not using in any tests or the caching in engines
 
         requestedEvidence = list()
 

@@ -23,15 +23,15 @@
 
 class DataPropertyDictionary:
     """
-    # TODO: definition
+    The DataPropertyDictionary stores information about a FlowElement's properties and their metadata. It can be queried to retrieve properties depending on this metadata.
     """
 
     def __init__(self, flowElement):
         """
         Construct DataPropertyDictionary
 
-        :param flowElement:
-        :type flowElement:
+        :param flowElement: the FlowElement relating to the properties
+        :type flowElement: FlowElement
         """
 
         self.flowElement = flowElement
@@ -40,7 +40,7 @@ class DataPropertyDictionary:
 
     def __iter__(self):
         """
-        # TODO: definition
+        An iterator to make it possible to loop over a property list
 
         """
 
@@ -49,13 +49,12 @@ class DataPropertyDictionary:
 
     def addProperty(self, propertyKey, metaDataDictionary):
         """
-        Add meta data dictionary keyed by property name
-        # TODO: check definition
+        Add property to the dictionary
 
-        :param propertyKey:
-        :type propertyKey:
+        :param propertyKey
+        :type propertyKey: str
         :param metaDataDictionary:
-        :type metaDataDictionary:
+        :type metaDataDictionary: dict
         """
 
         self.contents[propertyKey.lower()] = metaDataDictionary
@@ -63,7 +62,7 @@ class DataPropertyDictionary:
 
     def getContents(self):
         """
-        # TODO: definition
+        Get contents as a Dict
 
         :return:
         :rtype: dict
@@ -73,11 +72,12 @@ class DataPropertyDictionary:
 
     def getFiltered(self, propertyFilter):
         """
-        # TODO: definition
+        Get a dictionary of properties filtered by a meta key and meta value
+        # TODO: Replace this tuple with two separate params as it's over complicated
 
-        :param propertyFilter:
+        :param propertyFilter: Meta key and metavalue to filter by
         :type propertyFilter: tuple(key, value)
-        :return:
+        :return: Dictionary of filtered properties
         :rtype: dict
         """
 

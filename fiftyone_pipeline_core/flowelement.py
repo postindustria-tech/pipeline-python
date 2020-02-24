@@ -78,7 +78,7 @@ class FlowElement(object):
 
         :param key: the property key being sought within FlowData.evidence
         :type key: str
-        :returns: a dictionary containing the property key and the evidence related to it as it's value
+        :returns: a dictionary containing the property key and the evidence related to it as its value
         :rtype: dict
         """
 

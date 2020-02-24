@@ -21,11 +21,7 @@
 # ********************************************************************
 
 from datetime import datetime
-# import json
 import logging
-# import os
-# TODO: check if unused imports (commented out above) are needed
-
 
 class Logger:
     """

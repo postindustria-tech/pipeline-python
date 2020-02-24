@@ -24,14 +24,14 @@ from .evidence_keyfilter import EvidenceKeyFilter
 
 
 class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
-    """Basic version of an EvidenceKeyFilter - used to identify the evidence keys a Flow Element can work with."""
+    """Basic list version of EvidenceKeyFilter - used to identify the evidence keys a FlowElement can work with."""
 
     def __init__(self, keysList):
         """
         BasicListEvidenceKeyFilter constructor
 
         :param keysList: a list of keys to keep.
-        :type keysList: list[mixed]
+        :type keysList: list[String]
         """
 
         self.list = keysList
