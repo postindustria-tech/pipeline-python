@@ -1,4 +1,4 @@
-# 51Degrees V4 Pipeline - Python
+# 51Degrees V4 Pipeline Core - Python
 
 ## Requirements and installation
 
@@ -10,4 +10,6 @@ To run tests in each repository
 
 `python -m unittest discover -s tests -p test*.py`
 
-To run the web examples `export FLASK_APP=` with the name of the web example file and `flask run`.
+To run the web examples 
+* `export FLASK_APP=examples/client_side_evidence_custom_flow_element.py`
+* `flask run`
