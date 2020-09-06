@@ -48,6 +48,7 @@ if resourceKey == "!!YOUR_RESOURCE_KEY!!":
     You need to create a resource key at
     https://configure.51degrees.com and paste it into the code,
     'replacing !!YOUR_RESOURCE_KEY!!
+    To get a resourcekey with the properties used in this example go to https://configure.51degrees.com/GCrtGh1L
     """)
 else:
 
