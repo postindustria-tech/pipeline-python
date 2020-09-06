@@ -58,7 +58,7 @@ if resourceKey == "!!YOUR_RESOURCE_KEY!!":
     You need to create a resource key at
     https://configure.51degrees.com and paste it into the code,
     'replacing !!YOUR_RESOURCE_KEY!!
-    Make sure to include the supported media properties used by this example.
+    To include the properties used by this example go to https://configure.51degrees.com/CfLML6rg
     """)
 else:
 
