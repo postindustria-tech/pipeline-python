@@ -96,8 +96,8 @@ else:
     flowData2.process()
 
     print("Is User-Agent " + iphoneUA + " a mobile device?: ") 
-    if flowData1.device.ismobile.hasValue():
-        print(flowData1.device.ismobile.value())
+    if flowData2.device.ismobile.hasValue():
+        print(flowData2.device.ismobile.value())
     else:
         # Output why the value isn't meaningful
-        print(flowData1.device.ismobile.noValueMessage)
+        print(flowData2.device.ismobile.noValueMessage)
