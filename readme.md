@@ -3,6 +3,7 @@
 ## Requirements and installation
 
 * Python 2.7 or Python 3
+* The `flask` python library to run the web examples 
 
 ## To install from git repository
 
