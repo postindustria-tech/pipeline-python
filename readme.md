@@ -3,27 +3,21 @@
 ## Requirements and installation
 
 * Python 2.7 or Python 3
-* [Flask](https://flask.palletsprojects.com/en/1.1.x/installation/) (for running examples)
 
-## Examples and Tests
+## To install from git repository
 
-Note: If you get errors like `no module named 'x'`, then execute `pip install x` and retry.
+* Install `pipenv` https://pypi.org/project/pipenv/
+* Run `pipenv install` in the root of the folder
+* Launch the environment shell by running `pipenv shell`
 
-To run tests in each repository
+## Running tests and examples
 
-```
-python -m unittest discover -s tests -p test*.py
-```
+To run tests in each repository.
 
-## Examples
+* Go to each directory (for example `fiftyone_pipeline_core`)
+* Run `python -m unittest discover -s tests -p test*.py`
 
-The examples depend on the Pipeline modules, you can either use the remote 
-versions as normal or local versions. If you want to use the local versions 
-then use the `-e` option with `pip install`. For example:
-
-```
-pip install -e fiftyone_pipeline_core
-```
+To run the web examples:
 
 ### Linux
 
