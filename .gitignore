@@ -3,3 +3,8 @@ __pycache__
 **.log
 .vscode
 Pipfile.lock
+SOURCES.txt
+PKG-INFO
+requires.txt
+dependency_links.txt
+top_level.txt
