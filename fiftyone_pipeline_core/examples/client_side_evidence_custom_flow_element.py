@@ -106,15 +106,15 @@ class AstrologyFlowElement(FlowElement):
         }
     
 
-    # The processInternal function is the core working of a flowElement. 
-    # It takes flowData, reads evidence and returns data.
-    def processInternal(self, flowData):
+    # The process_internal function is the core working of a flowElement. 
+    # It takes FlowData, reads evidence and returns data.
+    def process_internal(self, flowdata):
 
         result = {}
         
         # Get the date of birth from the query string (submitted through 
         # a form on the client side)
-        dateOfBirth = flowData.evidence.get("query.dateOfBirth")
+        dateOfBirth = flowdata.evidence.get("query.dateOfBirth")
         
         if dateOfBirth:
 
@@ -137,7 +137,7 @@ class AstrologyFlowElement(FlowElement):
         """
 
         # Get the latitude from the above cookie
-        latitude = flowData.evidence.get("cookie.latitude")
+        latitude = flowdata.evidence.get("cookie.latitude")
 
         # Calculate the hemisphere
         if latitude:
@@ -146,11 +146,11 @@ class AstrologyFlowElement(FlowElement):
           
         data = ElementDataDictionary(self, result)
 
-        flowData.setElementData(data)
+        flowdata.set_element_data(data)
 
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
         """
-        getEvidenceKeyFilter - A filter (in this case a basic list) stating which evidence 
+        get_evidence_key_filter - A filter (in this case a basic list) stating which evidence 
         the flowElement is interested in
         """
         return  BasicListEvidenceKeyFilter(["cookie.latitude", "query.dateOfBirth"])
@@ -176,12 +176,12 @@ app = Flask(__name__)
 def jsonroute():
 
     # Create the flowData object for the JSON route
-    flowData = myPipeline.createFlowData()
+    flowData = myPipeline.create_flowdata()
 
     # Add any information from the request (headers, cookies and additional 
     # client side provided information)
 
-    flowData.evidence.setFromDict(webevidence(request))
+    flowData.evidence.add_from_dict(webevidence(request))
 
     # Process the flowData
 
@@ -195,12 +195,12 @@ def jsonroute():
 @app.route('/')
 def server():
     
-    flowData = myPipeline.createFlowData()
+    flowData = myPipeline.create_flowdata()
 
     # Add any information from the request (headers, cookies and additional 
     # client side provided information)
 
-    flowData.evidence.setFromDict(webevidence(request))
+    flowData.evidence.add_from_dict(webevidence(request))
 
     # Process the flowData
 

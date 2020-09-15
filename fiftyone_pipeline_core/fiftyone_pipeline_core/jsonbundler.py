@@ -53,10 +53,6 @@ class JSONBundlerElement(FlowElement):
     
     """
     def process_internal(self, flowdata):
-
-        data = ElementDataDictionary(self, {"json": {}})
-
-        flowdata.set_element_data(data)
    
         # Get every property on every FlowElement
         # Storing JavaScript properties in an extra section
@@ -116,7 +112,7 @@ class JSONBundlerElement(FlowElement):
 
             output[flow_element.datakey] = {}
 
-            for propertyKey, propertyMeta in properties.items():
+            for propertykey, propertymeta in properties.items():
                 value = None
                 null_reason = "Unknown"
 
@@ -124,7 +120,7 @@ class JSONBundlerElement(FlowElement):
 
 
                 if propertykey in property_cache["delayExecutionList"]:
-                    output[flow_element.datakey][propertyKey.lower() + "delayexecution"] = True
+                    output[flow_element.datakey][propertykey.lower() + "delayexecution"] = True
                 
 
                 # Check if property has any delayed execution evidence properties and set in JSON if yes
@@ -182,11 +178,10 @@ class JSONBundlerElement(FlowElement):
 
                 if sequence is None or sequence < 10: 
 
-                    if "type" in propertyMeta and propertyMeta["type"].lower() == "javascript":
+                    if "type" in propertymeta and propertymeta["type"].lower() == "javascript":
 
                         output["javascriptProperties"].append(flow_element.datakey.lower() + "." + propertykey.lower())
                  
-
         data = ElementDataDictionary(self, {"json": output})
 
         flowdata.set_element_data(data)

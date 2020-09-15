@@ -59,7 +59,7 @@ class PipelineBuilder:
        
       
         if "javascriptBuilderSettings" in settings:
-            self.javaScriptbuilder_settings = settings["javascriptBuilderSettings"]
+            self.javascriptbuilder_settings = settings["javascriptBuilderSettings"]
 
 
 
@@ -78,8 +78,8 @@ class PipelineBuilder:
             flow_elements.append(SequenceElement())
             flow_elements.append(JSONBundlerElement())
     
-            if (hasattr(self, "javascriptBuilderSettings")):
-                flow_elements.append(JavascriptBuilderElement(self.javaScriptbuilder_settings))
+            if (hasattr(self, "javascriptbuilder_settings")):
+                flow_elements.append(JavascriptBuilderElement(self.javascriptbuilder_settings))
             else:
                 flow_elements.append(JavascriptBuilderElement())
    

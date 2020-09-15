@@ -70,6 +70,7 @@ class TestEngine(FlowElement):
 class TestPipeline():
 
     def __init__(self, minify = None):
+
   
         if minify == None:
             pipelineSettings = {}
@@ -217,7 +218,7 @@ class JavaScriptBundlerTests(unittest.TestCase):
         FlowData = Pipeline.create_flowdata()
         FlowData.process()
         nonminified = FlowData.javascriptbuilder.javascript
-
+        
         # Generate javascript with default settings
         Pipeline = (TestPipeline()).Pipeline
         FlowData = Pipeline.create_flowdata()
