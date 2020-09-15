@@ -40,48 +40,52 @@ class JSONBundlerElement(FlowElement):
 
         super(JSONBundlerElement, self).__init__()
 
-        self.dataKey = "jsonbundler"
+        self.datakey = "jsonbundler"
 
         self.properties = {"json" : { "type": "dict"} }
 
-        self.propertyCache = {}
+        self.property_cache = {}
 
     """
     The JSONBundler extracts all properties from a FlowData and serializes them into JSON
-    @type FlowData:
-    @param FlowData: A FlowData
+    @type flowdata: FlowData
+    @param flowdata: A FlowData
     
     """
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
+
+        data = ElementDataDictionary(self, {"json": {}})
+
+        flowdata.set_element_data(data)
    
         # Get every property on every FlowElement
         # Storing JavaScript properties in an extra section
 
         output = {"javascriptProperties": [] }
 
-        if len(self.propertyCache):
-            propertyCacheSet = True
+        if len(self.property_cache):
+            property_cache_set = True
         else:
-            propertyCacheSet = False
+            property_cache_set = False
         
-        for flowElement in flowData.pipeline.flowElements:
+        for flow_element in flowdata.pipeline.flow_elements:
 
-            if flowElement.dataKey == "jsonbundler" or flowElement.dataKey == "sequence" or flowElement.dataKey == "javascriptbuilder":
+            if flow_element.datakey == "jsonbundler" or flow_element.datakey == "sequence" or flow_element.datakey == "javascriptbuilder":
                 continue
             
-            properties = flowElement.getProperties()
+            properties = flow_element.get_properties()
 
-            if not propertyCacheSet:
+            if not property_cache_set:
 
-                delayExecutionList = []
-                delayedEvidenceProperties = {}
+                delay_execution_list = []
+                delayed_evidence_properties = {}
 
                 # Loop over all properties and see if any have delay execution set to true
 
-                for propertyKey, propertyMeta in properties.items():
+                for propertykey, propertymeta in properties.items():
                     
-                    if "delayexecution" in propertyMeta and propertyMeta["delayexecution"] == True:
-                        delayExecutionList.append(propertyKey)
+                    if "delayexecution" in propertymeta and propertymeta["delayexecution"] == True:
+                        delay_execution_list.append(propertykey)
 
                 
                 """
@@ -89,80 +93,80 @@ class JSONBundlerElement(FlowElement):
                 have delayedExecution set to true
                 """
 
-                for propertyKey, propertyMeta in properties.items():
+                for propertykey, propertymeta in properties.items():
 
-                    if("evidenceproperties" in propertyMeta):
+                    if("evidenceproperties" in propertymeta):
 
-                        delayedEvidencePropertiesList = list(filter(lambda x: x in delayExecutionList, propertyMeta["evidenceproperties"]))
+                        delayed_evidence_properties_list = list(filter(lambda x: x in delay_execution_list, propertymeta["evidenceproperties"]))
 
-                        if len(delayedEvidencePropertiesList):
+                        if len(delayed_evidence_properties_list):
                             
-                            delayedEvidenceProperties[propertyKey] = list(map(lambda x:
-                                flowElement.dataKey + '.' + x, delayedEvidencePropertiesList))
+                            delayed_evidence_properties[propertykey] = list(map(lambda x:
+                                flow_element.datakey + '.' + x, delayed_evidence_properties_list))
 
 
-                self.propertyCache[flowElement.dataKey] = {
-                    "delayExecutionList": delayExecutionList,
-                    "evidenceProperties": delayedEvidenceProperties
+                self.property_cache[flow_element.datakey] = {
+                    "delayExecutionList": delay_execution_list,
+                    "evidenceProperties": delayed_evidence_properties
                 }
 
-            propertyCache = self.propertyCache[flowElement.dataKey]
+            property_cache = self.property_cache[flow_element.datakey]
 
             # Create empty area for FlowElement properties to go
 
-            output[flowElement.dataKey] = {}
+            output[flow_element.datakey] = {}
 
             for propertyKey, propertyMeta in properties.items():
                 value = None
-                nullReason = "Unknown"
+                null_reason = "Unknown"
 
                 # Check if property has delayed execution and set in JSON if yes
 
 
-                if propertyKey in propertyCache["delayExecutionList"]:
-                    output[flowElement.dataKey][propertyKey.lower() + "delayexecution"] = True
+                if propertykey in property_cache["delayExecutionList"]:
+                    output[flow_element.datakey][propertyKey.lower() + "delayexecution"] = True
                 
 
                 # Check if property has any delayed execution evidence properties and set in JSON if yes
 
-                if propertyKey in propertyCache["evidenceProperties"]:
-                    output[flowElement.dataKey][propertyKey.lower() + 'evidenceproperties'] = propertyCache["evidenceProperties"][propertyKey]
+                if propertykey in property_cache["evidenceProperties"]:
+                    output[flow_element.datakey][propertykey.lower() + 'evidenceproperties'] = property_cache["evidenceProperties"][propertykey]
                 
 
                 try:
 
-                    valueContainer = flowData.get(flowElement.dataKey).get(propertyKey)
+                    value_container = flowdata.get(flow_element.datakey).get(propertykey)
 
                     # Check if value is of the aspect property value type
 
-                    if isinstance(valueContainer, object) and hasattr(valueContainer, "hasValue" ):
+                    if isinstance(value_container, object) and hasattr(value_container, "has_value" ):
                     
                         # Check if it has a value
 
-                        if valueContainer.hasValue():
-                            value = valueContainer.value()
+                        if value_container.has_value():
+                            value = value_container.value()
                         else:
                             value = None
-                            nullReason = valueContainer.noValueMessage
+                            null_reason = value_container.no_value_message()
                         
                     # Check if list of aspect property values
 
-                    elif isinstance(valueContainer, list) and isinstance(valueContainer[0], object):
+                    elif isinstance(value_container, list) and isinstance(value_container[0], object):
 
                         output = []
 
-                        for item in valueContainer:
-                            if item.hasValue():
+                        for item in value_container:
+                            if item.has_value():
                                 output.append(item.value())
                             else:
-                                nullReason = item.noValueMessage
+                                null_reason = item.no_value_message
 
                         value = output
 
                     else:
 
                         # Standard value
-                        value = valueContainer
+                        value = value_container
                     
                 except:
                     # Catching missing property exceptions and other errors
@@ -170,21 +174,21 @@ class JSONBundlerElement(FlowElement):
                     continue
                
 
-                output[flowElement.dataKey.lower()][propertyKey.lower()] = value
+                output[flow_element.datakey.lower()][propertykey.lower()] = value
                 if value is None:
-                   output[flowElement.dataKey.lower()][propertyKey.lower() + "nullreason"] = nullReason
+                   output[flow_element.datakey.lower()][propertykey.lower() + "nullreason"] = null_reason
 
-                sequence = flowData.evidence.get("query.sequence")
+                sequence = flowdata.evidence.get("query.sequence")
 
                 if sequence is None or sequence < 10: 
 
                     if "type" in propertyMeta and propertyMeta["type"].lower() == "javascript":
 
-                        output["javascriptProperties"].append(flowElement.dataKey.lower() + "." + propertyKey.lower())
+                        output["javascriptProperties"].append(flow_element.datakey.lower() + "." + propertykey.lower())
                  
 
         data = ElementDataDictionary(self, {"json": output})
 
-        flowData.setElementData(data)
+        flowdata.set_element_data(data)
 
         return

@@ -36,7 +36,7 @@ except ImportError:
     from urllib.parse import urlencode
 
 # Engine that makes a call to the 51Degrees cloud service
-# Returns raw JSON as a "cloud" property under "cloud" dataKey
+# Returns raw JSON as a "cloud" property under "cloud" datakey
 
 class CloudRequestEngine(Engine):
 
@@ -52,7 +52,7 @@ class CloudRequestEngine(Engine):
 
         super(CloudRequestEngine, self).__init__()
 
-        self.dataKey = "cloud"
+        self.datakey = "cloud"
 
         self.properties = {
             "cloud" : {
@@ -127,9 +127,9 @@ class CloudRequestEngine(Engine):
         flowElementProperties = {}
 
         # Change indexes to be by name
-        for dataKey, elementProperties in properties["Products"].items():
+        for datakey, elementProperties in properties["Products"].items():
 
-            flowElementProperties[dataKey] = {}
+            flowElementProperties[datakey] = {}
 
             engineProperties = elementProperties["Properties"]
 
@@ -139,7 +139,7 @@ class CloudRequestEngine(Engine):
 
                 engineProperty =  {k.lower(): v for k, v in engineProperty.items()}
 
-                flowElementProperties[dataKey][engineProperty["name"]] = engineProperty
+                flowElementProperties[datakey][engineProperty["name"]] = engineProperty
                
         return flowElementProperties
     

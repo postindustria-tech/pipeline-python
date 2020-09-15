@@ -42,7 +42,7 @@ class CoreTests(unittest.TestCase):
     
         testPipeline = TestPipeline().pipeline
 
-        loggerMessage = testPipeline.logger.memoryLog[0]["message"]
+        loggerMessage = testPipeline.logger.memory_log[0]["message"]
         self.assertTrue(loggerMessage == "test")
  
 
@@ -73,14 +73,14 @@ class CoreTests(unittest.TestCase):
     def testGetWhere(self):
 
         testPipeline = TestPipeline()
-        getValue = len(testPipeline.flowData.getWhere("type", "int"))
+        getValue = len(testPipeline.flowData.get_where("type", "int"))
         self.assertTrue(getValue == 1)
         
 
     def testGetFromElement(self):
 
         testPipeline = TestPipeline()
-        getValue = testPipeline.flowData.getFromElement(testPipeline.flowElement1).get("integer")
+        getValue = testPipeline.flowData.get_from_element(testPipeline.flowElement1).get("integer")
         self.assertTrue(getValue == 5)
 
 
@@ -106,11 +106,11 @@ class CoreTests(unittest.TestCase):
         testPipeline = TestPipeline()
         yes = testPipeline.flowData.get("apv").get("yes")
 
-        self.assertTrue(yes.hasValue())
+        self.assertTrue(yes.has_value())
         self.assertTrue(yes.value() == "yes")
 
         no = testPipeline.flowData.get("apv").get("no")
 
-        self.assertFalse(no.hasValue())
-        self.assertTrue(no.noValueMessage == "no")
+        self.assertFalse(no.has_value())
+        self.assertTrue(no.no_value_message() == "no")
    

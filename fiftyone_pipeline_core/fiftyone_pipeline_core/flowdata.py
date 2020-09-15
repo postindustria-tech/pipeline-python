@@ -61,17 +61,17 @@ class FlowData:
 
         if not self.processed:
 
-            for flowElement in self.pipeline.flowElements:
+            for flow_element in self.pipeline.flow_elements:
                 if self.stopped is not True:
                     # All errors are caught and stored in an errors array keyed by the
                     # flowElement that set the error
 
                     try:
-                        flowElement.process(self)
+                        flow_element.process(self)
 
                     except Exception:
 
-                        self.setError(flowElement.dataKey, traceback.format_exc())
+                        self.set_error(flow_element.datakey, traceback.format_exc())
 
             # Set processed flag to true. flowData can only be processed once
 
@@ -82,12 +82,12 @@ class FlowData:
             self.setError("error", "FlowData already processed")
 
 
-    def getFromElement(self, flowElement):
+    def get_from_element(self, flow_element):
         """
         Retrieve data by FlowElement object.
 
-        @type flowElement: FlowElement
-        @param flowElement: FlowElement that created the data of interest
+        @type flow_element: FlowElement
+        @param flow_element: FlowElement that created the data of interest
 
         @rtype: ElementData
         @return: Returns data that was created by the flowElement held in the FlowData
@@ -95,19 +95,19 @@ class FlowData:
         """
 
         try:
-            return self.get(flowElement.dataKey)
+            return self.get(flow_element.datakey)
 
         except Exception:
             return None
 
 
-    def get(self, flowElementKey):
+    def get(self, flow_element_key):
         """
         Retrieve data by flowElement key.
-        Called by FlowData.getFromElement method.
+        Called by FlowData.get_from_element method.
 
-        @type flowElementKey: string
-        @param flowElementKey: FlowElement.dataKey of the FlowElement that created the data of interest
+        @type flow_element_key: string
+        @param flow_element_key: FlowElement.datakey of the FlowElement that created the data of interest
 
         @rtype: ElementData
         @return: Returns data in the FlowData instance that is under the specified key
@@ -115,45 +115,45 @@ class FlowData:
         """
 
         try:
-            return self.data[flowElementKey.lower()]
+            return self.data[flow_element_key.lower()]
 
         except Exception:
             return None
 
 
-    def __getattr__(self, flowElementKey):
+    def __getattr__(self, flow_element_key):
         """
         Magic getter to allow retrieval of data from FlowData.data[flowElementKey] by flowElement name.
         For example, instead of `flowdata.get("device")` you can use `flowData.device`
 
-        @type flowElementKey: string
-        @param flowElementKey: dataKey of the FlowElement that created the data of interest
+        @type flow_element_key: string
+        @param flow_element_key: datakey of the FlowElement that created the data of interest
 
         @rtype: ElementData
         
         """
 
-        return self.get(flowElementKey)
+        return self.get(flow_element_key)
 
 
-    def setElementData(self, elData):
+    def set_element_data(self, element_data):
         """
         Set data (used by flowElement) within FlowData.data
 
-        @type elData: ElementData
-        @param elData: elementData to be added to flowData
+        @type element_data: ElementData
+        @param element_data: elementData to be added to flowData
 
         """
 
-        self.data[elData.flowElement.dataKey] = elData
+        self.data[element_data.flow_element.datakey] = element_data
 
 
-    def setError(self, key, error):
+    def set_error(self, key, error):
         """
-        Set error (should be keyed by flowElement dataKey)
+        Set error (should be keyed by flowElement datakey)
 
         @type key: string
-        @param key: a flowElement.dataKey
+        @param key: a flowElement.datakey
 
         @type error: string
         @param error: Error message
@@ -168,7 +168,7 @@ class FlowData:
         self.pipeline.log("error", error)
 
 
-    def getEvidenceDataKey(self):
+    def get_evidence_datakey(self):
         """
         Get a list of evidence stored in the flowData, filtered by
         its flowElements' evidenceKeyFilters
@@ -179,10 +179,10 @@ class FlowData:
         """
         requestedEvidence = list()
 
-        for flowElement in self.pipeline.flowElements:
-            requestedEvidence = requestedEvidence.extend(flowElement.filterEvidence(self))
+        for flow_element in self.pipeline.flow_elements:
+            requested_evidence = requestedEvidence.extend(flow_element.filter_evidence(self))
 
-        return requestedEvidence
+        return requested_evidence
 
 
     def stop(self):
@@ -193,35 +193,35 @@ class FlowData:
 
         self.stopped = True
 
-    def getWhere(self, metaKey, metaValue):
+    def get_where(self, metakey, metavalue):
         """
         Get data from flowElement based on property meta data
 
-        @type metaKey: str
+        @type metakey: str
         @param metakey: metakey shared by all data of interest
 
-        @type metaValue: mixed
-        @param metaValue: meta value shared by all data of interest
+        @type metavalue: mixed
+        @param metavalue: meta value shared by all data of interest
 
         @rtype: dict
         @return: Returns dictionary of data created by the flowElement that have the specified meta property
 
         """
 
-        metaQueryOutput = {}
+        meta_query_output = {}
 
-        properties = self.pipeline.getProperties()
+        properties = self.pipeline.get_properties()
 
-        for flowElement, flowElementProperties in properties.items():
-            for propertyKey, propertyMeta in flowElementProperties.items():
-                if metaKey.lower() in propertyMeta:
-                    if propertyMeta[metaKey.lower()] == metaValue:
+        for flow_element, flow_element_properties in properties.items():
+            for propertykey, propertymeta in flow_element_properties.items():
+                if metakey.lower() in propertymeta:
+                    if propertymeta[metakey.lower()] == metavalue:
                         try:
-                            metaQueryOutput[propertyKey] = self.get(flowElement).get(propertyKey)                
+                            meta_query_output[propertykey] = self.get(flow_element).get(propertykey)                
                         # We are ignoring errors in getWhere as properties could be missing on purpose
                         # They shouldn't throw an error breaking the whole getWhere.
                         except Exception:
                             pass
                         
-        return metaQueryOutput
+        return meta_query_output
                         

@@ -23,24 +23,24 @@
 
 class Evidence:
 
-    def __init__(self, flowData):
+    def __init__(self, flowdata):
         """
         Constructor for Evidence container on a FlowData
 
-        @type flowData: FlowData
-        @param flowData: Parent FlowData
+        @type flowdata: FlowData
+        @param flowdata: Parent FlowData
 
         """
         self.evidence = {}
 
-        self.flowData = flowData
+        self.flowdata = flowdata
 
-    def set(self, key, value):
+    def add(self, key, value):
         """
-        Set a single piece of evidence by its element and value
+        Add a single piece of evidence by its element and value
 
         @type key: string
-        @param key: a flowElement's dataKey
+        @param key: a flowElement's datakey
 
         @type value: mixed
         @param value: a piece of evidence
@@ -49,35 +49,35 @@ class Evidence:
 
         keep = False
 
-        for flowElement in self.flowData.pipeline.flowElements:
+        for flow_element in self.flowdata.pipeline.flow_elements:
 
-            if flowElement.filterEvidenceKey(key):
+            if flow_element.filter_evidence_key(key):
                 keep = True
 
         if keep:
             self.evidence[key] = value
 
-    def setFromDict(self, evidenceDictionary):
+    def add_from_dict(self, evidence_dictionary):
         """
         Helper function to set multiple pieces of evidence from a dict
 
-        @type evidenceDictionary: dict
-        @param evidenceDictionary: Dict of evidence
+        @type evidence_dictionary: dict
+        @param evidence_dictionary: Dict of evidence
 
         """
 
-        if not type(evidenceDictionary) is dict:
-            self.flowData.setError("core", "Must pass valid dictionary.")
+        if not type(evidence_dictionary) is dict:
+            self.flowdata.set_error("core", "Must pass valid dictionary.")
 
-        for key, value in evidenceDictionary.items():
-            self.set(key, value)
+        for key, value in evidence_dictionary.items():
+            self.add(key, value)
 
     def get(self, key):
         """
         Get a piece of evidence by key
 
         @type key: string
-        @param key: A FlowElement's dataKey
+        @param key: A FlowElement's datakey
 
         @rtype: dict
         @return: A piece of evidence
@@ -92,7 +92,7 @@ class Evidence:
 
             return
 
-    def getAll(self):
+    def get_all(self):
         """
         Get all evidence
 

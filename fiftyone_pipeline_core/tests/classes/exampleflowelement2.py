@@ -11,13 +11,13 @@ class ExampleFlowElement2(FlowElement):
 
         super(ExampleFlowElement2, self).__init__()
 
-        self.dataKey = "example2"
+        self.datakey = "example2"
 
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
 
         data = ElementDataDictionary(self, {"integer": 7})
 
-        flowData.setElementData(data)
+        flowdata.set_element_data(data)
 
 
     properties = {"integer2" : {
@@ -25,6 +25,6 @@ class ExampleFlowElement2(FlowElement):
         }
     }
 
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
 
         return BasicListEvidenceKeyFilter(["header.user-agent"])

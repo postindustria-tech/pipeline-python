@@ -29,7 +29,7 @@ class Logger:
 
     """
 
-    def __init__(self, minLevel="error", settings = {}):
+    def __init__(self, min_level="error", settings = {}):
         """
         Create a logger
 
@@ -38,15 +38,15 @@ class Logger:
 
         """
 
-        self.allowedLevels = ["debug", "info", "warning", "error", "critical"]
+        self.allowed_levels = ["debug", "info", "warning", "error", "critical"]
 
-        self.minLevel = None
+        self.min_level = min_level
 
         # enable this level in logging to be output (system default is 'warning')
 
-        logging.basicConfig(level=getattr(logging, minLevel.upper()))
+        logging.basicConfig(level=getattr(logging, min_level.upper()))
 
-        self.minLevel = self.allowedLevels.index(str(minLevel).lower())
+        self.min_level = self.allowed_levels.index(str(min_level).lower())
 
         self.settings = settings
 
@@ -63,16 +63,16 @@ class Logger:
 
         """
 
-        levelIndex = self.allowedLevels.index(str(level).lower())
+        level_index = self.allowed_levels.index(str(level).lower())
 
-        if levelIndex >= self.minLevel:
+        if level_index >= self.min_level:
             now = datetime.now()
 
             log = {"time": now.strftime("%Y-%m-%d, %H:%M:%S"), "level": level, "message": message}
-            self.logInternal(level, log)
+            self.log_internal(level, log)
 
 
-    def logInternal(self, level, log):
+    def log_internal(self, level, log):
         """
         Internal logging function overridden by specific loggers
 

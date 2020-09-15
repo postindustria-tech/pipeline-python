@@ -49,21 +49,21 @@ class PipelineBuilder:
 
         """
 
-        self.flowElements = []
+        self.flow_elements = []
         self.logger = Logger()
 
         if "addJavaScriptBuilder" in settings:
-            self.addJavaScriptBuilder = settings["addJavascriptBuilder"]
+            self.add_javaScriptbuilder = settings["addJavascriptBuilder"]
         else:
-            self.addJavaScriptBuilder = True
+            self.add_javaScriptbuilder = True
        
       
         if "javascriptBuilderSettings" in settings:
-            self.javascriptBuilderSettings = settings["javascriptBuilderSettings"]
+            self.javaScriptbuilder_settings = settings["javascriptBuilderSettings"]
 
 
 
-    def getJavascriptElements(self):
+    def get_javascript_elements(self):
         """
         Adds the JavaScriptBuilder, JSONBundler and SequenceElement to the pipeline if
         If addJavascriptBuilder is set to true (the default)
@@ -71,33 +71,33 @@ class PipelineBuilder:
         @returns: Returns a list of FlowElements     
         """
         
-        flowElements = []
+        flow_elements = []
 
-        if (self.addJavaScriptBuilder):
+        if (self.add_javaScriptbuilder):
 
-            flowElements.append(SequenceElement())
-            flowElements.append(JSONBundlerElement())
+            flow_elements.append(SequenceElement())
+            flow_elements.append(JSONBundlerElement())
     
             if (hasattr(self, "javascriptBuilderSettings")):
-                flowElements.append(JavascriptBuilderElement(self.javascriptBuilderSettings))
+                flow_elements.append(JavascriptBuilderElement(self.javaScriptbuilder_settings))
             else:
-                flowElements.append(JavascriptBuilderElement())
+                flow_elements.append(JavascriptBuilderElement())
    
-        return flowElements
+        return flow_elements
 
-    def add(self, flowElement):
+    def add(self, flow_element):
         """
-        Add a flowElement to a list of flowElements be used in a pipeline.
+        Add a flow_element to a list of flowElements be used in a pipeline.
         
-        @type flowElement: FlowElement
-        @param flowElement: flowElement to be added to the pipeline
+        @type flow_element: FlowElement
+        @param flow_element: flowElement to be added to the pipeline
 
         @rtype: PipelineBuilder
         @returns: Returns the pipleine builder with the specified flowElement added to it's list of flowElements.
 
         """
 
-        self.flowElements.append(flowElement)
+        self.flow_elements.append(flow_element)
 
         return self
 
@@ -111,11 +111,11 @@ class PipelineBuilder:
 
         """
 
-        self.flowElements.extend(self.getJavascriptElements())
+        self.flow_elements.extend(self.get_javascript_elements())
 
-        return Pipeline(self.flowElements, logger=self.logger)
+        return Pipeline(self.flow_elements, logger=self.logger)
 
-    def addLogger(self, logger):
+    def add_logger(self, logger):
         """
         Add an instance of the logger class to the pipeline.
 

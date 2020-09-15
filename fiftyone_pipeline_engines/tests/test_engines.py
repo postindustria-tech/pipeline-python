@@ -57,7 +57,7 @@ class ExampleAspectEngine(Engine):
 
         super(ExampleAspectEngine, self).__init__()
 
-        self.dataKey = "example"
+        self.datakey = "example"
 
         self.properties = {
             "integer": {
@@ -85,7 +85,7 @@ class EngineTests(unittest.TestCase):
     
         testPipeline = PipelineBuilder().add(ExampleAspectEngine()).build()
 
-        flowData = testPipeline.createFlowData()
+        flowData = testPipeline.create_flowdata()
 
         flowData.process()
 
@@ -100,7 +100,7 @@ class EngineTests(unittest.TestCase):
 
         testPipeline = PipelineBuilder().add(engine).build()
 
-        flowData = testPipeline.createFlowData()
+        flowData = testPipeline.create_flowdata()
 
         flowData.process()
 
@@ -118,7 +118,7 @@ class EngineTests(unittest.TestCase):
 
         testPipeline = PipelineBuilder().add(engine).build()
 
-        flowData = testPipeline.createFlowData()
+        flowData = testPipeline.create_flowdata()
 
         flowData.process()
 
@@ -141,15 +141,15 @@ class EngineTests(unittest.TestCase):
 
         testPipeline = PipelineBuilder().add(engine).build()
 
-        flowData = testPipeline.createFlowData()
+        flowData = testPipeline.create_flowdata()
 
-        flowData.evidence.set("header.test", "test")
+        flowData.evidence.add("header.test", "test")
 
         flowData.process()
 
-        flowData2 = testPipeline.createFlowData()
+        flowData2 = testPipeline.create_flowdata()
 
-        flowData2.evidence.set("header.test", "test")
+        flowData2.evidence.add("header.test", "test")
 
         flowData2.process()
 

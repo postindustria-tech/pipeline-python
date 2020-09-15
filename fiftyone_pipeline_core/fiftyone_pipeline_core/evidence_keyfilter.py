@@ -31,13 +31,13 @@ class EvidenceKeyFilter:
 
     """
 
-    def filterEvidence(self, evidenceKeyObject):
+    def filter_evidence(self, evidence_key_object):
         """
         Filter evidence from a dictionary of evidence keys/values.
         Runs filterEvidenceKey on each key in the dictionary
 
-        @type evidenceKeyObject: dict
-        @param evidenceKeyObject: Evidence dictionary contents
+        @type evidence_key_object: dict
+        @param evidence_key_object: Evidence dictionary contents
 
         @rtype: dict
         @return: EReturns filtered evidence dictionary contents
@@ -45,15 +45,15 @@ class EvidenceKeyFilter:
 
         filtered = {}
 
-        for key, value in evidenceKeyObject.items():
+        for key, value in evidence_key_object.items():
 
-            if self.filterEvidenceKey(key):
+            if self.filter_evidence_key(key):
 
                 filtered[key] = value
 
         return filtered
 
-    def filterEvidenceKey(self, key):
+    def filter_evidence_key(self, key):
         """
         See if a property key should be in the filtered evidence
 

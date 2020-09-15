@@ -29,15 +29,15 @@ class ElementData(object):
 
     """
 
-    def __init__(self, flowElement):
+    def __init__(self, flow_element):
         """ Constructor for ElementData
 
-        @type flowElement: flowElement
-        @param flowElement: FlowElement that data has been created by
+        @type flow_element: FlowElement
+        @param flow_element: FlowElement that data has been created by
 
         """
 
-        self.flowElement = flowElement
+        self.flow_element = flow_element
 
     def get(self, key):
         """
@@ -52,7 +52,7 @@ class ElementData(object):
 
         """
 
-        return self.getInternal(key.lower())
+        return self.get_internal(key.lower())
 
     def __getattr__(self, key):
         """
@@ -69,7 +69,7 @@ class ElementData(object):
         return self.get(key)
 
 
-    def getInternal(self, key):
+    def get_internal(self, key):
         """
         Returns the requested property from the data
         Overridden by specific ElementData instances.
@@ -83,7 +83,7 @@ class ElementData(object):
 
         return
 
-    def getProperties(self):
+    def get_properties(self):
         """
         Proxy to the data's flowElement properties.
         Gets the FlowElement.properties of the parent FlowElement.
@@ -92,4 +92,4 @@ class ElementData(object):
         @return: Returns dictionary of the parent FlowElement's properties
         """
 
-        return self.flowElement.getProperties()
+        return self.flow_element.get_properties()

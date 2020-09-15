@@ -63,16 +63,16 @@ class JavascriptBuilderElement(FlowElement):
         FlowData constructor.
 
         * @param {dict} options options object
-        * @param {string} options.objName the name of the client
-        * side object with the JavaScript properties in it
+        * @param {string} options.obj_name the name of the client
+        * side object with the JavaScript properties in it ('fod' by default)
         * @param {string} options.protocol The protocol ("http" or "https")
         * used by the client side callback url.
         * This can be overriden with header.protocol evidence
         * @param {string} options.host The host of the client side
         * callback url. This can be overriden with header.host evidence.
-        * @param {string} options.endPoint The endpoint of the client side
+        * @param {string} options.endpoint The endpoint of the client side
         * callback url
-        * @param {boolean} options.enableCookies whether cookies should be enabled
+        * @param {boolean} options.enable_cookies whether cookies should be enabled
         * @param {boolean} options.minify Whether to minify the JavaScript
 
         """
@@ -81,40 +81,40 @@ class JavascriptBuilderElement(FlowElement):
 
         self.settings = {}
 
-        self.settings['_objName'] = settings["objName"] if "objName" in settings else 'fod'
+        self.settings['_objName'] = settings["obj_name"] if "obj_name" in settings else 'fod'
         self.settings['_protocol'] = settings["protocol"] if "protocol" in settings else None
         self.settings['_host'] = settings["host"] if "host" in settings else None
         self.settings['_endpoint'] = settings["endpoint"] if "endpoint" in settings else ''
-        self.settings['_enableCookies'] = settings["enableCookies"] if "enableCookies" in settings else True
+        self.settings['_enableCookies'] = settings["enable_cookies"] if "enable_cookies" in settings else True
 
         self.minify = settings["minify"] if "minify" in settings else True
 
-        self.dataKey = "javascriptbuilder"
+        self.datakey = "javascriptbuilder"
 
     """
     The JavaScriptBuilder captures query string evidence and
     headers for detecting whether the request is http or https
     
     """
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
    
         return JavaScriptBuilderEvidenceKeyFilter()
 
     """
     The JavaScriptBundler collects client side javascript to serve.
 
-    @type FlowData: FlowData
-    @param FlowData: The FlowData
+    @type flowdata: FlowData
+    @param flowdata: The FlowData
 
     """
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
     
         variables = {}
 
         for key, value in self.settings.items():
             variables[key] = value
 
-        variables["_jsonObject"] = json.dumps(flowData.jsonbundler.json)
+        variables["_jsonObject"] = json.dumps(flowdata.jsonbundler.json)
 
         # Generate URL and autoUpdate params
 
@@ -123,8 +123,8 @@ class JavascriptBuilderElement(FlowElement):
 
         if not protocol:
             # Check if protocol is provided in evidence
-            if flowData.evidence.get("header.protocol"):
-                protocol = flowData.evidence.get("header.protocol")
+            if flowdata.evidence.get("header.protocol"):
+                protocol = flowdata.evidence.get("header.protocol")
             
         if not protocol:
             protocol = "https"
@@ -133,8 +133,8 @@ class JavascriptBuilderElement(FlowElement):
         if not host:
             # Check if host is provided in evidence
 
-            if flowData.evidence.get("header.host"):
-                host = flowData.evidence.get("header.host")
+            if flowdata.evidence.get("header.host"):
+                host = flowdata.evidence.get("header.host")
 
         variables["_host"] = host
         variables["_protocol"] = protocol
@@ -145,18 +145,18 @@ class JavascriptBuilderElement(FlowElement):
 
             # Add query parameters to the URL
 
-            queryParams = self.getEvidenceKeyFilter().filterEvidence(flowData.evidence.getAll())
+            query_params = self.get_evidence_key_filter().filter_evidence(flowdata.evidence.get_all())
 
             query = {}
  
-            for param, paramValue in queryParams.items():
+            for param, paramvalue in query_params.items():
 
-                paramKey = param.split(".")[1] 
+                paramkey = param.split(".")[1] 
 
-                query[paramKey] = paramValue
+                query[paramkey] = paramvalue
            
   
-            urlQuery = urllib.parse.urlencode(query)
+            url_query = urllib.parse.urlencode(query)
   
             # Does the URL already have a query string in it?
     
@@ -165,7 +165,7 @@ class JavascriptBuilderElement(FlowElement):
             else:
                 variables["_url"] += "&"
             
-            variables["_url"] += urlQuery
+            variables["_url"] += url_query
 
             variables["_updateEnabled"] = True
         else:
@@ -176,8 +176,8 @@ class JavascriptBuilderElement(FlowElement):
         # if the browser supports promises.
         
         try:
-            flowData.get("device").get("promise")
-            variables["_supportsPromises"] = flowData.device.promise.value == True
+            flowdata.get("device").get("promise")
+            variables["_supportsPromises"] = flowdata.device.promise.value == True
         except Exception:
             variables["_supportsPromises"] = False
        
@@ -196,6 +196,6 @@ class JavascriptBuilderElement(FlowElement):
         
         data = ElementDataDictionary(self, {"javascript": output})
 
-        flowData.setElementData(data)
+        flowdata.set_element_data(data)
 
         return

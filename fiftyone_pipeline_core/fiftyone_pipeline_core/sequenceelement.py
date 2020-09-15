@@ -51,31 +51,31 @@ class SequenceElement(FlowElement):
 
         super(SequenceElement, self).__init__()
 
-        self.dataKey = "sequence"
+        self.datakey = "sequence"
 
     # """
     # The SequenceElement uses query.sequence and query.session-id evidence
     # """
 
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
   
       return SequenceElementEvidenceKeyFilter()
 
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
 
         """"
         The SequenceElement stores session data for requests for JavaScript
     
-        @type FlowData: FlowData
-        @param FlowData: The FlowData
+        @type flowdata: FlowData
+        @param flowdata: The FlowData
 
         """
     
-        if flowData.evidence.get("query.session-id"):
+        if flowdata.evidence.get("query.session-id"):
             
             # Get current sequence number
     
-            sequence = flowData.evidence.get("query.sequence")
+            sequence = flowdata.evidence.get("query.sequence")
       
             if sequence:
                 sequence = int(sequence)
@@ -83,12 +83,12 @@ class SequenceElement(FlowElement):
                 sequence = 1
            
       
-            flowData.evidence.set("query.sequence", sequence + 1)
+            flowdata.evidence.add("query.sequence", sequence + 1)
 
         else:
-            flowData.evidence.set(
+            flowdata.evidence.add(
                 "query.session-id",
                 uuid.uuid4()
             )
       
-            flowData.evidence.set("query.sequence", 1)
+            flowdata.evidence.add("query.sequence", 1)

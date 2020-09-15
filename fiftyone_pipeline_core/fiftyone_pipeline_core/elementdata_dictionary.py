@@ -29,7 +29,7 @@ class ElementDataDictionary(ElementData):
 
     """
 
-    def __init__(self, flowElement, contents):
+    def __init__(self, flow_element, contents):
         """
         Constructor for Element Data Dictionary
 
@@ -41,17 +41,17 @@ class ElementDataDictionary(ElementData):
 
         """
 
-        super(ElementDataDictionary, self).__init__(flowElement)
+        super(ElementDataDictionary, self).__init__(flow_element)
         self.contents = {}
 
         for key, value in contents.items():
             self.contents[key.lower()] = value
 
-        self.flowElement = flowElement
+        self.flow_element = flow_element
 
-        ElementData(flowElement)
+        ElementData(flow_element)
 
-    def asDictionary(self):
+    def as_dictionary(self):
         """"
         Get the values contained in the ElementData instance as a dictionary
         of keys and values.
@@ -62,7 +62,7 @@ class ElementDataDictionary(ElementData):
         """
         return self.contents
 
-    def getInternal(self, key):
+    def get_internal(self, key):
         """
         Internal getter for ElementDataDictionary.contents
 

@@ -11,20 +11,20 @@ class APVFlowElement(FlowElement):
 
         super(APVFlowElement, self).__init__()
 
-        self.dataKey = "apv"
+        self.datakey = "apv"
 
         self.properties = {"yes" : { "type": "string"} }
         self.properties = {"no" : { "type": "string"} }
 
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
 
         yes = AspectPropertyValue(value="yes")
-        no = AspectPropertyValue(noValueMessage="no")
+        no = AspectPropertyValue(no_value_message="no")
 
         data = ElementDataDictionary(self, {"yes": yes, "no": no})
 
-        flowData.setElementData(data)
+        flowdata.set_element_data(data)
     
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
 
         return BasicListEvidenceKeyFilter(["header.user-agent"])

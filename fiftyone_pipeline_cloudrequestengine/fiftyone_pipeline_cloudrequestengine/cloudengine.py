@@ -41,7 +41,7 @@ class CloudEngine(Engine):
 
         super(CloudEngine, self).__init__()
 
-        self.dataKey = "CloudEngineBase" # This should be overriden
+        self.datakey = "CloudEngineBase" # This should be overriden
 
     def onRegistration(self, pipeline):
  
@@ -59,7 +59,7 @@ class CloudEngine(Engine):
             raise Exception("CloudRequestEngine needs to be placed before cloud elements in Pipeline")
 
         # Add properties from the CloudRequestEngine which should already have them
-        self.properties = pipeline.flowElementsList["cloud"].flowElementProperties[self.dataKey]
+        self.properties = pipeline.flowElementsList["cloud"].flowElementProperties[self.datakey]
 
 
     def processInternal(self, flowData):
@@ -68,17 +68,17 @@ class CloudEngine(Engine):
 
         cloudData = json.loads(cloudData)
 
-        engineData = cloudData[self.dataKey]
+        engineData = cloudData[self.datakey]
 
         result = {}
 
         for key, value in engineData.items():
 
-            if key + "nullreason" in cloudData[self.dataKey]:
-                result[key] = AspectPropertyValue(noValueMessage=cloudData[self.dataKey][key + "nullreason"])
+            if key + "nullreason" in cloudData[self.datakey]:
+                result[key] = AspectPropertyValue(no_value_message=cloudData[self.datakey][key + "nullreason"])
             else:
                 result[key] = AspectPropertyValue(None, value)
 
         data = AspectDataDictionary(self, result)
             
-        flowData.setElementData(data)
+        flowData.set_element_data(data)

@@ -60,7 +60,7 @@ class AspectData(ElementData):
         if hasattr(self.flowElement, "restrictedProperties"):
 
             if not key in self.flowElement.restrictedProperties:
-                raise Exception("Property " + key + " was excluded from " + self.flowElement.dataKey)  
+                raise Exception("Property " + key + " was excluded from " + self.flowElement.datakey)  
 
         try:
             if self.getInternal(key) == None:

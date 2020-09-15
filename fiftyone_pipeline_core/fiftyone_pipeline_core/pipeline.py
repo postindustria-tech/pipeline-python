@@ -32,12 +32,12 @@ class Pipeline:
 
     """
 
-    def __init__(self, flowElements, logger=Logger()):
+    def __init__(self, flow_elements, logger=Logger()):
         """
         Pipeline constructor.
 
-        @type flowElements: list[FlowElement]
-        @param flowElements: A list of flowElements
+        @type flow_elements: list[FlowElement]
+        @param flow_elements: A list of flowElements
 
         @type logger: Logger
         @param logger: A logger to attach to the pipeline
@@ -47,22 +47,22 @@ class Pipeline:
 
         """
 
-        self.flowElements = flowElements
+        self.flow_elements = flow_elements
 
         self.logger = logger
 
-        self.flowElementsList = {}
+        self.flow_elements_list = {}
 
-        for flowElement in flowElements:
+        for flow_element in flow_elements:
 
             # Notify element that it has been registered in the pipeline
-            flowElement.onRegistration(self)
+            flow_element.on_registration(self)
 
-            self.flowElementsList[flowElement.dataKey] = flowElement
+            self.flow_elements_list[flow_element.datakey] = flow_element
 
-            flowElement.pipelines.append(self)
+            flow_element.pipelines.append(self)
 
-    def createFlowData(self):
+    def create_flowdata(self):
         """
         Create a FlowData based on what's in the pipeline
         
@@ -87,7 +87,7 @@ class Pipeline:
 
         self.logger.log(level, message)
 
-    def getElement(self, key):
+    def get_element(self, key):
         """
         Get a flowElement by its name.
 
@@ -99,22 +99,22 @@ class Pipeline:
 
         """
 
-        return self.flowElementsList[key]
+        return self.flow_elements_list[key]
 
-    def getProperties(self):
+    def get_properties(self):
         """
         Get all properties of all flowElements in the pipeline.
 
         @rtype: dict of {string : DataPropertyDictionary}
-        @returns: Returns dictionary of all properties in a pipeline keyed by each flowElement's FlowElement.dataKey.
+        @returns: Returns dictionary of all properties in a pipeline keyed by each flowElement's FlowElement.datakey.
 
         """
 
         output = {}
 
-        for flowElement in self.flowElements:
-            properties = flowElement.getProperties()
+        for flow_element in self.flow_elements:
+            properties = flow_element.get_properties()
 
-            output[flowElement.dataKey] = properties
+            output[flow_element.datakey] = properties
 
         return output

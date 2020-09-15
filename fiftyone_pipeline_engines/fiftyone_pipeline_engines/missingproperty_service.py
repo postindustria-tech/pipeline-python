@@ -31,6 +31,6 @@ class MissingPropertyService():
 
     def check(self, key, flowElement):
             
-        raise Exception("Property " + key + " not found in " +  flowElement.dataKey)
+        raise Exception("Property " + key + " not found in " +  flowElement.datakey)
     
 

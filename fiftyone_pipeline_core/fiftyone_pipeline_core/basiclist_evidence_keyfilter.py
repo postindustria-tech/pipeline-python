@@ -30,7 +30,7 @@ Evidence not using these keys is filtered out
 
 class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
 
-    def __init__(self, keysList):
+    def __init__(self, keys_list):
         """
         BasicListEvidenceKeyFilter constructor
 
@@ -39,9 +39,9 @@ class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
 
         """
 
-        self.list = keysList
+        self.list = keys_list
 
-    def filterEvidenceKey(self, key):
+    def filter_evidenceKey(self, key):
 
         """
         Check if an evidence key is present in a filter list.

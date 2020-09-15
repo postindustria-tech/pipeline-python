@@ -86,7 +86,7 @@ class AstrologyFlowElement(FlowElement):
 
         super(AstrologyFlowElement, self).__init__()
 
-        self.dataKey = "astrology"
+        self.datakey = "astrology"
 
         # set the FLowElement's properties
 

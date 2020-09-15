@@ -9,13 +9,13 @@ class ErrorFlowData(FlowElement):
 
         super(ErrorFlowData, self).__init__()
 
-        self.dataKey = "error"
+        self.datakey = "error"
 
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
   
         raise Exception("Something went wrong")
 
 
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
 
         return BasicListEvidenceKeyFilter(["header.user-agent"])

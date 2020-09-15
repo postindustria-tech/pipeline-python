@@ -40,9 +40,9 @@ class AspectPropertyValue(object):
 
     """
     
-    def __init__(self, noValueMessage = None, value = "noValue"):
+    def __init__(self, no_value_message = None, value = "noValue"):
 
-        self.noValueMessage = noValueMessage
+        self.noValueMessage = no_value_message
 
         if(value != "noValue"):
             self.__value = value
@@ -50,7 +50,7 @@ class AspectPropertyValue(object):
         else:
             self.__hasValue = False
 
-    def hasValue(self):
+    def has_value(self):
 
         return self.__hasValue
 
@@ -59,4 +59,8 @@ class AspectPropertyValue(object):
         if self.__hasValue:
             return self.__value
         else:
-            raise Exception(self.noValueMessage)
+            raise Exception(self.no_value_message())
+
+    def no_value_message(self):
+
+        return self.noValueMessage

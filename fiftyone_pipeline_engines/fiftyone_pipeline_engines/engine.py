@@ -100,7 +100,7 @@ class Engine(FlowElement):
             else:
                 self.processInternal(flowData)
                 cacheKey = json.dumps(self.filterEvidence(flowData))
-                self.cache.setCacheValue(cacheKey, flowData.get(self.dataKey))
+                self.cache.setCacheValue(cacheKey, flowData.get(self.datakey))
 
         else:
 

@@ -34,7 +34,7 @@ class TestEngine(FlowElement):
 
         super(TestEngine, self).__init__()
 
-        self.dataKey = "test"
+        self.datakey = "test"
 
         self.properties = { 
             "javascript" : {
@@ -52,7 +52,7 @@ class TestEngine(FlowElement):
         }
 
 
-    def processInternal(self, FlowData):
+    def process_internal(self, flowdata):
  
         contents = {}
 
@@ -64,7 +64,7 @@ class TestEngine(FlowElement):
 
         data =  ElementDataDictionary(self, contents)
 
-        FlowData.setElementData(data)
+        flowdata.set_element_data(data)
 
 
 class TestPipeline():
@@ -88,7 +88,7 @@ class DelayedExecutionEngine1(FlowElement):
 
         super(DelayedExecutionEngine1, self).__init__()
 
-        self.dataKey = "delayedexecutiontest1"
+        self.datakey = "delayedexecutiontest1"
 
         self.properties = {
             "one" : {
@@ -100,7 +100,7 @@ class DelayedExecutionEngine1(FlowElement):
             }
         }
 
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
 
         contents = {
             "one" : 1,
@@ -109,7 +109,7 @@ class DelayedExecutionEngine1(FlowElement):
 
         data = ElementDataDictionary(self, contents)
 
-        flowData.setElementData(data)
+        flowdata.set_element_data(data)
 
 
 class DelayedExecutionEngine2(FlowElement):
@@ -118,7 +118,7 @@ class DelayedExecutionEngine2(FlowElement):
 
         super(DelayedExecutionEngine2, self).__init__()
 
-        self.dataKey = "delayedexecutiontest2"
+        self.datakey = "delayedexecutiontest2"
             
         self.properties = {
             "one" : {
@@ -130,7 +130,7 @@ class DelayedExecutionEngine2(FlowElement):
             }
         }
 
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
 
 
         contents = {
@@ -140,7 +140,7 @@ class DelayedExecutionEngine2(FlowElement):
 
         data =  ElementDataDictionary(self, contents)
 
-        flowData.setElementData(data)
+        flowdata.set_element_data(data)
 
 
 class DelayedExecutionEngine3(FlowElement):
@@ -149,7 +149,7 @@ class DelayedExecutionEngine3(FlowElement):
 
         super(DelayedExecutionEngine3, self).__init__()
 
-        self.dataKey = "delayedexecutiontest3"
+        self.datakey = "delayedexecutiontest3"
   
         self.properties = {
             "one" : {
@@ -163,8 +163,7 @@ class DelayedExecutionEngine3(FlowElement):
             }
         }
 
-    def processInternal(self, flowData):
-
+    def process_internal(self, flowdata):
 
         contents = {
             "one" : 1,
@@ -174,8 +173,7 @@ class DelayedExecutionEngine3(FlowElement):
 
         data = ElementDataDictionary(self, contents)
 
-        flowData.setElementData(data)
-
+        flowdata.set_element_data(data)
 
 
 class JavaScriptBundlerTests(unittest.TestCase):
@@ -184,7 +182,7 @@ class JavaScriptBundlerTests(unittest.TestCase):
     
         Pipeline = TestPipeline(False).Pipeline
 
-        FlowData = Pipeline.createFlowData()
+        FlowData = Pipeline.create_flowdata()
 
         FlowData.process()
 
@@ -210,19 +208,19 @@ class JavaScriptBundlerTests(unittest.TestCase):
    
         # Generate minified javascript
         Pipeline = (TestPipeline(True)).Pipeline
-        FlowData = Pipeline.createFlowData()
+        FlowData = Pipeline.create_flowdata()
         FlowData.process()
         minified = FlowData.javascriptbuilder.javascript
 
         # Generate non-minified javascript
         Pipeline = (TestPipeline(False)).Pipeline
-        FlowData = Pipeline.createFlowData()
+        FlowData = Pipeline.create_flowdata()
         FlowData.process()
         nonminified = FlowData.javascriptbuilder.javascript
 
         # Generate javascript with default settings
         Pipeline = (TestPipeline()).Pipeline
-        FlowData = Pipeline.createFlowData()
+        FlowData = Pipeline.create_flowdata()
         FlowData.process()
         default = FlowData.javascriptbuilder.javascript
 
@@ -240,10 +238,10 @@ class JavaScriptBundlerTests(unittest.TestCase):
 
         Pipeline = ( TestPipeline(False)).Pipeline
 
-        FlowData = Pipeline.createFlowData()
+        FlowData = Pipeline.create_flowdata()
 
-        FlowData.evidence.set("query.session-id", "test")
-        FlowData.evidence.set("query.sequence", 10)
+        FlowData.evidence.add("query.session-id", "test")
+        FlowData.evidence.add("query.sequence", 10)
 
         FlowData.process()
 
@@ -259,7 +257,7 @@ class JavaScriptBundlerTests(unittest.TestCase):
         pipeline.add(DelayedExecutionEngine1())
         pipeline = pipeline.build()
 
-        flowData = pipeline.createFlowData()
+        flowData = pipeline.create_flowdata()
 
         flowData.process()
 
@@ -276,7 +274,7 @@ class JavaScriptBundlerTests(unittest.TestCase):
         pipeline.add(DelayedExecutionEngine2())
         pipeline = pipeline.build()
 
-        flowData = pipeline.createFlowData()
+        flowData = pipeline.create_flowdata()
 
         flowData.process()
 
@@ -299,7 +297,7 @@ class JavaScriptBundlerTests(unittest.TestCase):
         pipeline.add(DelayedExecutionEngine3())
         pipeline = pipeline.build()
 
-        flowData = pipeline.createFlowData()
+        flowData = pipeline.create_flowdata()
 
         flowData.process()
 

@@ -23,10 +23,10 @@ class TestPipeline():
             .add(APVFlowElement())\
             .add(StopFlowData())\
             .add(ExampleFlowElement2())\
-            .addLogger(logger)\
+            .add_logger(logger)\
             .build()
-        self.flowData = self.pipeline.createFlowData()
-        self.flowData.evidence.set("header.user-agent", "test")
-        self.flowData.evidence.set("some.other-evidence", "test")
+        self.flowData = self.pipeline.create_flowdata()
+        self.flowData.evidence.add("header.user-agent", "test")
+        self.flowData.evidence.add("some.other-evidence", "test")
         self.pipeline.log("error", "test")
         self.flowData.process()

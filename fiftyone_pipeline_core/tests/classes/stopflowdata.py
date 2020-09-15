@@ -7,13 +7,12 @@ class StopFlowData(FlowElement):
 
         super(StopFlowData, self).__init__()
 
-        self.dataKey = "stop"
+        self.datakey = "stop"
 
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
 
-        flowData.stop()
+        flowdata.stop()
 
-
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
 
         return BasicListEvidenceKeyFilter(["header.user-agent"])
