@@ -8,11 +8,11 @@ with open(path.join(this_directory, 'readme.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name="fiftyone_pipeline_cloudrequestengine",
-    version="4.0.0",
+    version="4.0.1",
     author="51Degrees",
     url="http://51degrees.com/",
     description=("The 51Degrees Pipeline API is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines). "
-    "This package extends the flow element class created by the fiftyone.pipeline.core pacakge into a specialized type of flow element called an engine."),
+    "This package extends the flow element class created by the fiftyone.pipeline.core package into a specialized type of flow element called an engine."),
     long_description=long_description,
     long_description_content_type='text/markdown',
     python_requires='>=2.7',
