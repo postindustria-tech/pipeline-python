@@ -75,9 +75,9 @@ class CloudRequestEngine(Engine):
 
         # Initialise evidencekeys and properties from the cloud service
      
-        self.flowElementProperties = self.getEngineProperties()
+        self.flow_element_properties = self.get_engine_properties()
 
-        self.evidenceKeys = self.getEvidenceKeys()
+        self.evidence_keys = self.get_evidence_keys()
 
 
     """
@@ -86,9 +86,9 @@ class CloudRequestEngine(Engine):
      * @rtype: dict
      * @return: Returns list of keys
      """
-    def getEvidenceKeys(self):
+    def get_evidence_keys(self):
     
-        evidenceKeyRequest = self.makeCloudRequest(self.baseURL + "evidencekeys")
+        evidenceKeyRequest = self.make_cloud_request(self.baseURL + "evidencekeys")
 
         evidenceKeys = json.loads(evidenceKeyRequest)
 
@@ -103,9 +103,9 @@ class CloudRequestEngine(Engine):
 
     """
 
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
 
-        return BasicListEvidenceKeyFilter(self.evidenceKeys)
+        return BasicListEvidenceKeyFilter(self.evidence_keys)
 
 
     """
@@ -114,13 +114,13 @@ class CloudRequestEngine(Engine):
     @rtype: dict
     @return: Returns properties for all engines
     """
-    def getEngineProperties(self):
+    def get_engine_properties(self):
 
         # Get properties for all engines
 
         propertiesURL = self.baseURL +"accessibleProperties?" + "resource=" + self.resourceKey
 
-        properties = self.makeCloudRequest(propertiesURL)
+        properties = self.make_cloud_request(propertiesURL)
 
         properties = json.loads(properties)
 
@@ -144,18 +144,14 @@ class CloudRequestEngine(Engine):
         return flowElementProperties
     
 
-    """
-    Internal helper method to make a cloud request
-    uses CURL if available, falls back to file_get_contents
-    
+    """    
     @type url: string
     @param url
     
     @rtype: dict
     @return Returns dict with data and error properties error contains any errors from the request, data contains the response
-    
     """
-    def makeCloudRequest(self, url):
+    def make_cloud_request(self, url):
 
         cloudResponse = requests.request('GET', url)
 
@@ -179,11 +175,11 @@ class CloudRequestEngine(Engine):
     @param FlowData: Returns a JSON object that is then parsed by cloud engines
 
     """
-    def processInternal(self, flowData):
+    def process_internal(self, flowdata):
    
         url = self.baseURL + self.resourceKey + ".json?"
 
-        evidence = flowData.evidence.getAll()
+        evidence = flowdata.evidence.get_all()
 
         # Remove prefix from evidence
 
@@ -203,10 +199,10 @@ class CloudRequestEngine(Engine):
 
         url += urlencode(evidenceWithoutPrefix)
 
-        result = self.makeCloudRequest(url)
+        result = self.make_cloud_request(url)
 
         data = AspectDataDictionary(self, {"cloud" : result})
 
-        flowData.set_element_data(data)
+        flowdata.set_element_data(data)
 
         return

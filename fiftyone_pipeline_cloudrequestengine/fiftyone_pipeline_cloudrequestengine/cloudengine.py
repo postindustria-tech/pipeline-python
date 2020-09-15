@@ -43,7 +43,7 @@ class CloudEngine(Engine):
 
         self.datakey = "CloudEngineBase" # This should be overriden
 
-    def onRegistration(self, pipeline):
+    def on_registration(self, pipeline):
  
         """
         Callback called when an engine is added to a pipeline
@@ -55,14 +55,14 @@ class CloudEngine(Engine):
 
         """
 
-        if not "cloud" in pipeline.flowElementsList:
+        if not "cloud" in pipeline.flow_elements_list:
             raise Exception("CloudRequestEngine needs to be placed before cloud elements in Pipeline")
 
         # Add properties from the CloudRequestEngine which should already have them
-        self.properties = pipeline.flowElementsList["cloud"].flowElementProperties[self.datakey]
+        self.properties = pipeline.flow_elements_list["cloud"].flow_element_properties[self.datakey]
 
 
-    def processInternal(self, flowData):
+    def process_internal(self, flowData):
   
         cloudData = flowData.get("cloud").get("cloud")
 
