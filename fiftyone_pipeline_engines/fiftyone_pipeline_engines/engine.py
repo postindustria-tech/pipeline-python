@@ -30,7 +30,7 @@ class Engine(FlowElement):
 
         super(Engine, self).__init__()
     
-    def setCache(self, cache):
+    def set_cache(self, cache):
         """
         Add a cache to an engine
         @type casee: Cache
@@ -41,19 +41,19 @@ class Engine(FlowElement):
         self.cache = cache
 
 
-    def setRestrictedProperties(self, propertiesList):
+    def set_restricted_properties(self, properties_list):
         """"
         Add a subset of properties
         
-        @type propertiesList: string[] 
-        @param propertiesList: An array of properties to include
+        @type properties_list: string[] 
+        @param properties_list: An array of properties to include
         
         """
  
-        self.restrictedProperties = propertiesList
+        self.restricted_properties = properties_list
   
 
-    def inCache(self, flowData):
+    def in_cache(self, flowData):
         """
         A method to check if a flowData's evidence is in the cache
         
@@ -65,14 +65,14 @@ class Engine(FlowElement):
 
         """
     
-        keys = self.filterEvidence(flowData)
+        keys = self.filter_evidence(flowData)
 
         cacheKey = json.dumps(keys)
 
-        cached = self.cache.getCacheValue(cacheKey)
+        cached = self.cache.get_cache_value(cacheKey)
 
         if cached is not None:
-            flowData.setElementData(cached)
+            flowData.set_element_data(cached)
 
             return True
         else:
@@ -81,27 +81,27 @@ class Engine(FlowElement):
 
 
 
-    def process(self, flowData):
+    def process(self, flowdata):
 
         """
         Engine's core process function.
         Calls specific overriden processInternal methods but wraps it in a cache check
         and a cache put
         
-        @type lowData: FlowData
+        @type flowdata: FlowData
         @param flowData:
         
         """
 
         if hasattr(self, "cache"):
 
-            if self.inCache(flowData):
+            if self.in_cache(flowdata):
                 return True
             else:
-                self.processInternal(flowData)
-                cacheKey = json.dumps(self.filterEvidence(flowData))
-                self.cache.setCacheValue(cacheKey, flowData.get(self.datakey))
+                self.process_internal(flowdata)
+                cacheKey = json.dumps(self.filter_evidence(flowdata))
+                self.cache.set_cache_value(cacheKey, flowdata.get(self.datakey))
 
         else:
 
-            self.processInternal(flowData)
+            self.process_internal(flowdata)

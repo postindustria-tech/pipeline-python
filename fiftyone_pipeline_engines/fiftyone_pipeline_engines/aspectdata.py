@@ -31,7 +31,7 @@ class AspectData(ElementData):
     * It also allows properties to be explicitly excluded by a flowElement / engine
     """
 
-    def __init__(self, flowElement):
+    def __init__(self, flow_element):
         """
         Constructor for element data
         Adds default missing property service if not available
@@ -42,11 +42,11 @@ class AspectData(ElementData):
         """
 
         # Default missing property service
-        if not hasattr(flowElement,"missingPropertyService"):
-            self.missingPropertyService = MissingPropertyService()
+        if not hasattr(flow_element,"missingPropertyService"):
+            self.missing_property_service = MissingPropertyService()
         
 
-        super(AspectData, self).__init__(flowElement)
+        super(AspectData, self).__init__(flow_element)
 
 
     def get(self, key):
@@ -57,16 +57,16 @@ class AspectData(ElementData):
         * returns: mixed
         """
         
-        if hasattr(self.flowElement, "restrictedProperties"):
+        if hasattr(self.flow_element, "restricted_properties"):
 
-            if not key in self.flowElement.restrictedProperties:
-                raise Exception("Property " + key + " was excluded from " + self.flowElement.datakey)  
+            if not key in self.flow_element.restricted_properties:
+                raise Exception("Property " + key + " was excluded from " + self.flow_element.datakey)  
 
         try:
-            if self.getInternal(key) == None:
-                return self.missingPropertyService.check(key, self.flowElement)
+            if self.get_internal(key) == None:
+                return self.missing_property_service.check(key, self.flow_element)
             else:
-                return self.getInternal(key)
+                return self.get_internal(key)
 
         except:
-            return self.missingPropertyService.check(key, self.flowElement)
+            return self.missing_property_service.check(key, self.flow_element)

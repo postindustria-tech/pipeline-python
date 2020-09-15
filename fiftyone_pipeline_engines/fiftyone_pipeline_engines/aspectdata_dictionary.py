@@ -28,12 +28,12 @@ class AspectDataDictionary(AspectData):
     
     """
 
-    def __init__(self, flowElement, contents):
+    def __init__(self, flow_element, contents):
         """
         Constructor for element data dictionary
 
-        @type flowElement: flowElement
-        @param flowElement:
+        @type flow_element: FlowElement
+        @param flow_element:
 
         @type contents: dict
         @param contents:
@@ -45,10 +45,10 @@ class AspectDataDictionary(AspectData):
         for key,value in contents.items():
             self.contents[key.lower()] = value
 
-        super(AspectDataDictionary, self).__init__(flowElement)
+        super(AspectDataDictionary, self).__init__(flow_element)
 
  
-    def asDictionary(self):
+    def as_dictionary(self):
         """
         Get the values contained in the aspectData instance as a dictionary
         of keys and values.
@@ -63,7 +63,7 @@ class AspectDataDictionary(AspectData):
   
  
  
-    def getInternal(self, key):
+    def get_internal(self, key):
         """
         getInternal = Internal getter for contents
 

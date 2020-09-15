@@ -29,8 +29,8 @@ is not available
 """
 class MissingPropertyService():
 
-    def check(self, key, flowElement):
+    def check(self, key, flow_element):
             
-        raise Exception("Property " + key + " not found in " +  flowElement.datakey)
+        raise Exception("Property " + key + " not found in " +  flow_element.datakey)
     
 

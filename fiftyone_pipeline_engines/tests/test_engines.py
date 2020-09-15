@@ -41,14 +41,14 @@ class TestCache(DataKeyedCache):
         self.cache = {}
         self.cacheHits = 0
 
-    def getCacheValue(self, key):
+    def get_cache_value(self, key):
         if key in self.cache:
             self.cacheHits += 1
             return self.cache[key]
         else:
             return None
 
-    def setCacheValue(self, key, value):
+    def set_cache_value(self, key, value):
         self.cache[key] = value
 
 class ExampleAspectEngine(Engine):
@@ -68,15 +68,15 @@ class ExampleAspectEngine(Engine):
             }
         }
 
-    def getEvidenceKeyFilter(self):
+    def get_evidence_key_filter(self):
 
         return BasicListEvidenceKeyFilter(["header.test"])
         
-    def processInternal(self, flowData):
+    def process_internal(self, flowData):
 
         data = AspectDataDictionary(self, {"integer" : 5, "boolean" : True})
 
-        flowData.setElementData(data)
+        flowData.set_element_data(data)
 
 class EngineTests(unittest.TestCase):
 
@@ -96,7 +96,7 @@ class EngineTests(unittest.TestCase):
         
         engine = ExampleAspectEngine()
 
-        engine.setRestrictedProperties(["boolean"])
+        engine.set_restricted_properties(["boolean"])
 
         testPipeline = PipelineBuilder().add(engine).build()
 
@@ -137,7 +137,7 @@ class EngineTests(unittest.TestCase):
 
         cache = TestCache()
 
-        engine.setCache(cache)
+        engine.set_cache(cache)
 
         testPipeline = PipelineBuilder().add(engine).build()
 

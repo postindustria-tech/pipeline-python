@@ -28,13 +28,13 @@ class tracker(DataKeyedCache):
     def track(self, key):
 
 
-        if self.getCacheValue(key) is None:
+        if self.get_cache_value(key) is None:
    
             return True
    
         else:
    
-            return self.match(key, self.getCacheValue(key))
+            return self.match(key, self.get_cache_value(key))
    
   
     def match(self, key,  result):

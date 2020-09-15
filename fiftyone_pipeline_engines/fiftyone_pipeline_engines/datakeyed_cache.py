@@ -24,12 +24,12 @@
 class DataKeyedCache(object):
 
 
-    def getCacheValue(self, cachekey):
+    def get_cache_value(self, cachekey):
 
         return None
 
 
-    def setCacheValue(self, cachekey, value):
+    def set_cache_value(self, cachekey, value):
 
         return None
 

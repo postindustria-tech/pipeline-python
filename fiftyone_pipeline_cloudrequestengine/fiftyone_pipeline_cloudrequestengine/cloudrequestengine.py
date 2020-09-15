@@ -207,6 +207,6 @@ class CloudRequestEngine(Engine):
 
         data = AspectDataDictionary(self, {"cloud" : result})
 
-        flowData.setElementData(data)
+        flowData.set_element_data(data)
 
         return

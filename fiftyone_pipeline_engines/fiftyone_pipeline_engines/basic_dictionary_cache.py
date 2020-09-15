@@ -6,11 +6,11 @@ class BasicDictionaryCache(DataKeyedCache):
 
         self.cache = {}
 
-    def getCacheValue(self, key):
+    def get_cache_value(self, key):
         if key in self.cache:
             return self.cache[key]
         else:
             return None
 
-    def setCacheValue(self, key, value):
+    def set_cache_value(self, key, value):
         self.cache[key] = value
