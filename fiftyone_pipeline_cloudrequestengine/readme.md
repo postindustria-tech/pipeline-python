@@ -1,5 +1,7 @@
 ![51Degrees](https://51degrees.com/DesktopModules/FiftyOne/Distributor/Logo.ashx?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=python-open-source "Data rewards the curious") **Python Pipeline Cloud Request Engine**
 
+[Pipeline Documentation](https://51degrees.com/documentation/4.1/index.html "Complete documentation")
+
 ## Introduction
 
 The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines) 
@@ -13,5 +15,5 @@ This package uses the `engines` class created by the `fiftyone.pipeline.engines`
 
 It is used by the cloud versions of the following 51Degrees engines:
 
-- **fiftyone_devicedetection** - A device detection engine
-- **fiftyone_location** - A geolocation lookup engine
+- [**fiftyone_devicedetection**](https://pypi.org/project/fiftyone-devicedetection/) - Get details about the devices accessing your web page
+- [**fiftyone_location**](https://pypi.org/project/fiftyone-location/) - Get postal address details from the location of devices accessing your web page
