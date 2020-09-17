@@ -24,9 +24,24 @@
 from .datakeyed_cache import DataKeyedCache
 
 class tracker(DataKeyedCache):
-
+    
+    """!
+    A tracker is an instance of datakeyed cache which,
+    if a result is found in the cache, calls an additional
+    boolean match method
+    """
+    
     def track(self, key):
 
+        """!
+        The track method calls the dataKeyedCache get method,
+        if it receives a result it sends it onto a match function
+        
+        @type key : cache key to run through tracker
+        @rtype bool 
+        @return result of tracking
+
+        """
 
         if self.get_cache_value(key) is None:
    
@@ -34,10 +49,18 @@ class tracker(DataKeyedCache):
    
         else:
    
-            return self.match(key, self.get_cache_value(key))
-   
+            return self.match(self.get_cache_value(key))
   
-    def match(self, key,  result):
+    def match(self, result):
+
+        """!
+        If object is found in cache, the match function is called
+        
+        @type key : result of the track function
+        @rtype bool 
+        @return whether a match has been made
+
+        """
 
         return True
 

@@ -21,13 +21,13 @@
  # ********************************************************************
 
 
-
-"""
-A missing property service runs when a property is not available in the
-aspectData. It can be extended to provide a specific message for why the property
-is not available
-"""
 class MissingPropertyService():
+    
+    """!
+    A missing property service runs when a property is not available in the
+    aspectData. It can be extended to provide a specific message for why the property
+    is not available
+    """
 
     def check(self, key, flow_element):
             

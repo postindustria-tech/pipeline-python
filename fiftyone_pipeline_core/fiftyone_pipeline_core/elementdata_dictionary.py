@@ -24,13 +24,15 @@ from .elementdata import ElementData
 
 
 class ElementDataDictionary(ElementData):
-    """
+
+    """!
     An extension of ElementData with dictionary object storage / lookup
 
     """
 
     def __init__(self, flow_element, contents):
-        """
+        
+        """!
         Constructor for Element Data Dictionary
 
         @type flowElement: FlowElement
@@ -52,18 +54,21 @@ class ElementDataDictionary(ElementData):
         ElementData(flow_element)
 
     def as_dictionary(self):
-        """"
+        
+        """!
         Get the values contained in the ElementData instance as a dictionary
         of keys and values.
 
         @rtype: dict
-        @returns: Returns a dictionary of items in an ElementData
+        @return: Returns a dictionary of items in an ElementData
 
         """
+
         return self.contents
 
     def get_internal(self, key):
-        """
+
+        """!
         Internal getter for ElementDataDictionary.contents
 
         @type key: string

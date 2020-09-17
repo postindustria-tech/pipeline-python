@@ -27,15 +27,16 @@ from fiftyone_pipeline_core.aspectproperty_value import AspectPropertyValue
 
 import json
 
-"""
+class CloudEngine(Engine):
+
+    """!
     This is a template for all 51Degrees cloud engines.
     It requires the 51Degrees cloudRequestEngine to be placed in a
     pipeline before it. It takes that raw JSON response and
     parses it to extract the device part.
     It also uses this data to generate a list of properties and an evidence key filter
 
-"""
-class CloudEngine(Engine):
+    """
 
     def __init__(self):
 
@@ -45,7 +46,7 @@ class CloudEngine(Engine):
 
     def on_registration(self, pipeline):
  
-        """
+        """!
         Callback called when an engine is added to a pipeline
         In this case sets up the properties list for the element from
         data in the CloudRequestEngine
@@ -63,6 +64,16 @@ class CloudEngine(Engine):
 
 
     def process_internal(self, flowData):
+
+        """!
+        Process function of a cloud engine.
+        This organises and parses data returned from the Cloud Request Engine
+        and adds it to the FlowData
+
+        @type flowData: FlowData
+        @param flowData: FlowData to process 
+
+        """
   
         cloudData = flowData.get("cloud").get("cloud")
 

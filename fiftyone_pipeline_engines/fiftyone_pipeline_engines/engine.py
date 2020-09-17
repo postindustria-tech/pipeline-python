@@ -26,12 +26,20 @@ import json
 
 class Engine(FlowElement):
 
+    """!
+    
+    An engine is an extension of the FlowElement class that adds
+    extra functionality
+
+    """
+
     def __init__(self):
 
         super(Engine, self).__init__()
     
     def set_cache(self, cache):
-        """
+
+        """!
         Add a cache to an engine
         @type casee: Cache
         @param cache: Cache with get and set methods
@@ -42,7 +50,8 @@ class Engine(FlowElement):
 
 
     def set_restricted_properties(self, properties_list):
-        """"
+
+        """!
         Add a subset of properties
         
         @type properties_list: string[] 
@@ -54,7 +63,8 @@ class Engine(FlowElement):
   
 
     def in_cache(self, flowData):
-        """
+
+        """!
         A method to check if a flowData's evidence is in the cache
         
         @type FlowData: FlowData
@@ -83,7 +93,8 @@ class Engine(FlowElement):
 
     def process(self, flowdata):
 
-        """
+        """!
+        
         Engine's core process function.
         Calls specific overriden processInternal methods but wraps it in a cache check
         and a cache put

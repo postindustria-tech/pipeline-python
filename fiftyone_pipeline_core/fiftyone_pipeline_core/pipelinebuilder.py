@@ -45,7 +45,7 @@ class PipelineBuilder:
         (default true)
         `javascriptBuilderSettings (dict)` - Settings for the JavaScriptBuilder engine 
         @rtype: PipelineBuilder
-        @returns: Returns a Pipeline Builder
+        @return: Returns a Pipeline Builder
 
         """
 
@@ -68,7 +68,7 @@ class PipelineBuilder:
         Adds the JavaScriptBuilder, JSONBundler and SequenceElement to the pipeline if
         If addJavascriptBuilder is set to true (the default)
         @rtype: list
-        @returns: Returns a list of FlowElements     
+        @return: Returns a list of FlowElements     
         """
         
         flow_elements = []
@@ -93,7 +93,7 @@ class PipelineBuilder:
         @param flow_element: flowElement to be added to the pipeline
 
         @rtype: PipelineBuilder
-        @returns: Returns the pipleine builder with the specified flowElement added to it's list of flowElements.
+        @return: Returns the pipleine builder with the specified flowElement added to it's list of flowElements.
 
         """
 
@@ -107,7 +107,7 @@ class PipelineBuilder:
         Call build after all items to be included in the pipeline have been added.
 
         @rtype: Pipeline
-        @returns: Returns a Pipeline
+        @return: Returns a Pipeline
 
         """
 
@@ -123,7 +123,7 @@ class PipelineBuilder:
         @param logger: Logger to be added to the pipeline
 
         @rtype: PipelineBuilder
-        @returns: Returns the pipeline builder with the specified Logger added.
+        @return: Returns the pipeline builder with the specified Logger added.
         
         """
 

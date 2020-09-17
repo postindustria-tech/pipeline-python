@@ -21,26 +21,26 @@
  # ********************************************************************
 
 
-"""
-   An AspectPropertyValue is a wrapper for a value
-   It lets you check this wrapper has a value inside it
-   If not value is set, a specific no value message is returned
-"""
-
 class AspectPropertyValue(object):
-
-    """
-    Constructor for AspectPropertyValue
-
-    @type value: mixed
-    @param value: the property value to store
-
-    @type noValueMessage: string
-    @param noValueMessage: if there is no value, the reason for there not being one
-
-    """
     
+    """!
+    An AspectPropertyValue is a wrapper for a value
+    It lets you check this wrapper has a value inside it
+    If not value is set, a specific no value message is returned
+    """
+
     def __init__(self, no_value_message = None, value = "noValue"):
+    
+        """!
+        Constructor for AspectPropertyValue
+
+        @type value: mixed
+        @param value: the property value to store
+
+        @type noValueMessage: string
+        @param noValueMessage: if there is no value, the reason for there not being one
+        
+        """
 
         self.noValueMessage = no_value_message
 
@@ -52,9 +52,27 @@ class AspectPropertyValue(object):
 
     def has_value(self):
 
+        """!
+        Check if the AspectPropertyValue wrapper has a value inside it
+
+        @rtype bool
+        @return whether there is a value
+        
+        """
+
         return self.__hasValue
 
     def value(self):
+
+        """!
+        Get the value out of the AspectPropertyValue wrapper
+        Note that this will return an error (including no_value_message if set)
+        if there is no value. So check has_value() first to be sure.
+
+        @rtype mixed
+        @return the stored value
+        
+        """
         
         if self.__hasValue:
             return self.__value
@@ -62,5 +80,13 @@ class AspectPropertyValue(object):
             raise Exception(self.no_value_message())
 
     def no_value_message(self):
+
+        """!
+        If there is no value, get the reason for there not being a value
+
+        @rtype string
+        @return the no value message
+        
+        """
 
         return self.noValueMessage

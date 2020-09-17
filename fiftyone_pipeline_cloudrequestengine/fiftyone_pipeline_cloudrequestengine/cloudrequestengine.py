@@ -42,7 +42,7 @@ class CloudRequestEngine(Engine):
 
     def __init__(self, settings = {}):
 
-        """
+        """!
         Constructor for CloudRequestEngine
         
         @type settings: dict
@@ -79,14 +79,13 @@ class CloudRequestEngine(Engine):
 
         self.evidence_keys = self.get_evidence_keys()
 
-
-    """
-     * Internal function for getting evidence keys used by cloud engines
-     *
-     * @rtype: dict
-     * @return: Returns list of keys
-     """
     def get_evidence_keys(self):
+
+        """!
+        Internal function for getting evidence keys used by cloud engines
+        @rtype: dict
+        @return: Returns list of keys
+        """
     
         evidenceKeyRequest = self.make_cloud_request(self.baseURL + "evidencekeys")
 
@@ -94,27 +93,29 @@ class CloudRequestEngine(Engine):
 
         return evidenceKeys
 
-    """
-    Instance of EvidenceKeyFilter based on the evidence keys fetched
-    from the cloud service by the private getEvidenceKeys() method
-    
-    @trye: BasicListEvidenceKeyFilter
-    @return: Returns BasicListEvidenceKeyFilter
-
-    """
 
     def get_evidence_key_filter(self):
+
+        """!
+        Instance of EvidenceKeyFilter based on the evidence keys fetched
+        from the cloud service by the private getEvidenceKeys() method
+        
+        @type: BasicListEvidenceKeyFilter
+        @return: Returns BasicListEvidenceKeyFilter
+
+        """
 
         return BasicListEvidenceKeyFilter(self.evidence_keys)
 
 
-    """
-    Internal method to get properties for cloud engines from the cloud service
-    
-    @rtype: dict
-    @return: Returns properties for all engines
-    """
     def get_engine_properties(self):
+
+        """!
+        Internal method to get properties for cloud engines from the cloud service
+    
+        @rtype: dict
+        @return: Returns properties for all engines
+        """
 
         # Get properties for all engines
 
@@ -143,15 +144,15 @@ class CloudRequestEngine(Engine):
                
         return flowElementProperties
     
-
-    """    
-    @type url: string
-    @param url
-    
-    @rtype: dict
-    @return Returns dict with data and error properties error contains any errors from the request, data contains the response
-    """
     def make_cloud_request(self, url):
+
+        """!    
+        @type url: string
+        @param url
+        
+        @rtype: dict
+        @return Returns dict with data and error properties error contains any errors from the request, data contains the response
+        """
 
         cloudResponse = requests.request('GET', url)
 
@@ -165,17 +166,19 @@ class CloudRequestEngine(Engine):
             except:
                 raise Exception("Cloud request engine properties list request returned " + str(cloudResponse.status_code))
             
-    """
-    Processing function for the CloudRequestEngine
-    Makes a request to the cloud service with the supplied resource key
-    and evidence and returns a JSON object that is then parsed by cloud engines
-    placed later in the pipeline
-    
-    @type FlowData: FlowData
-    @param FlowData: Returns a JSON object that is then parsed by cloud engines
 
-    """
     def process_internal(self, flowdata):
+
+        """!
+        Processing function for the CloudRequestEngine
+        Makes a request to the cloud service with the supplied resource key
+        and evidence and returns a JSON object that is then parsed by cloud engines
+        placed later in the pipeline
+        
+        @type FlowData: FlowData
+        @param FlowData: Returns a JSON object that is then parsed by cloud engines
+
+        """
    
         url = self.baseURL + self.resourceKey + ".json?"
 

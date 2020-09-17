@@ -21,8 +21,7 @@
  # ********************************************************************
 
 
-#  @example custom_flowelement
-
+## @example client_side_evidence_custom_flow_element.py
 # This example demonstrates the creation of a custom flow element. In this case 
 # the flowElement takes the results of a client side form collecting 
 # date of birth, setting this as evidence on a flowData object to calculate 
@@ -38,7 +37,6 @@ from fiftyone_pipeline_core.flowelement import FlowElement
 from fiftyone_pipeline_core.elementdata_dictionary import ElementDataDictionary
 
 import json
-
 
 # Function to get star sign from month and day
 def getStarSign(month, day):

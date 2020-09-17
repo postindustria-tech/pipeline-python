@@ -22,16 +22,18 @@
 
 from .evidence_keyfilter import EvidenceKeyFilter
 
-"""
-An instance of EvidenceKeyFilter that uses a simple array of keys
-Evidence not using these keys is filtered out
-
-"""
 
 class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
 
+    """!
+    An instance of EvidenceKeyFilter that uses a simple array of keys
+    Evidence not using these keys is filtered out
+
+    """
+
     def __init__(self, keys_list):
-        """
+        
+        """!
         BasicListEvidenceKeyFilter constructor
 
         @type keysList: dict 
@@ -43,7 +45,7 @@ class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
 
     def filter_evidenceKey(self, key):
 
-        """
+        """!
         Check if an evidence key is present in a filter list.
 
         @type key: string

@@ -24,7 +24,8 @@ from .flowdata import FlowData
 from .logger import Logger
 
 class Pipeline:
-    """
+
+    """!
     Pipeline holding a list of FlowElements for processing,
     can create FlowData that will be passed through these,
     collecting ElementData
@@ -33,7 +34,8 @@ class Pipeline:
     """
 
     def __init__(self, flow_elements, logger=Logger()):
-        """
+
+        """!
         Pipeline constructor.
 
         @type flow_elements: list[FlowElement]
@@ -43,7 +45,7 @@ class Pipeline:
         @param logger: A logger to attach to the pipeline
 
         @rtype: Pipeline
-        @returns: Returns a Pipeline
+        @return: Returns a Pipeline
 
         """
 
@@ -63,18 +65,20 @@ class Pipeline:
             flow_element.pipelines.append(self)
 
     def create_flowdata(self):
-        """
+
+        """!
         Create a FlowData based on what's in the pipeline
         
         @rtype: FlowData
-        @returns: Return a FlowData
+        @return: Return a FlowData
 
         """
 
         return FlowData(self)
 
     def log(self, level, message):
-        """
+
+        """!
         Log a message using the Logger.log of the pipeline's Logger.
 
         @type level: string
@@ -88,25 +92,27 @@ class Pipeline:
         self.logger.log(level, message)
 
     def get_element(self, key):
-        """
+
+        """!
         Get a flowElement by its name.
 
         @type key: string
         @param key: name of flowElement
 
         @rtype: FlowElement
-        @returns: Returns the FlowElement indicated
+        @return: Returns the FlowElement indicated
 
         """
 
         return self.flow_elements_list[key]
 
     def get_properties(self):
-        """
+
+        """!
         Get all properties of all flowElements in the pipeline.
 
         @rtype: dict of {string : DataPropertyDictionary}
-        @returns: Returns dictionary of all properties in a pipeline keyed by each flowElement's FlowElement.datakey.
+        @return: Returns dictionary of all properties in a pipeline keyed by each flowElement's FlowElement.datakey.
 
         """
 

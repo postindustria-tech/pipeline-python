@@ -22,7 +22,8 @@
 
 
 class EvidenceKeyFilter:
-    """
+
+    """!
     An EvidenceKeyFilter is attached to a FlowElement and is used to check
     if a specific evidence key is needed by it. This allows for keys that are
     not used by any FLowElement in a pipeline to be discarded, and on a FlowElement
@@ -32,7 +33,8 @@ class EvidenceKeyFilter:
     """
 
     def filter_evidence(self, evidence_key_object):
-        """
+
+        """!
         Filter evidence from a dictionary of evidence keys/values.
         Runs filterEvidenceKey on each key in the dictionary
 
@@ -54,7 +56,8 @@ class EvidenceKeyFilter:
         return filtered
 
     def filter_evidence_key(self, key):
-        """
+
+        """!
         See if a property key should be in the filtered evidence
 
         @type key: string
