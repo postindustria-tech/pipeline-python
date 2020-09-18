@@ -2,6 +2,16 @@ from flask import request
 
 def webevidence(request):
 
+    """!
+    Get evidence from a web request (gets headers, cookies and query parameters)
+    
+    @type request: Request 
+    @param request: A Request object
+    @rtype dict
+    @return A dictionary of web evidence that can be using in flowdata.evidence.add_from_dict()
+
+    """
+
     webevidence = {}
 
     for header in request.headers:

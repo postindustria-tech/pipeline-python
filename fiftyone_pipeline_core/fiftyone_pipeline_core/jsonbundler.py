@@ -20,8 +20,12 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************
 
+from .flowelement import FlowElement
+from .elementdata_dictionary import ElementDataDictionary
 
-"""
+class JSONBundlerElement(FlowElement):
+
+    """!
     The JSONBundler aggregates all properties from FlowElements into a JSON object
     It is used for retrieving via an endpoint from the client
     side via the JavaScriptBuilder and also used inside the
@@ -29,12 +33,7 @@
     Both this and the JavaScriptBuilder element are automatically
     added to a Pipeline unless specifically ommited in the PipelineBuilder
 
-"""
-
-from .flowelement import FlowElement
-from .elementdata_dictionary import ElementDataDictionary
-
-class JSONBundlerElement(FlowElement):
+    """
 
     def __init__(self):
 
@@ -46,13 +45,15 @@ class JSONBundlerElement(FlowElement):
 
         self.property_cache = {}
 
-    """
-    The JSONBundler extracts all properties from a FlowData and serializes them into JSON
-    @type flowdata: FlowData
-    @param flowdata: A FlowData
-    
-    """
     def process_internal(self, flowdata):
+
+        """!
+        
+        The JSONBundler extracts all properties from a FlowData and serializes them into JSON
+        @type flowdata: FlowData
+        @param flowdata: A FlowData
+    
+        """
    
         # Get every property on every FlowElement
         # Storing JavaScript properties in an extra section

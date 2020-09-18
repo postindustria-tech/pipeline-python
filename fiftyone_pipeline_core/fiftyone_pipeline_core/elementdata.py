@@ -22,7 +22,8 @@
 
 
 class ElementData(object):
-    """
+
+    """!
     Core ElementData class
     Stores information created by a FlowElement based on FlowData.
     Stored in FlowData
@@ -30,7 +31,9 @@ class ElementData(object):
     """
 
     def __init__(self, flow_element):
-        """ Constructor for ElementData
+
+        """!
+        Constructor for ElementData
 
         @type flow_element: FlowElement
         @param flow_element: FlowElement that data has been created by
@@ -40,7 +43,8 @@ class ElementData(object):
         self.flow_element = flow_element
 
     def get(self, key):
-        """
+
+        """!
         Get a value from the elementData contents
         Proxy for the ElementData.getInternal method
 
@@ -55,7 +59,8 @@ class ElementData(object):
         return self.get_internal(key.lower())
 
     def __getattr__(self, key):
-        """
+
+        """!
         Magic getter for a property from the data
         Allowing  user to write for example Data.IsMobile rather than Data.get("IsMobile)
 
@@ -70,7 +75,8 @@ class ElementData(object):
 
 
     def get_internal(self, key):
-        """
+        
+        """!
         Returns the requested property from the data
         Overridden by specific ElementData instances.
 
@@ -84,7 +90,8 @@ class ElementData(object):
         return
 
     def get_properties(self):
-        """
+
+        """!
         Proxy to the data's flowElement properties.
         Gets the FlowElement.properties of the parent FlowElement.
 

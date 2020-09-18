@@ -21,16 +21,6 @@
 # ********************************************************************* 
 
 
-"""
-  The SequenceElement stores session data regarding
-  requests for client side JavaScript from the JavaScript
-  created by a Pipeline's JavaScriptBuilder
-  If a Pipeline is constructed with the JavaScript elements
-  enabled this is added automatically along with the JavaScriptBuilder
-  and JSONBundler.
-"""
-
-
 from .flowelement import FlowElement
 from .evidence_keyfilter import EvidenceKeyFilter
 import uuid
@@ -47,23 +37,33 @@ class SequenceElementEvidenceKeyFilter(EvidenceKeyFilter):
 
 class SequenceElement(FlowElement):
 
+    """!
+    The SequenceElement stores session data regarding
+    requests for client side JavaScript from the JavaScript
+    created by a Pipeline's JavaScriptBuilder
+    If a Pipeline is constructed with the JavaScript elements
+    enabled this is added automatically along with the JavaScriptBuilder
+    and JSONBundler.
+    """
+
     def __init__(self):
 
         super(SequenceElement, self).__init__()
 
         self.datakey = "sequence"
 
-    # """
-    # The SequenceElement uses query.sequence and query.session-id evidence
-    # """
 
     def get_evidence_key_filter(self):
+    
+        """!
+        The SequenceElement uses query.sequence and query.session-id evidence
+        """
   
-      return SequenceElementEvidenceKeyFilter()
+        return SequenceElementEvidenceKeyFilter()
 
     def process_internal(self, flowdata):
 
-        """"
+        """!
         The SequenceElement stores session data for requests for JavaScript
     
         @type flowdata: FlowData

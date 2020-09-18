@@ -30,18 +30,6 @@ import urllib.parse
 import chevron
 from jsmin import jsmin
 
-"""
-    The JavaScriptBuilder aggregates JavaScript properties
-    from FlowElements in the Pipeline. This JavaScript also (when needed)
-    generates a fetch request to retrieve additional properties
-    populated with data from the client side
-    It depends on the JSON Bundler element (both are automatically
-    added to a Pipeline unless specifically removed) for its list of properties.
-    The results of the JSON Bundler should also be used in a user-specified
-    endpoint which retrieves the JSON from the client side.
-    The JavaScriptBuilder is constructed with a url for this endpoint.
-
-"""
 
 class JavaScriptBuilderEvidenceKeyFilter(EvidenceKeyFilter):
 
@@ -57,10 +45,23 @@ class JavaScriptBuilderEvidenceKeyFilter(EvidenceKeyFilter):
 
 class JavascriptBuilderElement(FlowElement):
 
+    """!
+    The JavaScriptBuilder aggregates JavaScript properties
+    from FlowElements in the Pipeline. This JavaScript also (when needed)
+    generates a fetch request to retrieve additional properties
+    populated with data from the client side
+    It depends on the JSON Bundler element (both are automatically
+    added to a Pipeline unless specifically removed) for its list of properties.
+    The results of the JSON Bundler should also be used in a user-specified
+    endpoint which retrieves the JSON from the client side.
+    The JavaScriptBuilder is constructed with a url for this endpoint.
+
+    """
 
     def __init__(self, settings = {} ):
-        """
-        FlowData constructor.
+
+        """!
+        JavaScriptBuilder constructor.
 
         * @param {dict} options options object
         * @param {string} options.obj_name the name of the client
@@ -91,23 +92,28 @@ class JavascriptBuilderElement(FlowElement):
 
         self.datakey = "javascriptbuilder"
 
-    """
-    The JavaScriptBuilder captures query string evidence and
-    headers for detecting whether the request is http or https
     
-    """
     def get_evidence_key_filter(self):
+
+        """!
+        
+        The JavaScriptBuilder captures query string evidence and
+        headers for detecting whether the request is http or https
+    
+        """
    
         return JavaScriptBuilderEvidenceKeyFilter()
 
-    """
-    The JavaScriptBundler collects client side javascript to serve.
 
-    @type flowdata: FlowData
-    @param flowdata: The FlowData
-
-    """
     def process_internal(self, flowdata):
+
+        """!
+        The JavaScriptBundler collects client side javascript to serve.
+
+        @type flowdata: FlowData
+        @param flowdata: The FlowData
+
+        """
     
         variables = {}
 

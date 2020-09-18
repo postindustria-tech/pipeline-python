@@ -24,13 +24,15 @@ from datetime import datetime
 import logging
 
 class Logger:
-    """
+    
+    """!
     Logging for a Pipeline
 
     """
 
     def __init__(self, min_level="error", settings = {}):
-        """
+       
+        """!
         Create a logger
 
         @type minLevel: str|list
@@ -52,7 +54,8 @@ class Logger:
 
 
     def log(self, level, message):
-        """
+
+        """!
         Log a message
 
         @type level: string
@@ -73,7 +76,8 @@ class Logger:
 
 
     def log_internal(self, level, log):
-        """
+
+        """!
         Internal logging function overridden by specific loggers
 
         @type level: string

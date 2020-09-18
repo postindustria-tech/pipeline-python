@@ -24,7 +24,8 @@
 class Evidence:
 
     def __init__(self, flowdata):
-        """
+
+        """!
         Constructor for Evidence container on a FlowData
 
         @type flowdata: FlowData
@@ -36,7 +37,8 @@ class Evidence:
         self.flowdata = flowdata
 
     def add(self, key, value):
-        """
+
+        """!
         Add a single piece of evidence by its element and value
 
         @type key: string
@@ -58,7 +60,8 @@ class Evidence:
             self.evidence[key] = value
 
     def add_from_dict(self, evidence_dictionary):
-        """
+
+        """!
         Helper function to set multiple pieces of evidence from a dict
 
         @type evidence_dictionary: dict
@@ -73,7 +76,8 @@ class Evidence:
             self.add(key, value)
 
     def get(self, key):
-        """
+
+        """!
         Get a piece of evidence by key
 
         @type key: string
@@ -93,7 +97,8 @@ class Evidence:
             return
 
     def get_all(self):
-        """
+
+        """!
         Get all evidence
 
         @rtype: dict

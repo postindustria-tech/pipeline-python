@@ -23,13 +23,16 @@
 from .aspectdata import AspectData
 
 class AspectDataDictionary(AspectData):
-    """
+
+    """!
+
     AspectDataDictionary class extension that stores content as dictionary
     
     """
 
     def __init__(self, flow_element, contents):
-        """
+    
+        """!
         Constructor for element data dictionary
 
         @type flow_element: FlowElement
@@ -49,7 +52,8 @@ class AspectDataDictionary(AspectData):
 
  
     def as_dictionary(self):
-        """
+
+        """!
         Get the values contained in the aspectData instance as a dictionary
         of keys and values.
         
@@ -64,11 +68,12 @@ class AspectDataDictionary(AspectData):
  
  
     def get_internal(self, key):
-        """
+
+        """!
         getInternal = Internal getter for contents
 
         @type key: string
-        @param key:
+        @param key: the key to get
 
         
         @rtype: dict

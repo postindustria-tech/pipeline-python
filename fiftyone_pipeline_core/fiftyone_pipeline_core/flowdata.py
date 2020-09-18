@@ -25,7 +25,8 @@ import traceback
 
 
 class FlowData:
-    """
+
+    """!
     FlowData is created by a specific Pipeline
     It collects evidence set by the user
     It passes evidence to FlowElements in the Pipeline
@@ -34,7 +35,8 @@ class FlowData:
     """
 
     def __init__(self, pipeline):
-        """
+
+        """!
         FlowData constructor.
 
         @type pipeline: Pipeline
@@ -50,7 +52,8 @@ class FlowData:
         self.evidence = Evidence(self)
 
     def process(self):
-        """
+
+        """!
         Runs the process function on every attached flowElement allowing data to be changed based on evidence.
         This can only be run once per FlowData instance.
 
@@ -83,7 +86,8 @@ class FlowData:
 
 
     def get_from_element(self, flow_element):
-        """
+
+        """!
         Retrieve data by FlowElement object.
 
         @type flow_element: FlowElement
@@ -102,7 +106,8 @@ class FlowData:
 
 
     def get(self, flow_element_key):
-        """
+
+        """!
         Retrieve data by flowElement key.
         Called by FlowData.get_from_element method.
 
@@ -122,7 +127,8 @@ class FlowData:
 
 
     def __getattr__(self, flow_element_key):
-        """
+
+        """!
         Magic getter to allow retrieval of data from FlowData.data[flowElementKey] by flowElement name.
         For example, instead of `flowdata.get("device")` you can use `flowData.device`
 
@@ -137,7 +143,8 @@ class FlowData:
 
 
     def set_element_data(self, element_data):
-        """
+
+        """!
         Set data (used by flowElement) within FlowData.data
 
         @type element_data: ElementData
@@ -149,7 +156,8 @@ class FlowData:
 
 
     def set_error(self, key, error):
-        """
+
+        """!
         Set error (should be keyed by flowElement datakey)
 
         @type key: string
@@ -169,7 +177,8 @@ class FlowData:
 
 
     def get_evidence_datakey(self):
-        """
+
+        """!
         Get a list of evidence stored in the flowData, filtered by
         its flowElements' evidenceKeyFilters
 
@@ -186,15 +195,18 @@ class FlowData:
 
 
     def stop(self):
-        """
+
+        """!
         Stop processing any subsequent flowElements
+        @return void
         
         """
 
         self.stopped = True
 
     def get_where(self, metakey, metavalue):
-        """
+
+        """!
         Get data from flowElement based on property meta data
 
         @type metakey: str

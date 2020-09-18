@@ -23,13 +23,35 @@
 
 class DataKeyedCache(object):
 
+    """!
+    
+    A data keyed cache is the base class for caches used in the pipeline
+    It does nothing on its own and should be extended by a specific cache
+        
+    """
 
     def get_cache_value(self, cachekey):
+
+        """!
+        Get data from the cache
+        @type key : string
+        @param key : The cache key to lookup
+        @type value : mixed
+        @param key : None , or the stored data
+        """
 
         return None
 
 
     def set_cache_value(self, cachekey, value):
+
+        """!
+        Place data in the cache
+        @type key : string
+        @param key : The cache key to store data under
+        @type value : mixed
+        @param key : The value to save in the cache
+        """
 
         return None
 

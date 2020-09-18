@@ -26,13 +26,15 @@ from fiftyone_pipeline_engines.missingproperty_service import MissingPropertySer
 
 
 class AspectData(ElementData):
-    """
-    * AspectData extends elementData by adding the option of a missing property service
-    * It also allows properties to be explicitly excluded by a flowElement / engine
+
+    """!
+    AspectData extends elementData by adding the option of a missing property service
+    It also allows properties to be explicitly excluded by a flowElement / engine
     """
 
     def __init__(self, flow_element):
-        """
+
+        """!
         Constructor for element data
         Adds default missing property service if not available
         
@@ -50,11 +52,14 @@ class AspectData(ElementData):
 
 
     def get(self, key):
-        """
-        * get - Get a value (unless in a flowElement's restrictedProperties list)
-        * If property not found, call the attached missing property service
-        * param: string key
-        * returns: mixed
+
+        """!
+        get - Get a value (unless in a flowElement's restrictedProperties list)
+        If property not found, call the attached missing property service
+        @type key: string
+        @param key: the key to get
+        @rtype mixed
+        @return The value stored under the chosen key
         """
         
         if hasattr(self.flow_element, "restricted_properties"):

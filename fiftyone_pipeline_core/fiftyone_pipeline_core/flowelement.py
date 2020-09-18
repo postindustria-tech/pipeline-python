@@ -24,7 +24,8 @@ from .evidence_keyfilter import EvidenceKeyFilter
 
 
 class FlowElement(object):
-    """
+
+    """!
     A FlowElement is placed inside a Pipeline
     It receives Evidence via a FlowData object
     It uses this to optionally create ElementData on the FlowData
@@ -33,7 +34,8 @@ class FlowElement(object):
     """
 
     def __init__(self):
-        """
+
+        """!
         List of Pipelines the FlowElement has been added to 
 
         """
@@ -42,7 +44,8 @@ class FlowElement(object):
         self.datakey = ""
 
     def process(self, flowdata):
-        """
+
+        """!
         Function for getting the FlowElement's EvidenceKeyFilter
         Used by the filterEvidence method
 
@@ -50,14 +53,15 @@ class FlowElement(object):
         @param flowdata: FlowData to be processed
 
         @rtype: mixed
-        @returns: Returns whatever the self.processInternal method is set to return
+        @return: Returns whatever the self.processInternal method is set to return
 
         """
 
         return self.process_internal(flowdata)
 
     def on_registration(self, pipeline):
-        """
+
+        """!
         Function called when an element is added to the pipeline. 
         Used for example, for elements that depend on other elements in a pipeline
 
@@ -69,25 +73,27 @@ class FlowElement(object):
         pass
 
     def get_evidence_key_filter(self):
-        """
+
+        """!
         Filter FlowData evidence using the FlowElement's EvidenceKeyFilter
 
         @rtype: EvidenceKeyFilter
-        @returns: Returns an EvidenceKeyFilter
+        @return: Returns an EvidenceKeyFilter
 
         """
 
         return EvidenceKeyFilter()
 
     def filter_evidence(self, flowdata):
-        """
+
+        """!
         Filter FlowData evidence using the FlowElement's EvidenceKeyFilter
 
         @type flowdata: FlowData
         @param flowdata: a FlowData that has some Evidence set
 
         @rtype: dict
-        @returns: Returns a dictionary of evidence that has passed the filter
+        @return: Returns a dictionary of evidence that has passed the filter
 
         """
 
@@ -96,7 +102,8 @@ class FlowElement(object):
         return filter.filter_evidence(flowdata.evidence.get_all())
 
     def filter_evidence_key(self, key):
-        """
+
+        """!
         Filter FlowData.evidence using the flowElement's EvidenceKeyFilter
         with the property key of evidence of interest.
 
@@ -104,7 +111,7 @@ class FlowElement(object):
         @param key: the property key being sought within FlowData.evidence
 
         @rtype: dict
-        @returns: Returns a dictionary containing the property key and the evidence related to it as its value
+        @return: Returns a dictionary containing the property key and the evidence related to it as its value
 
         """
 
@@ -113,7 +120,8 @@ class FlowElement(object):
         return filter.filter_evidence_key(key)
 
     def process_internal(self, flowdata):
-        """
+
+        """!
         The method behind FlowElement.Process - it is called by the process() function.
         It is usually overridden by specific flowElements to do their core work.
 
@@ -121,20 +129,21 @@ class FlowElement(object):
         @param flowdata: FlowData to be processed
 
         @rtype: bool
-        @returns: Returns True
+        @return: Returns True
 
         """
 
         return True
 
     def get_properties(self):
-        """
+
+        """!
         Get the FlowElement.properties of a FlowElement.
         
         This is usually overridden by specific flowElements.
 
         @rtype: DataPropertyDictionary
-        @returns: Returns dictionary of the FlowElement's properties
+        @return: Returns dictionary of the FlowElement's properties
 
         """
 
