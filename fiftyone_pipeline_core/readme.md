@@ -1,3 +1,5 @@
+# Pipeline Core
+
 ![51Degrees](https://51degrees.com/DesktopModules/FiftyOne/Distributor/Logo.ashx?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=python-open-source "Data rewards the curious") **Python Pipeline Core**
 
 [Pipeline Documentation](https://51degrees.com/documentation/4.1/index.html "Complete documentation")
