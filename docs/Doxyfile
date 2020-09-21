@@ -821,7 +821,7 @@ WARN_LOGFILE           =
 INPUT                  = ../fiftyone_pipeline_cloudrequestengine \
                          ../fiftyone_pipeline_core \
                          ../fiftyone_pipeline_engines \
-                         ../fiftyone_pipeline_core/example
+                         ../fiftyone_pipeline_core/example \
                          ../readme.md
 
 # This tag can be used to specify the character encoding of the source files
