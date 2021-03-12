@@ -2,6 +2,7 @@ name: Build and Publish Python Pipeline
 
 trigger:
 - master
+- release/*  
 
 variables:
   # Access token for the git repository. Used by the git tag task.
@@ -13,6 +14,14 @@ pool:
 
 steps:
 
+# The lines below are needed to allow the pipeline access to the
+# OAuth access token that controls write access to the git repository. 
+# (Required for GitTag task)
+- checkout: self
+  lfs: true
+  submodules: recursive
+  persistCredentials: true
+  
 - task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
   name: GitVersion
