@@ -6,9 +6,12 @@ from fiftyone_pipeline_core.basiclist_evidence_keyfilter import BasicListEvidenc
 
 class ExampleFlowElement1(FlowElement):
 
-    def __init__(self):
+    def __init__(self, example_param = None):
 
         super(ExampleFlowElement1, self).__init__()
+
+        if(example_param):
+            self.param_set = True
 
         self.datakey = "example1"
 

@@ -24,10 +24,10 @@
 ## @example client_side_evidence_custom_flow_element.py
 # This example demonstrates the creation of a custom flow element. In this case 
 # the flowElement takes the results of a client side form collecting 
-# date of birth, setting this as evidence on a flowData object to calculate 
+# date of birth, setting this as evidence on a flowdata object to calculate 
 # a person's starsign. The flowElement also serves additional JavaScript 
 # which gets a user's geolocation and saves the latitude as a cookie. 
-# This latitude is also then passed in to the flowData to calculate if 
+# This latitude is also then passed in to the flowdata to calculate if 
 # a person is in the northern or southern hemispheres.
 
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
@@ -156,13 +156,13 @@ class AstrologyFlowElement(FlowElement):
 
 # Add some callback settings for the page to make a request with extra evidence from the client side, in this case the Flask /json route we have made below
 
-javascriptBuilderSettings = {
+javascript_builder_settings = {
     "endpoint": "/json"
 }
 
 # Make the pipeline and add the element we want to it
 
-myPipeline = (PipelineBuilder({"javascriptBuilderSettings": javascriptBuilderSettings})).add(AstrologyFlowElement()).build()
+myPipeline = (PipelineBuilder({"javascript_builder_settings": javascript_builder_settings})).add(AstrologyFlowElement()).build()
 
 from flask import Flask, request
 
@@ -173,36 +173,36 @@ app = Flask(__name__)
 @app.route('/json', methods=['POST'])
 def jsonroute():
 
-    # Create the flowData object for the JSON route
-    flowData = myPipeline.create_flowdata()
+    # Create the flowdata object for the JSON route
+    flowdata = myPipeline.create_flowdata()
 
     # Add any information from the request (headers, cookies and additional 
     # client side provided information)
 
-    flowData.evidence.add_from_dict(webevidence(request))
+    flowdata.evidence.add_from_dict(webevidence(request))
 
-    # Process the flowData
+    # Process the flowdata
 
-    flowData.process()
+    flowdata.process()
 
     # Return the JSON from the JSONBundler engine
 
-    return json.dumps(flowData.jsonbundler.json)
+    return json.dumps(flowdata.jsonbundler.json)
     
 
 @app.route('/')
 def server():
     
-    flowData = myPipeline.create_flowdata()
+    flowdata = myPipeline.create_flowdata()
 
     # Add any information from the request (headers, cookies and additional 
     # client side provided information)
 
-    flowData.evidence.add_from_dict(webevidence(request))
+    flowdata.evidence.add_from_dict(webevidence(request))
 
-    # Process the flowData
+    # Process the flowdata
 
-    flowData.process()
+    flowdata.process()
 
     # Generate the HTML for the form that gets a user's starsign 
 
@@ -214,13 +214,13 @@ def server():
 
     ## Add the results if they're available
 
-    if (flowData.astrology.starSign):
-        output += "<p>Your starsign is " + flowData.astrology.starSign + "</p>"
+    if (flowdata.astrology.starSign):
+        output += "<p>Your starsign is " + flowdata.astrology.starSign + "</p>"
 
     output += "<div id='hemispheretext'>"
 
-    if (flowData.astrology.hemisphere):
-        output += "<p>Look at the " + flowData.astrology.hemisphere + " hemisphere stars tonight!</p>"
+    if (flowdata.astrology.hemisphere):
+        output += "<p>Look at the " + flowdata.astrology.hemisphere + " hemisphere stars tonight!</p>"
 
     output += "</div>"
 
@@ -234,7 +234,7 @@ def server():
     ## 3. The web server responds with new JSON data that contains the hemisphere based on the location.
     ## 4. The JavaScript integrates the new JSON data and fires the onChange callback below.
 
-    output += flowData.javascriptbuilder.javascript
+    output += flowdata.javascriptbuilder.javascript
 
     output += """
         const loadHemisphere = function() {

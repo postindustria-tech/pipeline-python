@@ -26,7 +26,14 @@ from .evidence_keyfilter import EvidenceKeyFilter
 from .elementdata_dictionary import ElementDataDictionary
 import os
 import json
-import urllib.parse
+
+try:
+    #python2
+    from urllib import urlencode
+except ImportError:
+    #python3
+    from urllib.parse import urlencode
+
 import chevron
 from jsmin import jsmin
 
@@ -79,7 +86,7 @@ class JavascriptBuilderElement(FlowElement):
         """
 
         super(JavascriptBuilderElement, self).__init__()
-
+        
         self.settings = {}
 
         self.settings['_objName'] = settings["obj_name"] if "obj_name" in settings else 'fod'
@@ -91,6 +98,16 @@ class JavascriptBuilderElement(FlowElement):
         self.minify = settings["minify"] if "minify" in settings else True
 
         self.datakey = "javascriptbuilder"
+
+        self.exclude_from_messages = True
+
+        # Load template file contents into memory
+
+        template = os.path.dirname(os.path.abspath(__file__)) + "/JavaScriptResource.mustache"
+
+        f = open(template, "r")
+        self.template = f.read()
+        f.close()
 
     
     def get_evidence_key_filter(self):
@@ -160,10 +177,9 @@ class JavascriptBuilderElement(FlowElement):
                 paramkey = param.split(".")[1] 
 
                 query[paramkey] = paramvalue
-           
   
-            url_query = urllib.parse.urlencode(query)
-  
+            url_query = urlencode(query)
+            
             # Does the URL already have a query string in it?
     
             if "?" not in variables["_url"]: 
@@ -191,10 +207,7 @@ class JavascriptBuilderElement(FlowElement):
 
         variables["_hasDelayedProperties"] = True if "delayexecution" in variables["_jsonObject"] else False
          
-        template = os.path.dirname(os.path.abspath(__file__)) + "/JavaScriptResource.mustache"
-        
-        with open(template, 'r') as f:
-            output = chevron.render(f, variables)
+        output = chevron.render(self.template, variables)
         
         if self.minify:
             # Minify the output

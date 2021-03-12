@@ -25,8 +25,8 @@ class TestPipeline():
             .add(ExampleFlowElement2())\
             .add_logger(logger)\
             .build()
-        self.flowData = self.pipeline.create_flowdata()
-        self.flowData.evidence.add("header.user-agent", "test")
-        self.flowData.evidence.add("some.other-evidence", "test")
+        self.flowdata = self.pipeline.create_flowdata()
+        self.flowdata.evidence.add("header.user-agent", "test")
+        self.flowdata.evidence.add("some.other-evidence", "test")
         self.pipeline.log("error", "test")
-        self.flowData.process()
+        self.flowdata.process()

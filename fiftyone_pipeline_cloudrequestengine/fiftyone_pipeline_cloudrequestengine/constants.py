@@ -19,47 +19,9 @@
  # in the end user terms of the application under an appropriate heading, 
  # such notice(s) shall fulfill the requirements of that article.
  # ********************************************************************
-
-from .datakeyed_cache import DataKeyedCache
-
-class Tracker(DataKeyedCache):
-    
-    """!
-    A tracker is an instance of datakeyed cache which,
-    if a result is found in the cache, calls an additional
-    boolean match method
-    """
-    
-    def track(self, key):
-
-        """!
-        The track method calls the DataKeyedCache get method,
-        if it receives a result it sends it onto a match function
-        
-        @type key : cache key to run through tracker
-        @rtype bool 
-        @return result of tracking
-
-        """
-
-        if self.get_cache_value(key) is None:
-
-            return True
-
-        else:
-
-            return self.match(key, self.get_cache_value(key))
-
-    def match(self, result):
-
-        """!
-        If object is found in cache, the match function is called
-        
-        @type key : result of the track function
-        @rtype bool 
-        @return whether a match has been made
-
-        """
-
-        return True
-
+ 
+class Constants:
+    # Environment variable to set cloud end point
+    FOD_CLOUD_API_URL = "FOD_CLOUD_API_URL"
+    # Default cloud end point
+    BASE_URL_DEFAULT = "https://cloud.51degrees.com/api/v4/"

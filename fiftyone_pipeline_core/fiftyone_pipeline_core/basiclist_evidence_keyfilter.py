@@ -41,9 +41,10 @@ class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
 
         """
 
-        self.list = keys_list
+        # lowercase keys list
+        self.list = [item.lower() for item in keys_list]
 
-    def filter_evidenceKey(self, key):
+    def filter_evidence_key(self, key):
 
         """!
         Check if an evidence key is present in a filter list.
@@ -55,9 +56,8 @@ class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
         @return: Is this key in the filter's keys list?
 
         """
-
-        if key in self.list:
+        
+        if key.lower() in self.list:
             return True
         else:
-
             return False

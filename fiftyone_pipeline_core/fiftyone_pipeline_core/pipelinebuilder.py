@@ -25,10 +25,10 @@ from .logger import Logger
 from .javascriptbuilder import JavascriptBuilderElement
 from .jsonbundler import JSONBundlerElement
 from .sequenceelement import SequenceElement
-import json
+import importlib
 
 
-class PipelineBuilder:
+class PipelineBuilder(object):
     """
     A PipelineBuilder generates a Pipeline object
     Before construction of the Pipeline, FlowElements are added to it
@@ -36,37 +36,40 @@ class PipelineBuilder:
 
     """
 
-    def __init__(self, settings={}):
+    def __init__(self, settings=None):
         """
         Pipeline Builder constructor.
         @type settings: dictionary
         @param settings : settings for the pipeline builder including:
-        `addJavaScriptBuilder (Bool)` - Whether to add the JavaScriptBuilder to the pipeline
+        `add_javascript_builder (Bool)` - Whether to add the JavaScriptBuilder to the pipeline
         (default true)
-        `javascriptBuilderSettings (dict)` - Settings for the JavaScriptBuilder engine 
+        `javascript_builder_settings (dict)` - Settings for the JavaScriptBuilder engine 
         @rtype: PipelineBuilder
         @return: Returns a Pipeline Builder
 
         """
 
+        if settings is None:
+            settings = {}
+
         self.flow_elements = []
         self.logger = Logger()
 
-        if "addJavaScriptBuilder" in settings:
-            self.add_javaScriptbuilder = settings["addJavascriptBuilder"]
+        if "add_javascript_builder" in settings:
+            self.add_javaScriptbuilder = settings["add_javascript_builder"]
         else:
             self.add_javaScriptbuilder = True
        
       
-        if "javascriptBuilderSettings" in settings:
-            self.javascriptbuilder_settings = settings["javascriptBuilderSettings"]
+        if "javascript_builder_settings" in settings:
+            self.javascriptbuilder_settings = settings["javascript_builder_settings"]
 
 
 
     def get_javascript_elements(self):
         """
         Adds the JavaScriptBuilder, JSONBundler and SequenceElement to the pipeline if
-        If addJavascriptBuilder is set to true (the default)
+        If add_javascript_builder is set to true (the default)
         @rtype: list
         @return: Returns a list of FlowElements     
         """
@@ -130,3 +133,28 @@ class PipelineBuilder:
         self.logger = logger
 
         return self
+
+    def build_from_configuration(self, config):
+        """
+        Build a pipeline from a configuration file
+
+        @type config: dict
+        @param config: pipeline configuration
+
+        @rtype: Pipeline
+        @return: Returns built pipeline
+        
+        """
+
+        flow_elements = []
+
+        for element in config["PipelineOptions"]["Elements"]:
+            flow_element = importlib.import_module(element["elementPath"]).__getattribute__(element["elementName"])
+            if("elementParameters" in element):
+                flow_element = flow_element(**element["elementParameters"])
+            else:
+                flow_element = flow_element()
+            flow_elements.append(flow_element)
+
+        return Pipeline(flow_elements)
+

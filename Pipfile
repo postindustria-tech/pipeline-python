@@ -10,6 +10,6 @@ pylint = "*"
 fiftyone-pipeline-core = {editable = true, path = "./fiftyone_pipeline_core"}
 fiftyone-pipeline-cloudrequestengine = {editable = true, path = "./fiftyone_pipeline_cloudrequestengine"}
 fiftyone-pipeline-engines = {editable = true, path = "./fiftyone_pipeline_engines"}
-
+requests = "*"
 [requires]
 python_version = "3.8"

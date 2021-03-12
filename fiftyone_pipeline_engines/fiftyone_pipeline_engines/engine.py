@@ -21,6 +21,7 @@
  # ********************************************************************
 
 from fiftyone_pipeline_core.flowelement import FlowElement
+from fiftyone_pipeline_engines.datafile_update_service import DataFileUpdateService
 
 import json
 
@@ -33,7 +34,15 @@ class Engine(FlowElement):
 
     """
 
-    def __init__(self):
+    
+    def __init__(self, data_file = None):
+
+        """!
+        Constructor for an engine
+
+        """
+
+        self.data_file = data_file
 
         super(Engine, self).__init__()
     
@@ -41,7 +50,7 @@ class Engine(FlowElement):
 
         """!
         Add a cache to an engine
-        @type casee: Cache
+        @type cashe: Cache
         @param cache: Cache with get and set methods
 
         """
@@ -62,34 +71,42 @@ class Engine(FlowElement):
         self.restricted_properties = properties_list
   
 
-    def in_cache(self, flowData):
+    def in_cache(self, flowdata):
 
         """!
-        A method to check if a flowData's evidence is in the cache
+        A method to check if a flowdata's evidence is in the cache
         
         @type FlowData: FlowData
         @param FlowData:
 
         @rtype: bool
-        @return: True or false: a flowData's evidence is in the cache
+        @return: True or false: a flowdata's evidence is in the cache
 
         """
     
-        keys = self.filter_evidence(flowData)
+        keys = self.filter_evidence(flowdata)
 
         cacheKey = json.dumps(keys)
 
         cached = self.cache.get_cache_value(cacheKey)
 
         if cached is not None:
-            flowData.set_element_data(cached)
+            flowdata.set_element_data(cached)
 
             return True
         else:
             return False
   
-
-
+  
+    """!
+    
+    Function called to refresh the engine with a new datafile
+    @type identifier: string
+    @param identifier: identifier of the datafile
+    
+    """
+    def refresh(self, identifier):
+        pass
 
     def process(self, flowdata):
 
@@ -100,7 +117,7 @@ class Engine(FlowElement):
         and a cache put
         
         @type flowdata: FlowData
-        @param flowData:
+        @param flowdata:
         
         """
 
@@ -116,3 +133,31 @@ class Engine(FlowElement):
         else:
 
             self.process_internal(flowdata)
+
+    def on_registration(self, pipeline):
+
+        """!
+        
+        Called when an engine is registered with a pipeline 
+        and if there is a data file, a data file update service is attached to the parent pipeline.
+        @type pipeline: Pipeline
+        @param pipeline: The pipeline the engine has been attached to
+        
+        """
+
+        if(self.data_file):
+            if not hasattr(pipeline, "data_file_update_service"):
+                pipeline.data_file_update_service = DataFileUpdateService(pipeline)
+            pipeline.data_file_update_service.register_data_file(self.data_file)
+
+    def register_data_file(self, data_file):
+
+        """!
+        
+        Register a data_file of the DataFile class with the engine
+        @type data_file: DataFile
+        @param data_file: DataFile (such as for an on premise engine)
+        
+        """
+        
+        self.data_file = data_file

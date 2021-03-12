@@ -20,12 +20,20 @@
  # such notice(s) shall fulfill the requirements of that article.
  # ********************************************************************
 
-
 from fiftyone_pipeline_engines.engine import Engine
-from fiftyone_pipeline_engines.aspectdata_dictionary import AspectDataDictionary
 from fiftyone_pipeline_core.aspectproperty_value import AspectPropertyValue
 
+from .clouddata import CloudData
+
 import json
+
+from fiftyone_pipeline_engines.missingproperty_service import MissingPropertyService
+
+class OnPremiseMissingPropertyService(MissingPropertyService):
+
+    def check(self, key, flow_element):
+
+        raise Exception('Property ' + key + ' not found in data for element ' + flow_element.datakey + '. Please check that the element and property names are correct.')
 
 class CloudEngine(Engine):
 
@@ -60,36 +68,60 @@ class CloudEngine(Engine):
             raise Exception("CloudRequestEngine needs to be placed before cloud elements in Pipeline")
 
         # Add properties from the CloudRequestEngine which should already have them
+
+        if not self.datakey in pipeline.flow_elements_list["cloud"].flow_element_properties:
+            raise Exception("Your resource key does not include access to any properties under the engine with key" + self.datakey +  " that was added to the pipeline. For more details on resource keys, see our explainer: https://51degrees.com/documentation/_info__resourcekeys.html " + "Available engine data keys are: " + str([e for e in pipeline.flow_elements_list["cloud"].flow_element_properties]))
+
         self.properties = pipeline.flow_elements_list["cloud"].flow_element_properties[self.datakey]
 
+        # Add a special message to the pipeline 
+        # when requesting an element that does not exist
 
-    def process_internal(self, flowData):
+        pipeline.element_not_found = self.pipeline_element_not_found
+
+    def pipeline_element_not_found(self, element, flowdata):
+        """!
+        Custom error when an element cannot be found in the pipeline
+
+        @type element: string
+        @param element: name of flowelement 
+        @type flowdata: flowdata
+        @param element: flowdata being processsed 
+        @rtype: Exception
+        @return: Returns exception
+
+        """
+
+        raise Exception("Your resource key does not include access to any properties under " + element +  ". For more details on resource keys, see our explainer: https://51degrees.com/documentation/_info__resourcekeys.html " + "Available element data keys are: " + str([e for e in flowdata.pipeline.flow_elements_display_list]))
+
+
+    def process_internal(self, flowdata):
 
         """!
         Process function of a cloud engine.
         This organises and parses data returned from the Cloud Request Engine
         and adds it to the FlowData
 
-        @type flowData: FlowData
-        @param flowData: FlowData to process 
+        @type flowdata: FlowData
+        @param flowdata: FlowData to process 
 
         """
   
-        cloudData = flowData.get("cloud").get("cloud")
+        cloud_data = flowdata.get("cloud").get("cloud")
 
-        cloudData = json.loads(cloudData)
+        cloud_data = json.loads(cloud_data)
 
-        engineData = cloudData[self.datakey]
+        engineData = cloud_data[self.datakey]
 
         result = {}
 
         for key, value in engineData.items():
 
-            if key + "nullreason" in cloudData[self.datakey]:
-                result[key] = AspectPropertyValue(no_value_message=cloudData[self.datakey][key + "nullreason"])
+            if key + "nullreason" in cloud_data[self.datakey]:
+                result[key] = AspectPropertyValue(no_value_message=cloud_data[self.datakey][key + "nullreason"])
             else:
                 result[key] = AspectPropertyValue(None, value)
 
-        data = AspectDataDictionary(self, result)
+        data = CloudData(self, result)
             
-        flowData.set_element_data(data)
+        flowdata.set_element_data(data)

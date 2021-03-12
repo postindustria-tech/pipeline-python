@@ -44,7 +44,7 @@ class AspectData(ElementData):
         """
 
         # Default missing property service
-        if not hasattr(flow_element,"missingPropertyService"):
+        if not hasattr(flow_element,"missing_property_service"):
             self.missing_property_service = MissingPropertyService()
         
 

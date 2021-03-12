@@ -1,4 +1,4 @@
- # *********************************************************************
+# *********************************************************************
  # This Original Work is copyright of 51 Degrees Mobile Experts Limited.
  # Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  # Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
@@ -22,44 +22,24 @@
 
 from .datakeyed_cache import DataKeyedCache
 
-class Tracker(DataKeyedCache):
-    
+from cachetools import LRUCache
+
+class LRUEngineCache(DataKeyedCache):
     """!
-    A tracker is an instance of datakeyed cache which,
-    if a result is found in the cache, calls an additional
-    boolean match method
+     An instance of DataKeyed cache using a least recently used (LRU) method
     """
-    
-    def track(self, key):
-
+    def __init__(self, size = 1000):
         """!
-        The track method calls the DataKeyedCache get method,
-        if it receives a result it sends it onto a match function
-        
-        @type key : cache key to run through tracker
-        @rtype bool 
-        @return result of tracking
-
+        Constructor for LRUCache
+        @type size: int
+        @param size: maximum entries in the cache
         """
 
-        if self.get_cache_value(key) is None:
+        self.cache = LRUCache(maxsize=size)
 
-            return True
+    def get_cache_value (self, cache_key):
 
-        else:
+        return self.cache.get(cache_key)
 
-            return self.match(key, self.get_cache_value(key))
-
-    def match(self, result):
-
-        """!
-        If object is found in cache, the match function is called
-        
-        @type key : result of the track function
-        @rtype bool 
-        @return whether a match has been made
-
-        """
-
-        return True
-
+    def set_cache_value(self, key, value):
+        self.cache.__setitem__(key, value)
