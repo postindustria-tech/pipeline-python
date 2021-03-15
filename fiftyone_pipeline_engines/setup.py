@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'readme.md')) as f:
 
 setuptools.setup(
     name="fiftyone_pipeline_engines",
-    version="4.2.0",
+    version="4.2.1",
     author="51Degrees",
 	author_email="info@51degrees.com",
     url="http://51degrees.com/",
