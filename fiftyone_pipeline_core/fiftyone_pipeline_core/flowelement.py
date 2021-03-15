@@ -43,6 +43,11 @@ class FlowElement(object):
         self.properties = {}
         self.datakey = ""
 
+        # Allow elements to be excluded from messages listing
+        # all flowelements. For system elements like the JavaScriptBuilder
+        
+        self.exclude_from_messages = False
+
     def process(self, flowdata):
 
         """!

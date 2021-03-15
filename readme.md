@@ -2,7 +2,7 @@
 
 ![51Degrees](https://51degrees.com/DesktopModules/FiftyOne/Distributor/Logo.ashx?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=python-open-source "Data rewards the curious") **Python Pipeline**
 
-[Pipeline Documentation](https://51degrees.com/documentation/4.1/index.html "Complete documentation")
+[Developer Documentation](https://51degrees.com/pipeline-python/index.html?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=python-open-source "Developer Documentation")
 
 ## Introduction
 This repository contains the components of the Python implementation of the 51Degrees Pipeline API.
@@ -18,7 +18,7 @@ This repository contains 3 modules:
 
 ## Requirements
 
-* Python 2.7 or Python 3
+* Python 3.5+ 
 * The `flask` python library to run the web examples 
 
 ## Installation
@@ -46,12 +46,12 @@ and examples that are available. To run tests:
 * Go to each directory (for example `fiftyone_pipeline_core`)
 * Run `python -m unittest discover -s tests -p test*.py`
 
-To run the web examples:
+To run the web examples navigate into Examples folder:
 
-### Linux
+#### Linux
 
-Execute `export FLASK_APP=` with the name of the web example file, then `flask run`.
+Execute `export FLASK_APP=web` where `web` is the example file, and start your application via `flask run`.
 
-### Windows
+#### Windows
 
-Execute `$env:FLASK_APP = "x"` with the name of the example file, then `flask run`.
+Execute `$env:FLASK_APP = "web"` where `web` is the example file, and start your application via `flask run`.

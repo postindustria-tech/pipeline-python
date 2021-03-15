@@ -28,11 +28,11 @@ import uuid
 class SequenceElementEvidenceKeyFilter(EvidenceKeyFilter):
 
     def filter(self, key):
-   
-      if (key == "query.sequence" or key == "query.session-id"):
-          return True
+    
+        if (key == "query.sequence" or key == "query.session-id"):
+            return True
             
-      return False
+        return False
 
 
 class SequenceElement(FlowElement):
@@ -51,6 +51,7 @@ class SequenceElement(FlowElement):
         super(SequenceElement, self).__init__()
 
         self.datakey = "sequence"
+        self.exclude_from_messages = True
 
 
     def get_evidence_key_filter(self):
@@ -88,7 +89,7 @@ class SequenceElement(FlowElement):
         else:
             flowdata.evidence.add(
                 "query.session-id",
-                uuid.uuid4()
+                str(uuid.uuid4())
             )
       
             flowdata.evidence.add("query.sequence", 1)

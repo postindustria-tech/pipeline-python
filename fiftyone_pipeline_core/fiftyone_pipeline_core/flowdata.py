@@ -58,7 +58,7 @@ class FlowData:
         This can only be run once per FlowData instance.
 
         @rtype: FlowData
-        @return: Returns flowData
+        @return: Returns flowdata
 
         """
 
@@ -76,7 +76,7 @@ class FlowData:
 
                         self.set_error(flow_element.datakey, traceback.format_exc())
 
-            # Set processed flag to true. flowData can only be processed once
+            # Set processed flag to true. flowdata can only be processed once
 
             self.processed = True
             return self
@@ -123,14 +123,14 @@ class FlowData:
             return self.data[flow_element_key.lower()]
 
         except Exception:
-            return None
 
+            return self.pipeline.element_not_found(flow_element_key, self)
 
     def __getattr__(self, flow_element_key):
 
         """!
         Magic getter to allow retrieval of data from FlowData.data[flowElementKey] by flowElement name.
-        For example, instead of `flowdata.get("device")` you can use `flowData.device`
+        For example, instead of `flowdata.get("device")` you can use `flowdata.device`
 
         @type flow_element_key: string
         @param flow_element_key: datakey of the FlowElement that created the data of interest
@@ -141,14 +141,28 @@ class FlowData:
 
         return self.get(flow_element_key)
 
+    def __getitem__(self, flow_element_key):
 
+        """!
+        Magic method in Python, which when used in a class, allows its instances to use the [] (indexer) operators.
+        For example, instead of `flowdata.get("device")` you can use `flowdata["device"]`
+
+        @type flow_element_key: string
+        @param flow_element_key: datakey of the FlowElement that created the data of interest
+
+        @rtype: ElementData
+        
+        """
+
+        return self.get(flow_element_key)
+		
     def set_element_data(self, element_data):
 
         """!
         Set data (used by flowElement) within FlowData.data
 
         @type element_data: ElementData
-        @param element_data: elementData to be added to flowData
+        @param element_data: elementData to be added to flowdata
 
         """
 
@@ -179,7 +193,7 @@ class FlowData:
     def get_evidence_datakey(self):
 
         """!
-        Get a list of evidence stored in the flowData, filtered by
+        Get a list of evidence stored in the flowdata, filtered by
         its flowElements' evidenceKeyFilters
 
         @rtype: list

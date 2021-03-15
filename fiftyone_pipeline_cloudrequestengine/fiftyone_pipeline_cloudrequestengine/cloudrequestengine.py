@@ -20,13 +20,16 @@
  # such notice(s) shall fulfill the requirements of that article.
  # ********************************************************************
 
-from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
+from __future__ import absolute_import
 from fiftyone_pipeline_core.basiclist_evidence_keyfilter import BasicListEvidenceKeyFilter
 from fiftyone_pipeline_engines.engine import Engine
 from fiftyone_pipeline_engines.aspectdata_dictionary import AspectDataDictionary
+from .requestclient import RequestClient
+from .constants import Constants
 
 import json
 import requests
+import os
 
 try:
     #python2
@@ -46,7 +49,7 @@ class CloudRequestEngine(Engine):
         Constructor for CloudRequestEngine
         
         @type settings: dict
-        @param settings: Settings should contain a resourceKey and optionally a cloudEndPoint to overwrite the default baseurl
+        @param settings: Settings should contain a resource_key and optionally a cloud_endpoint to overwrite the default baseurl
 
         """
 
@@ -61,23 +64,35 @@ class CloudRequestEngine(Engine):
             }
         }
 
-        if not "resourceKey" in settings:
+        if not "resource_key" in settings:
             raise Exception("CloudRequestEngine needs a resource key")
         else: 
-            self.resourceKey = settings["resourceKey"]
+            self.resource_key = settings["resource_key"]
         
         
-        if "cloudEndPoint" in settings:
-            self.baseURL = settings["cloudEndPoint"]
+        if "cloud_endpoint" in settings:
+            self.baseURL = settings["cloud_endpoint"]
         else:
-            self.baseURL = "https://cloud.51degrees.com/api/v4/"
+            self.baseURL = os.environ.get(Constants.FOD_CLOUD_API_URL)
+            if self.baseURL is None or (self.baseURL is not None and self.baseURL == ""):
+                self.baseURL = Constants.BASE_URL_DEFAULT
+
+        # Make sure if baseURL does not end with '/', one will be appended
+        if not self.baseURL.endswith("/"):
+            self.baseURL = self.baseURL + "/"
   
+        if "http_client" in settings:
+            self.http_client = settings["http_client"]
+        else:
+            self.http_client = RequestClient()
 
         # Initialise evidencekeys and properties from the cloud service
      
         self.flow_element_properties = self.get_engine_properties()
 
         self.evidence_keys = self.get_evidence_keys()
+
+        self.exclude_from_messages = True
 
     def get_evidence_keys(self):
 
@@ -119,7 +134,7 @@ class CloudRequestEngine(Engine):
 
         # Get properties for all engines
 
-        propertiesURL = self.baseURL +"accessibleProperties?" + "resource=" + self.resourceKey
+        propertiesURL = self.baseURL +"accessibleProperties?" + "resource=" + self.resource_key
 
         properties = self.make_cloud_request(propertiesURL)
 
@@ -132,9 +147,9 @@ class CloudRequestEngine(Engine):
 
             flowElementProperties[datakey] = {}
 
-            engineProperties = elementProperties["Properties"]
+            engine_properties = elementProperties["Properties"]
 
-            for engineProperty in engineProperties:
+            for engineProperty in engine_properties:
 
                 # Lowercase keys
 
@@ -154,7 +169,7 @@ class CloudRequestEngine(Engine):
         @return Returns dict with data and error properties error contains any errors from the request, data contains the response
         """
 
-        cloudResponse = requests.request('GET', url)
+        cloudResponse = self.http_client.request('GET', url)
 
         if cloudResponse.status_code < 400:
             return cloudResponse.text
@@ -180,7 +195,7 @@ class CloudRequestEngine(Engine):
 
         """
    
-        url = self.baseURL + self.resourceKey + ".json?"
+        url = self.baseURL + self.resource_key + ".json?"
 
         evidence = flowdata.evidence.get_all()
 

@@ -34,6 +34,8 @@ from fiftyone_pipeline_engines.engine import Engine
 from fiftyone_pipeline_engines.datakeyed_cache import DataKeyedCache
 from fiftyone_pipeline_engines.aspectdata_dictionary import AspectDataDictionary
 
+from fiftyone_pipeline_engines.lru_cache import LRUEngineCache
+
 class TestCache(DataKeyedCache):
     
     def __init__(self):
@@ -72,11 +74,11 @@ class ExampleAspectEngine(Engine):
 
         return BasicListEvidenceKeyFilter(["header.test"])
         
-    def process_internal(self, flowData):
+    def process_internal(self, flowdata):
 
         data = AspectDataDictionary(self, {"integer" : 5, "boolean" : True})
 
-        flowData.set_element_data(data)
+        flowdata.set_element_data(data)
 
 class EngineTests(unittest.TestCase):
 
@@ -85,11 +87,11 @@ class EngineTests(unittest.TestCase):
     
         testPipeline = PipelineBuilder().add(ExampleAspectEngine()).build()
 
-        flowData = testPipeline.create_flowdata()
+        flowdata = testPipeline.create_flowdata()
 
-        flowData.process()
+        flowdata.process()
 
-        self.assertTrue(flowData.example.integer == 5)
+        self.assertTrue(flowdata.example.integer == 5)
 
     # Test restricting properties
     def testRestrictedProperty(self):
@@ -100,12 +102,12 @@ class EngineTests(unittest.TestCase):
 
         testPipeline = PipelineBuilder().add(engine).build()
 
-        flowData = testPipeline.create_flowdata()
+        flowdata = testPipeline.create_flowdata()
 
-        flowData.process()
+        flowdata.process()
 
         try:
-            flowData.example.get("integer")
+            flowdata.example.get("integer")
         except Exception as e:
             result = str(e)
 
@@ -118,12 +120,12 @@ class EngineTests(unittest.TestCase):
 
         testPipeline = PipelineBuilder().add(engine).build()
 
-        flowData = testPipeline.create_flowdata()
+        flowdata = testPipeline.create_flowdata()
 
-        flowData.process()
+        flowdata.process()
 
         try:
-           flowData.example.get("missing")
+           flowdata.example.get("missing")
         except Exception as e:
             result = str(e)
 
@@ -141,16 +143,40 @@ class EngineTests(unittest.TestCase):
 
         testPipeline = PipelineBuilder().add(engine).build()
 
-        flowData = testPipeline.create_flowdata()
+        flowdata = testPipeline.create_flowdata()
 
-        flowData.evidence.add("header.test", "test")
+        flowdata.evidence.add("header.test", "test")
 
-        flowData.process()
+        flowdata.process()
 
-        flowData2 = testPipeline.create_flowdata()
+        flowdata2 = testPipeline.create_flowdata()
 
-        flowData2.evidence.add("header.test", "test")
+        flowdata2.evidence.add("header.test", "test")
 
-        flowData2.process()
+        flowdata2.process()
 
         self.assertEqual(cache.cacheHits, 1)
+
+    def testLRUCache(self):
+
+        engine = ExampleAspectEngine()
+
+        cache = LRUEngineCache()
+
+        engine.set_cache(cache)
+
+        testPipeline = PipelineBuilder().add(engine).build()
+
+        flowdata = testPipeline.create_flowdata()
+
+        flowdata.evidence.add("header.test", "test")
+
+        flowdata.process()
+
+        flowdata2 = testPipeline.create_flowdata()
+
+        flowdata2.evidence.add("header.test", "test")
+
+        flowdata2.process()
+
+        self.assertEqual(cache.cache.currsize, 1)

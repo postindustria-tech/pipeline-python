@@ -31,7 +31,7 @@ class Logger:
     """
 
     def __init__(self, min_level="error", settings = {}):
-       
+
         """!
         Create a logger
 
@@ -49,9 +49,8 @@ class Logger:
         logging.basicConfig(level=getattr(logging, min_level.upper()))
 
         self.min_level = self.allowed_levels.index(str(min_level).lower())
-
+        
         self.settings = settings
-
 
     def log(self, level, message):
 

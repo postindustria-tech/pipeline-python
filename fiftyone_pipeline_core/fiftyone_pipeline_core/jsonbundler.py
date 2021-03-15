@@ -41,6 +41,8 @@ class JSONBundlerElement(FlowElement):
 
         self.datakey = "jsonbundler"
 
+        self.exclude_from_messages = True
+
         self.properties = {"json" : { "type": "dict"} }
 
         self.property_cache = {}
@@ -84,12 +86,11 @@ class JSONBundlerElement(FlowElement):
                     if "delayexecution" in propertymeta and propertymeta["delayexecution"] == True:
                         delay_execution_list.append(propertykey)
 
-                
                 """
                 Loop over all properties again and see if any have evidenceproperties which
                 have delayedExecution set to true
                 """
-
+                
                 for propertykey, propertymeta in properties.items():
 
                     if("evidenceproperties" in propertymeta):
@@ -169,11 +170,10 @@ class JSONBundlerElement(FlowElement):
                     # Catching missing property exceptions and other errors
 
                     continue
-               
-
+        
                 output[flow_element.datakey.lower()][propertykey.lower()] = value
                 if value is None:
-                   output[flow_element.datakey.lower()][propertykey.lower() + "nullreason"] = null_reason
+                    output[flow_element.datakey.lower()][propertykey.lower() + "nullreason"] = null_reason
 
                 sequence = flowdata.evidence.get("query.sequence")
 

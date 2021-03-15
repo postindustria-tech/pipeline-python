@@ -50,7 +50,7 @@ class CoreTests(unittest.TestCase):
     def testEvidence(self):
 
         testPipeline = TestPipeline()
-        userAgent = testPipeline.flowData.evidence.get("header.user-agent")
+        userAgent = testPipeline.flowdata.evidence.get("header.user-agent")
         self.assertTrue(userAgent == "test")
 
 
@@ -58,7 +58,7 @@ class CoreTests(unittest.TestCase):
     def testEvidenceKeyFilter(self):
 
         testPipeline = TestPipeline()
-        nullEvidence = testPipeline.flowData.evidence.get("header.other-evidence")
+        nullEvidence = testPipeline.flowdata.evidence.get("header.other-evidence")
         self.assertTrue(nullEvidence == None)
 
 
@@ -66,21 +66,21 @@ class CoreTests(unittest.TestCase):
     def testGet(self):
  
         testPipeline = TestPipeline()
-        getValue = testPipeline.flowData.get("example1").get("integer")
+        getValue = testPipeline.flowdata.get("example1").get("integer")
         self.assertTrue(getValue == 5)
   
 
     def testGetWhere(self):
 
         testPipeline = TestPipeline()
-        getValue = len(testPipeline.flowData.get_where("type", "int"))
+        getValue = len(testPipeline.flowdata.get_where("type", "int"))
         self.assertTrue(getValue == 1)
         
 
     def testGetFromElement(self):
 
         testPipeline = TestPipeline()
-        getValue = testPipeline.flowData.get_from_element(testPipeline.flowElement1).get("integer")
+        getValue = testPipeline.flowdata.get_from_element(testPipeline.flowElement1).get("integer")
         self.assertTrue(getValue == 5)
 
 
@@ -88,15 +88,19 @@ class CoreTests(unittest.TestCase):
     def testStopFlowData(self):
  
         testPipeline = TestPipeline()
-        getValue = testPipeline.flowData.get("example2")
-        self.assertTrue(getValue == None)
+        try:
+            testPipeline.flowdata.get("example2")
+        except Exception as e:
+            message = str(e)
+
+        self.assertEqual(message, "There is no element data for example2 against this flow data. Available element data keys are: ['example1', 'error', 'apv', 'stop', 'example2']")
    
 
     # Test errors are returned
     def testErrors(self):
 
         testPipeline = TestPipeline()
-        getValue = testPipeline.flowData.errors["error"]
+        getValue = testPipeline.flowdata.errors["error"]
         self.assertTrue(getValue is not None)
 
     # Test aspectPropertyValue wrapper
@@ -104,13 +108,41 @@ class CoreTests(unittest.TestCase):
     def testAPV(self):
 
         testPipeline = TestPipeline()
-        yes = testPipeline.flowData.get("apv").get("yes")
+        yes = testPipeline.flowdata.get("apv").get("yes")
 
         self.assertTrue(yes.has_value())
         self.assertTrue(yes.value() == "yes")
 
-        no = testPipeline.flowData.get("apv").get("no")
+        no = testPipeline.flowdata.get("apv").get("no")
 
         self.assertFalse(no.has_value())
         self.assertTrue(no.no_value_message() == "no")
-   
+
+    def test_build_from_config(self):
+
+        config = {
+            "PipelineOptions": {
+                "Elements": [
+                    {
+                        "elementName": "ExampleFlowElement1",
+                        "elementPath": "classes.exampleflowelement1",
+                        "elementParameters": {
+                            "example_param": "hello"
+                        }
+                    }
+                ]
+            }
+        }
+
+        pipeline = PipelineBuilder().build_from_configuration(config)
+
+        fd = pipeline.create_flowdata()
+
+        fd.evidence.add("header.user-agent", "test")
+        
+        fd.process()
+
+        getValue = fd.get("example1").get("integer")
+        self.assertTrue(getValue == 5)
+
+        

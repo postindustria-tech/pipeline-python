@@ -7,20 +7,21 @@ with open(path.join(this_directory, 'readme.md')) as f:
     long_description = f.read()
 
 setuptools.setup(
-    name="fiftyone_pipeline_cloudrequestengine",
+    name="fiftyone_pipeline_engines_fiftyone",
     version="4.2.0",
     author="51Degrees",
 	author_email="info@51degrees.com",
     url="http://51degrees.com/",
     description=("The 51Degrees Pipeline API is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines). "
-    "This package extends the flow element class created by the fiftyone.pipeline.core package into a specialized type of flow element called an engine."),
+    "It includes a ShareUsage engine that sends usage data to 51Degrees in zipped batches."),
     long_description=long_description,
     long_description_content_type='text/markdown',
     python_requires='>=3.5',
-    packages=["fiftyone_pipeline_cloudrequestengine"],
     install_requires=[
           'requests',
+          'cachetools'
     ],
+    packages=["fiftyone_pipeline_engines_fiftyone"],
     license="EUPL-1.2",
     classifiers=[
         "Development Status :: 5 - Production/Stable",

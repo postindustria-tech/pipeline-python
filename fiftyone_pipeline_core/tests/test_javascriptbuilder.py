@@ -76,7 +76,7 @@ class TestPipeline():
             pipelineSettings = {}
         else:
             jsSettings = {'minify' : minify}
-            pipelineSettings = {'javascriptBuilderSettings' : jsSettings}
+            pipelineSettings = {'javascript_builder_settings' : jsSettings}
         
         self.Pipeline = PipelineBuilder(pipelineSettings)\
             .add(TestEngine())\
@@ -258,12 +258,12 @@ class JavaScriptBundlerTests(unittest.TestCase):
         pipeline.add(DelayedExecutionEngine1())
         pipeline = pipeline.build()
 
-        flowData = pipeline.create_flowdata()
+        flowdata = pipeline.create_flowdata()
 
-        flowData.process()
+        flowdata.process()
 
         expected = {"one" : 1, "two" : 2}
-        actual = flowData.jsonbundler.json["delayedexecutiontest1"]
+        actual = flowdata.jsonbundler.json["delayedexecutiontest1"]
         self.assertEqual(actual, expected)
 
 
@@ -275,9 +275,9 @@ class JavaScriptBundlerTests(unittest.TestCase):
         pipeline.add(DelayedExecutionEngine2())
         pipeline = pipeline.build()
 
-        flowData = pipeline.create_flowdata()
+        flowdata = pipeline.create_flowdata()
 
-        flowData.process()
+        flowdata.process()
 
         expected = {
             "onedelayexecution" : True,
@@ -286,7 +286,7 @@ class JavaScriptBundlerTests(unittest.TestCase):
             "two" : 2
         }
 
-        actual = flowData.jsonbundler.json["delayedexecutiontest2"]
+        actual = flowdata.jsonbundler.json["delayedexecutiontest2"]
         self.assertEqual(actual, expected)
 
 
@@ -298,9 +298,9 @@ class JavaScriptBundlerTests(unittest.TestCase):
         pipeline.add(DelayedExecutionEngine3())
         pipeline = pipeline.build()
 
-        flowData = pipeline.create_flowdata()
+        flowdata = pipeline.create_flowdata()
 
-        flowData.process()
+        flowdata.process()
 
         expected = {
             "oneevidenceproperties" : ['delayedexecutiontest3.two'],
@@ -310,5 +310,5 @@ class JavaScriptBundlerTests(unittest.TestCase):
             "three" : 3
         }
 
-        actual = flowData.jsonbundler.json["delayedexecutiontest3"]
+        actual = flowdata.jsonbundler.json["delayedexecutiontest3"]
         self.assertEqual(actual, expected)

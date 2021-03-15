@@ -55,6 +55,8 @@ class Pipeline:
 
         self.flow_elements_list = {}
 
+        self.flow_elements_display_list = []
+
         for flow_element in flow_elements:
 
             # Notify element that it has been registered in the pipeline
@@ -63,6 +65,9 @@ class Pipeline:
             self.flow_elements_list[flow_element.datakey] = flow_element
 
             flow_element.pipelines.append(self)
+
+            if not flow_element.exclude_from_messages:
+                self.flow_elements_display_list.append(flow_element.datakey)
 
     def create_flowdata(self):
 
@@ -105,6 +110,22 @@ class Pipeline:
         """
 
         return self.flow_elements_list[key]
+
+    def element_not_found(self, element, flowdata):
+        """!
+        Trigger error when an element cannot be found in the pipeline
+
+        @type element: string
+        @param element: name of flowelement 
+        @type flowdata: flowdata
+        @param element: flowdata being processsed 
+        @rtype: Exception
+        @return: Returns exception
+
+        """
+
+        raise Exception("There is no element data for " + element + " against this flow data. Available element data keys are: " + str(flowdata.pipeline.flow_elements_display_list))
+
 
     def get_properties(self):
 

@@ -73,7 +73,21 @@ class ElementData(object):
 
         return self.get(key)
 
+    def __getitem__(self, flow_element_key):
+    
+        """!
+        Magic method in Python, which when used in a class, allows its instances to use the [] (indexer) operators.
+        For example, instead of `flowdata.get("device")` you can use `flowdata["device"]`
 
+        @type flow_element_key: string
+        @param flow_element_key: datakey of the FlowElement that created the data of interest
+
+        @rtype: ElementData
+        
+        """
+
+        return self.get(flow_element_key)
+		
     def get_internal(self, key):
         
         """!

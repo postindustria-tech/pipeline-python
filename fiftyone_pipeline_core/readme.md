@@ -2,7 +2,7 @@
 
 ![51Degrees](https://51degrees.com/DesktopModules/FiftyOne/Distributor/Logo.ashx?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=python-open-source "Data rewards the curious") **Python Pipeline Core**
 
-[Pipeline Documentation](https://51degrees.com/documentation/4.1/index.html "Complete documentation")
+[Developer Documentation](https://51degrees.com/pipeline-python/index.html?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=python-open-source "Developer Documentation")
 
 ## Introduction
 
@@ -23,5 +23,5 @@ Engines created by 51Degrees:
 
 ## Requirements
 
-* Python 2.7 or Python 3
+* Python 3.5+
 * The `flask` python library to run the web examples 
