@@ -76,7 +76,7 @@ class CoreTests(unittest.TestCase):
         getValue = len(testPipeline.flowdata.get_where("type", "int"))
         self.assertTrue(getValue == 1)
         
-
+ 
     def testGetFromElement(self):
 
         testPipeline = TestPipeline()
@@ -93,7 +93,7 @@ class CoreTests(unittest.TestCase):
         except Exception as e:
             message = str(e)
 
-        self.assertEqual(message, "There is no element data for example2 against this flow data. Available element data keys are: ['example1', 'error', 'apv', 'stop', 'example2']")
+        self.assertEqual(message, "There is no element data for example2 against this flow data. Available element data keys are: ['example1', 'error', 'apv', 'stop', 'example2', 'set-headers']")
    
 
     # Test errors are returned

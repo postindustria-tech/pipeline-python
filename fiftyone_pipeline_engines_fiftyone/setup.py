@@ -8,10 +8,10 @@ with open(path.join(this_directory, 'readme.md')) as f:
 
 setuptools.setup(
     name="fiftyone_pipeline_engines_fiftyone",
-    version="4.2.1",
+    version="4.3.0",
     author="51Degrees",
 	author_email="info@51degrees.com",
-    url="http://51degrees.com/",
+    url="https://51degrees.com/",
     description=("The 51Degrees Pipeline API is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines). "
     "It includes a ShareUsage engine that sends usage data to 51Degrees in zipped batches."),
     long_description=long_description,

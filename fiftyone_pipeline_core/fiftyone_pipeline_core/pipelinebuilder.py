@@ -25,6 +25,7 @@ from .logger import Logger
 from .javascriptbuilder import JavascriptBuilderElement
 from .jsonbundler import JSONBundlerElement
 from .sequenceelement import SequenceElement
+from .setheaderelement import SetHeaderElement
 import importlib
 
 
@@ -36,7 +37,7 @@ class PipelineBuilder(object):
 
     """
 
-    def __init__(self, settings=None):
+    def __init__(self, settings= {}):
         """
         Pipeline Builder constructor.
         @type settings: dictionary
@@ -45,12 +46,11 @@ class PipelineBuilder(object):
         (default true)
         `javascript_builder_settings (dict)` - Settings for the JavaScriptBuilder engine 
         @rtype: PipelineBuilder
+        `use_setheader_properties (Bool)` - Whether to add the SetHeaderElement to the pipeline
+        (default true)
         @return: Returns a Pipeline Builder
 
         """
-
-        if settings is None:
-            settings = {}
 
         self.flow_elements = []
         self.logger = Logger()
@@ -59,11 +59,14 @@ class PipelineBuilder(object):
             self.add_javaScriptbuilder = settings["add_javascript_builder"]
         else:
             self.add_javaScriptbuilder = True
-       
-      
+          
         if "javascript_builder_settings" in settings:
             self.javascriptbuilder_settings = settings["javascript_builder_settings"]
 
+        if "use_setheader_properties" in settings:
+            self.use_setheader_properties = settings["use_setheader_properties"]
+        else:
+            self.use_setheader_properties = True
 
 
     def get_javascript_elements(self):
@@ -85,6 +88,21 @@ class PipelineBuilder(object):
                 flow_elements.append(JavascriptBuilderElement(self.javascriptbuilder_settings))
             else:
                 flow_elements.append(JavascriptBuilderElement())
+   
+        return flow_elements
+
+    def get_setheader_elements(self):
+        """
+        Adds the SetHeaderElement to the pipeline if
+        If use_setheader_properties is set to true (the default)
+        @rtype: list
+        @return: Returns a list of FlowElements     
+        """
+        
+        flow_elements = []
+
+        if (self.use_setheader_properties):
+            flow_elements.append(SetHeaderElement())
    
         return flow_elements
 
@@ -115,7 +133,8 @@ class PipelineBuilder(object):
         """
 
         self.flow_elements.extend(self.get_javascript_elements())
-
+        self.flow_elements.extend(self.get_setheader_elements())
+        
         return Pipeline(self.flow_elements, logger=self.logger)
 
     def add_logger(self, logger):

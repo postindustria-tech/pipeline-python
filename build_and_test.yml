@@ -37,6 +37,8 @@ steps:
     pip install pylint
     pip install unittest-xml-reporting
     pip install coverage
+    pip install parameterized
+    pip install requests-mock
     pip install flask
   displayName: 'Install dependencies'
 
