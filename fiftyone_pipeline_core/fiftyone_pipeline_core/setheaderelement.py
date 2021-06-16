@@ -42,7 +42,7 @@ class SetHeaderElement(FlowElement):
 
         self.properties = {"responseheaderdictionary" : { "type": "dict"} }
 
-        self.setheader_properties = {};
+        self.setheader_properties = {}
 
     def process_internal(self, flowdata):
     
@@ -160,13 +160,13 @@ class SetHeaderElement(FlowElement):
         try:
             # Get the elementData from flowData that contains required property.
             element_data = flowData.get(element_key)
-        except Exception as e:
+        except Exception:
             print(Messages.ELEMENT_NOT_FOUND.format(element_key))
             return ""
 
         try:
             property = element_data[property_key.lower()]
-        except Exception as e:
+        except:
             print(Messages.PROPERTY_NOT_FOUND.format(property_key, element_key))
             return ""
 

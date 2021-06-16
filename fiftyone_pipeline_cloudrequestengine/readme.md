@@ -8,9 +8,13 @@
 
 The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines) 
 
+## Requirements
+
+* Python 3.5+
+
 ## This package fiftyone_pipeline_cloudrequestengine
 
-This package uses the `engines` class created by the `fiftyone.pipeline.engines`. It makes available:
+This package uses the `engines` class created by the `fiftyone-pipeline-engines`. It makes available:
 
 * A `Cloud Request Engine` which calls the 51Degrees cloud service to fetch properties and metadata about them based on a provided resource key. Get a resource key at https://configure.51degrees.com/
 * A `Cloud Engine` template which reads data from the Cloud Request Engine.

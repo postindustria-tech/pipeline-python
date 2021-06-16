@@ -18,7 +18,7 @@ This repository contains 3 modules:
 
 ## Requirements
 
-* Python 3.5+ 
+* Python 3.5+
 * The `flask` python library to run the web examples 
 
 ## Installation
@@ -27,9 +27,9 @@ This repository contains 3 modules:
 
 Generally, you will want to be installing one of the engines such as [device detection](https://pypi.org/project/fiftyone-devicedetection/) or [location](https://pypi.org/project/fiftyone-location/). However, if you do want to install the core modules directly (for example, to work on your own engine) then just use `pip install` with the relevant module name: 
 
-`pip install fiftyone_pipeline_core`
-`pip install fiftyone_pipeline_engines`
-`pip install fiftyone_pipeline_cloundrequestengine`
+`pip install fiftyone-pipeline-core`
+`pip install fiftyone-pipeline-engines`
+`pip install fiftyone-pipeline-cloundrequestengine`
 
 ### From GitHub
 
