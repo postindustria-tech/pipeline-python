@@ -48,7 +48,7 @@ class Tracker(DataKeyedCache):
 
         else:
 
-            return self.match(key, self.get_cache_value(key))
+            return self.match(key, self.get_cache_value(key)) # pylint: disable=E1121
 
     def match(self, result):
 

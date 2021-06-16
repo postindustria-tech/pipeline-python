@@ -1,20 +1,28 @@
 import setuptools
+import os
+import io
 
-# read the contents of your README file
-from os import path
-this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'readme.md')) as f:
-    long_description = f.read()
+# Read a text file and return the content as a string.
+def read(file_name):
 
+    """Read a text file and return the content as a string."""
+    try:
+        with io.open(
+            os.path.join(os.path.dirname(__file__), file_name), encoding="utf-8"
+        ) as f:
+            return f.read()
+    except:
+        return ""    
+    
 setuptools.setup(
     name="fiftyone_pipeline_engines",
-    version="4.2.1",
+    version=read("version.txt"),
     author="51Degrees",
-	author_email="info@51degrees.com",
-    url="http://51degrees.com/",
+    author_email="support@51degrees.com",
+    url="https://51degrees.com/",
     description=("The 51Degrees Pipeline API is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines). "
-    "This package extends the flow element class created by the fiftyone.pipeline.core package into a specialized type of flow element called an engine."),
-    long_description=long_description,
+    "This package extends the flow element class created by the fiftyone-pipeline-core package into a specialized type of flow element called an engine."),
+    long_description=read("readme.md"),
     long_description_content_type='text/markdown',
     python_requires='>=3.5',
     install_requires=[

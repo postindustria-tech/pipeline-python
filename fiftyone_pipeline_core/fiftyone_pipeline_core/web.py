@@ -34,3 +34,25 @@ def webevidence(request):
         webevidence["header.protocol"] = "http"
 
     return webevidence
+
+def set_response_header(flowData, response):
+    
+    """!
+    Set UACH response header in web response (sets Accept-CH header in response)
+    
+    @type response: Response 
+    @param response: A Response object
+    @param response_header_dict: Dictionary containing response header key and values to be set
+    @rtype response
+    @return A response object containing headers with non null values in response
+
+    """
+    
+    # Get response headers dictionary containing key values to be set in response  
+    response_header_dict = flowData["set-headers"]["responseheaderdictionary"]
+    for response_key, response_value in response_header_dict.items():
+        response_value = response_value.replace(",", ", ")
+        if response_value != "":
+            response.headers[response_key] = response_value
+
+    return response
