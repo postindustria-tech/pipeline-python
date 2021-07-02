@@ -14,15 +14,9 @@ variables:
   - template: shared-variables.yml
 
 stages:
-- template: shared-build-and-test-platforms.yml
-  parameters:
-    windowsImage: $(windowsImage)
-    linuxImage: $(linuxImage)
-    macImage: $(macImage)
 
 - stage: Build_Packages
   displayName: Build Packages
-  dependsOn: [Windows_x64,Windows_x86,Linux_x64,MacOS_x64]
   jobs:
   - job: Create_Packages
     displayName: Create Packages
