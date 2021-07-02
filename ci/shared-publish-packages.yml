@@ -33,21 +33,22 @@ steps:
   displayName: 'Install Twine'             
 
 # Upload packages
-- template: shared-upload-packages.yml
-  parameters:
-    publishEndpoint: ${{ parameters.publishEndpoint }}
-    packageName: 'fiftyone_pipeline_cloudrequestengine'         
 
 - template: shared-upload-packages.yml
   parameters:
     publishEndpoint: ${{ parameters.publishEndpoint }}
     packageName: 'fiftyone_pipeline_core'
-  
+
 - template: shared-upload-packages.yml
   parameters:
     publishEndpoint: ${{ parameters.publishEndpoint }}
     packageName: 'fiftyone_pipeline_engines'
-  
+
+- template: shared-upload-packages.yml
+  parameters:
+    publishEndpoint: ${{ parameters.publishEndpoint }}
+    packageName: 'fiftyone_pipeline_cloudrequestengine'         
+    
 - template: shared-upload-packages.yml
   parameters:
     publishEndpoint: ${{ parameters.publishEndpoint }}
