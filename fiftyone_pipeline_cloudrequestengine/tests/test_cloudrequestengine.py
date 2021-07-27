@@ -41,7 +41,7 @@ class TestCloudRequestEngine(unittest.TestCase):
     testEnvVarEndPoint = "http://testEnvVarEndPoint/"
 
     class TestRequestClient(RequestClient):
-        def request(self, type, name):
+        def request(self, type, name, originHeader):
             propertiesStr = "accessibleProperties"
             evidenceKeysStr = "evidencekeys"
 

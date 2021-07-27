@@ -49,7 +49,9 @@ class CloudRequestEngine(Engine):
         Constructor for CloudRequestEngine
         
         @type settings: dict
-        @param settings: Settings should contain a resource_key and optionally a cloud_endpoint to overwrite the default baseurl
+        @param settings: Settings should contain a resource_key and optionally 
+        1) a cloud_endpoint to overwrite the default baseurl 
+        2) an cloud_request_origin to use when making requests
 
         """
 
@@ -85,6 +87,11 @@ class CloudRequestEngine(Engine):
             self.http_client = settings["http_client"]
         else:
             self.http_client = RequestClient()
+
+        if "cloud_request_origin" in settings:
+            self.cloud_request_origin = settings["cloud_request_origin"]
+        else:
+            self.cloud_request_origin = None
 
         # Initialise evidencekeys and properties from the cloud service
      
@@ -169,18 +176,19 @@ class CloudRequestEngine(Engine):
         @return Returns dict with data and error properties error contains any errors from the request, data contains the response
         """
 
-        cloudResponse = self.http_client.request('GET', url)
+        cloudResponse = self.http_client.request('GET', url, self.cloud_request_origin)
 
         if cloudResponse.status_code < 400:
             return cloudResponse.text
         else:
             try:
                 jsonResponse = json.loads(cloudResponse.content)
-                if("errors" in jsonResponse and len(jsonResponse["errors"])):
-                    raise Exception("Cloud request returned an error " + json.dumps(jsonResponse["errors"]))
             except:
-                raise Exception("Cloud request engine properties list request returned " + str(cloudResponse.status_code))
-            
+                raise Exception("Cloud request engine properties list request returned code '" + 
+                    str(cloudResponse.status_code) + "' with content '" + cloudResponse.content+ "'")
+            else:
+                if("errors" in jsonResponse and len(jsonResponse["errors"])):
+                    raise Exception("Cloud request returned an error: " + json.dumps(jsonResponse["errors"]))            
 
     def process_internal(self, flowdata):
 

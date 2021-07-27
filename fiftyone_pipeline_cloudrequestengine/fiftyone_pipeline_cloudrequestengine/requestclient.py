@@ -23,5 +23,5 @@
 import requests
 
 class RequestClient:
-    def request(self, type, url):
-        return requests.request(type, url)
+    def request(self, type, url, originHeader):
+        return requests.request(type, url, headers={"Origin":originHeader})
