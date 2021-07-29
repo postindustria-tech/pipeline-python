@@ -93,7 +93,7 @@ class CoreTests(unittest.TestCase):
         except Exception as e:
             message = str(e)
 
-        self.assertEqual(message, "There is no element data for example2 against this flow data. Available element data keys are: ['example1', 'error', 'apv', 'stop', 'example2', 'set-headers']")
+        self.assertEqual(message, "There is no element data for example2 against this flow data. Available element data keys are: ['example1', 'error', 'apv', 'stop', 'example2']")
    
 
     # Test errors are returned
