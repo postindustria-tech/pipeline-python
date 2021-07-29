@@ -26,6 +26,9 @@ stages:
         Python 39:          
           pythonVersion: '3.9'
 
+    variables: 
+      - group: InternalKeys
+      
     pool:
       vmImage: ${{ parameters.imageName }}
       
@@ -86,6 +89,10 @@ stages:
       failOnStderr: true
         
     - bash: |
+    
+        export resource_key="$(SuperResourceKey)"      
+        echo 'Exporting resource key for cloud tests, resource_key=$(SuperResourceKey)'
+        
         cd ./fiftyone_pipeline_cloudrequestengine
         coverage run -m xmlrunner discover -s tests -p test*.py -o test-results
         if [ $? -ne 0 ]; then

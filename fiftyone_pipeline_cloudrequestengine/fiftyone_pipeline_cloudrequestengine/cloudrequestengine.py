@@ -26,9 +26,8 @@ from fiftyone_pipeline_engines.engine import Engine
 from fiftyone_pipeline_engines.aspectdata_dictionary import AspectDataDictionary
 from .requestclient import RequestClient
 from .constants import Constants
-
+import warnings
 import json
-import requests
 import os
 
 try:
@@ -92,7 +91,7 @@ class CloudRequestEngine(Engine):
             self.cloud_request_origin = settings["cloud_request_origin"]
         else:
             self.cloud_request_origin = None
-
+			
         # Initialise evidencekeys and properties from the cloud service
      
         self.flow_element_properties = self.get_engine_properties()
@@ -109,7 +108,7 @@ class CloudRequestEngine(Engine):
         @return: Returns list of keys
         """
     
-        evidenceKeyRequest = self.make_cloud_request(self.baseURL + "evidencekeys")
+        evidenceKeyRequest = self.make_cloud_request('GET', self.baseURL + "evidencekeys")
 
         evidenceKeys = json.loads(evidenceKeyRequest)
 
@@ -143,7 +142,7 @@ class CloudRequestEngine(Engine):
 
         propertiesURL = self.baseURL +"accessibleProperties?" + "resource=" + self.resource_key
 
-        properties = self.make_cloud_request(propertiesURL)
+        properties = self.make_cloud_request('GET', propertiesURL)
 
         properties = json.loads(properties)
 
@@ -165,8 +164,64 @@ class CloudRequestEngine(Engine):
                 flowElementProperties[datakey][engineProperty["name"]] = engineProperty
                
         return flowElementProperties
+
+    def validate_response(self, cloudResponse):
+
+        """!
+        Validate the JSON response from the cloud service.
     
-    def make_cloud_request(self, url):
+        @type: Response
+        @param: Response returned from the cloud service.
+        @rtype: Exception
+        @return: Thrown if there are errors returned from the cloud service.
+        """
+
+        hasData = cloudResponse.text and cloudResponse.text.strip()
+        messages = []
+
+        if hasData:
+            try:
+                jsonResponse = json.loads(cloudResponse.content)
+            except:
+                raise Exception("Cloud request engine properties list request returned code '" + 
+                    str(cloudResponse.status_code) + "' with content '" + cloudResponse.content+ "'")
+
+            hasErrors = "errors" in jsonResponse and len(jsonResponse["errors"])
+            if hasErrors:
+                hasData = len(jsonResponse) > 1
+            else:
+                hasData = len(jsonResponse) > 0
+            
+            if hasErrors:
+                messages.append(json.dumps(jsonResponse["errors"]))
+
+        # If there were no errors but there was also no other data
+        # in the response then add an explanation to the list of
+        # messages.
+
+        if (len(messages) == 0 and hasData == False):
+            message = Constants.MESSAGE_NO_DATA_IN_RESPONSE.format(cloudResponse.url)
+            messages.append(message)
+
+        # If there are any errors returned from the cloud service
+        # then throw an exception
+
+        if (len(messages) > 1):
+            exceptionList = [Constants.EXCEPTION_CLOUD_ERRORS_MULTIPLE]
+            exceptionList = exceptionList + messages
+            raise Exception(exceptionList)
+        elif (len(messages) == 1):
+            message = Constants.EXCEPTION_CLOUD_ERROR.format(messages[0])
+            raise Exception(message)
+
+        # If there were no errors returned but the response code was non
+        # success then throw an exception.
+
+        if (len(messages) == 0 and cloudResponse.status_code != 200):
+            raise Exception("Cloud request engine properties list request returned " + \
+                            str(cloudResponse.status_code))
+
+    def make_cloud_request(self, type, url, content = None):
 
         """!    
         @type url: string
@@ -176,19 +231,11 @@ class CloudRequestEngine(Engine):
         @return Returns dict with data and error properties error contains any errors from the request, data contains the response
         """
 
-        cloudResponse = self.http_client.request('GET', url, self.cloud_request_origin)
+        cloudResponse = self.http_client.request(type, url, content, self.cloud_request_origin)
+ 
+        self.validate_response(cloudResponse)
 
-        if cloudResponse.status_code < 400:
-            return cloudResponse.text
-        else:
-            try:
-                jsonResponse = json.loads(cloudResponse.content)
-            except:
-                raise Exception("Cloud request engine properties list request returned code '" + 
-                    str(cloudResponse.status_code) + "' with content '" + cloudResponse.content+ "'")
-            else:
-                if("errors" in jsonResponse and len(jsonResponse["errors"])):
-                    raise Exception("Cloud request returned an error: " + json.dumps(jsonResponse["errors"]))            
+        return cloudResponse.text           
 
     def process_internal(self, flowdata):
 
@@ -205,30 +252,128 @@ class CloudRequestEngine(Engine):
    
         url = self.baseURL + self.resource_key + ".json?"
 
-        evidence = flowdata.evidence.get_all()
+        content = self.get_content(flowdata)
 
-        # Remove prefix from evidence
-
-        evidenceWithoutPrefix = {}
-
-        for key, value in evidence.items():
-        
-            keySplit =  key.split('.')
-
-            try:
-                keySplit[1]
-            except:
-                continue
-            else:
-                evidenceWithoutPrefix[keySplit[1]] = value
-
-
-        url += urlencode(evidenceWithoutPrefix)
-
-        result = self.make_cloud_request(url)
+        result = self.make_cloud_request('POST', url, content)
 
         data = AspectDataDictionary(self, {"cloud" : result})
 
         flowdata.set_element_data(data)
 
         return
+
+    def get_content(self, flowData):
+
+        """!
+        Generate the Content to send in the POST request. The evidence keys
+        e.g. 'query.' and 'header.' have an order of precedence. These are
+        added to the evidence in reverse order, if there is conflict then 
+        the queryData value is overwritten. 
+
+        'query.' evidence should take precedence over all other evidence.
+        If there are evidence keys other than 'query.' that conflict then
+        this is unexpected so a warning will be logged.
+
+        @param: flowData: FlowData
+        @return: Evidence Dictionary
+        """
+
+        queryData = {}
+
+        evidence = flowData.evidence.get_all()
+        print(evidence)
+        # Add evidence in reverse alphabetical order, excluding special keys. 
+        self.add_query_data(queryData, evidence, self.get_selected_evidence(evidence, Constants.EVIDENCE_OTHER))
+        # Add cookie evidence.
+        self.add_query_data(queryData, evidence, self.get_selected_evidence(evidence, Constants.EVIDENCE_COOKIE_PREFIX))
+        # Add header evidence.
+        self.add_query_data(queryData, evidence, self.get_selected_evidence(evidence, Constants.EVIDENCE_HTTPHEADER_PREFIX))
+        # Add query evidence.
+        self.add_query_data(queryData, evidence, self.get_selected_evidence(evidence, Constants.EVIDENCE_QUERY_PREFIX))
+        print(queryData)
+        return queryData
+
+    def add_query_data(self, query_data, all_evidence, evidence):
+
+        """!
+        Add query data to the evidence.
+
+        @param: query_data: The destination dictionary to add query data to.
+        @param all_evidence: All evidence in the flow data. This is used to report which evidence
+        keys are conflicting.
+        @param evidence: Evidence to add to the query Data.
+        """        
+
+        for evidenceKey, evidenceValue in evidence.items():
+
+            # Get the key parts
+            evidenceKeyParts = evidenceKey.split(Constants.EVIDENCE_SEPERATOR)
+            prefix = evidenceKeyParts[0].lower()
+            suffix = evidenceKeyParts[-1].lower()
+
+            # Check and add the evidence to the query parameters.
+            if (not suffix in query_data.keys()):
+                query_data[suffix] = evidenceValue
+            # If the queryParameter exists already.
+            else:
+                # Get the conflicting pieces of evidence and then log a 
+                # warning, if the evidence prefix is not query. Otherwise a
+                # warning is not needed as query evidence is expected 
+                # to overwrite any existing evidence with the same suffix.
+                if (prefix.lower() != Constants.EVIDENCE_QUERY_PREFIX):
+                    conflicts = {}
+                    for key, value in all_evidence.items(): 
+                        if(key.lower() != evidenceKey.lower() and suffix in key.lower()):
+                            conflicts[key] = value
+
+                    warningMessage = Constants.WARNING_MESSAGE \
+                                        .format(evidenceKey, evidenceValue) 
+                        
+                    conflictStr = ', '.join('{}:{}'.format(key, value) \
+                                for key, value in conflicts.items())
+                    
+                    if conflictStr:
+                        warnings.warn(warningMessage + conflictStr)
+                    
+                # Overwrite the existing queryParameter value.
+                query_data[suffix] = evidenceValue
+
+    def get_selected_evidence(self, evidence, type):
+        
+        """!
+        Get evidence with specified prefix.
+
+        @param evidence: All evidence in the flow data.
+        @param type: Required evidence key prefix
+        """
+
+        selected_evidence = {}
+
+        if type == Constants.EVIDENCE_OTHER:
+            for key, value in evidence.items():
+                if (not self.key_has_prefix(key, Constants.EVIDENCE_QUERY_PREFIX) and \
+                        not self.key_has_prefix(key, Constants.EVIDENCE_HTTPHEADER_PREFIX) and \
+                            not self.key_has_prefix(key, Constants.EVIDENCE_COOKIE_PREFIX)):
+                    selected_evidence[key] = value
+            selected_evidence = dict(sorted(selected_evidence.items(), reverse=True))
+            
+        else:
+            for key, value in evidence.items():
+                if self.key_has_prefix(key, type):
+                    selected_evidence[key] = value
+            
+        return selected_evidence
+        
+    def key_has_prefix(self, itemKey, prefix):
+
+        """!
+        Check that the key of a KeyValuePair has the given prefix.
+
+        @param itemKey: Key to check
+        @param prefix: The prefix to check for.
+        @return: True if the key has the prefix.
+        """
+
+        key = itemKey.split(Constants.EVIDENCE_SEPERATOR)
+        return key[0].lower() == prefix.lower()
+
