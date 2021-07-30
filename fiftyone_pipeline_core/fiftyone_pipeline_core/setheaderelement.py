@@ -43,6 +43,8 @@ class SetHeaderElement(FlowElement):
         self.properties = {"responseheaderdictionary" : { "type": "dict"} }
 
         self.setheader_properties = {}
+		
+        self.exclude_from_messages = True
 
     def process_internal(self, flowdata):
     

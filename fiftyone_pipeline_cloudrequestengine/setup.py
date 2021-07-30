@@ -27,6 +27,7 @@ setuptools.setup(
     python_requires='>=3.5',
     packages=["fiftyone_pipeline_cloudrequestengine"],
     install_requires=[
+          'fiftyone_pipeline_engines',
           'requests',
     ],
     license="EUPL-1.2",

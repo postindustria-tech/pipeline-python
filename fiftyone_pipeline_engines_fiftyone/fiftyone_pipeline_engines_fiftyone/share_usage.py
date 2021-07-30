@@ -34,24 +34,37 @@ import platform
 import datetime
 
 class ShareUsage(Engine):
-    def __init__(self, interval = 100, requested_package_size = 10, cookie = None, query_whitelist = [], header_blacklist = [], share_percentage = 100):
+    def __init__(self, interval = 1200, requested_package_size = 10, cookie = None, query_whitelist = [], header_blacklist = [], share_percentage = 100):
         """!
         Constructor for ShareUsage element
         
         @type interval: int
-        @param interval: how often to send (seconds)
+        @param interval: If exactly the same evidence values are seen 
+        multiple times within this time limit (in seconds) then they 
+        will only be shared once.
         @type requested_package_size: int
-        @param requested_package_size: how many items in one zipped packaged
+        @param requested_package_size: The usage element will group data into 
+        single requests before sending it. This setting controls the minimum 
+        number of entries before data is sent. If you are sharing large 
+        amounts of data, increasing this value is recommended in order to 
+        reduce the overhead of sending HTTP messages.
+        For example, the 51Degrees cloud service uses a value of 2500.
         @type cookie: string
-        @param cookie: which cookie is used to track evidence
+        @param cookie: If a cookie is being used to identify user 
+        sessions, it can be specified here in order to reduce the 
+        sharing of duplicated data.
         @type query_whitelist: list
-        @param query_whitelist: list of query string whitelist evidence to keep
+        @param query_whitelist: By default query string and HTTP form 
+        parameters are not shared unless prefixed with '51D_'.
+        If you need to share query string parameters, a list can be 
+        specified here.
         @type query_blacklist: list
-        @param query_blacklist: list of header evidence to exclude
-        @type share_percentage: number of requests to share
-        @param share_percentage : int
-        
-        
+        @param query_blacklist: By default, all HTTP headers 
+        (except a few, such as Cookies) are shared. 
+        Individual headers can be excluded from sharing by adding them 
+        to this list.
+        @type share_percentage : int
+        @param share_percentage: Percentage of requests to share.        
         """
 
         super(ShareUsage, self).__init__()
