@@ -2,25 +2,42 @@ trigger:
 - master
 - develop
 - release/*
+- hotfix/*
 
 # Don't trigger for a pull request
 pr: none
 
 variables:
+  - group: CIAutomation
   # Access token for the git repository. Used by the git tag task.
   - name: system_accesstoken
     value: $(System.AccessToken)
   # Include shared variables
   - template: shared-variables.yml
 
+resources:
+  repositories:
+    - repository: ciTemplates # Id of the repository used to reference to in this script
+      type: git
+      name: common-ci # Name of the actual repository
+
 stages:
 
 - stage: Build_Packages
   displayName: Build Packages
   jobs:
+  - template: shared-git-version-job.yml@ciTemplates
+    parameters:
+      imageName: $(linuxImage)
+
   - job: Create_Packages
     displayName: Create Packages
-     
+    dependsOn: Versioning
+    condition: and(succeeded(), ne(variables['CreatePackages'], 'Off'))
+    
+    variables:
+      GitVersionSemVer: $[ dependencies.Versioning.outputs['SetGitVersionVars.GitVersionSemVer'] ]
+    
     pool:
       vmImage: $(linuxImage)
 
@@ -33,12 +50,6 @@ stages:
       lfs: true
       submodules: recursive
       persistCredentials: true
-      
-    - task: gittools.gitversion.gitversion-task.GitVersion@5
-      displayName: GitVersion
-      name: GitVersion
-      inputs:
-        preferBundledVersion: false
 
     # Set python version to be used to build the packages.
     - task: UsePythonVersion@0
@@ -80,9 +91,9 @@ stages:
 
     # Build packages
     - bash: |
-        echo 'Setting package version to $(GitVersion.SemVer)'
+        echo 'Setting package version to $(GitVersionSemVer)'
         cd ./fiftyone_pipeline_cloudrequestengine
-        echo $(GitVersion.SemVer) >> version.txt
+        echo $(GitVersionSemVer) >> version.txt
         if [  $? != 0]; then
           echo "Failed to create version file."
           exit 1
@@ -94,7 +105,7 @@ stages:
         fi
         
         cd ../fiftyone_pipeline_core
-        echo $(GitVersion.SemVer) >> version.txt
+        echo $(GitVersionSemVer) >> version.txt
         if [  $? != 0]; then
           echo "Failed to create version file."
           exit 1
@@ -106,7 +117,7 @@ stages:
         fi
         
         cd ../fiftyone_pipeline_engines
-        echo $(GitVersion.SemVer) >> version.txt
+        echo $(GitVersionSemVer) >> version.txt
         if [  $? != 0]; then
           echo "Failed to create version file."
           exit 1
@@ -118,7 +129,7 @@ stages:
         fi
         
         cd ../fiftyone_pipeline_engines_fiftyone
-        echo $(GitVersion.SemVer) >> version.txt
+        echo $(GitVersionSemVer) >> version.txt
         if [  $? != 0]; then
           echo "Failed to create version file."
           exit 1
@@ -129,17 +140,6 @@ stages:
             exit 1
         fi        
       displayName: 'Build Packages'
-      
-    # Add a tag to the git repository with the version number.
-    - task: ATP.ATP-GitTag.GitTag.GitTag@5
-      displayName: 'Tag Repo With Version Number'
-      inputs:
-        tagUser: 'Azure DevOps'
-        tagEmail: 'CIUser@51Degrees.com'
-
-    # Only create the tag if we're on master, develop or a release branch.
-    # This can be overridden by setting the 'ForceTagCommit' variable to true.
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), eq('true', variables['ForceTagCommit'])))))
       
     # Copy artifacts contents.
     - task: CopyFiles@2
@@ -163,3 +163,8 @@ stages:
         preferBundledVersion: True
       displayName: 'Publish Python artifact'
       condition: succeeded()
+
+  - template: shared-git-tag-job.yml@ciTemplates
+    parameters:
+      imageName: $(linuxImage)
+      jobDependencies: [Versioning,Create_Packages]
