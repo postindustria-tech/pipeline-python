@@ -215,9 +215,10 @@ class CloudRequestEngine(Engine):
         # then throw an exception
 
         headers = None
+        
         if (len(messages) > 0):
             # Get the response headers.
-            headers =  ', '.join(cloudResponse.headers)
+            headers = cloudResponse.headers
 
         if (len(messages) > 1):
             exceptionList = [Constants.EXCEPTION_CLOUD_ERRORS_MULTIPLE]

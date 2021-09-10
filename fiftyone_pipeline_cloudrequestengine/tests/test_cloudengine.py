@@ -179,9 +179,8 @@ class CloudEngineTests(unittest.TestCase):
         try:
             cloud = CloudRequestEngine({"resource_key" : resource_key})       
             pipeline = pipeline.add(cloud).build()
-            self.assertFalse("Expected exception did not occur");
+            self.assertFalse("Expected exception did not occur")
         except CloudRequestException as ex:
-            self.assertTrue(ex.httpStatusCode > 0, "Status code should not be 0");
-            self.assertIsNotNone(ex.responseHeaders, "Response headers not populated");
-            self.assertTrue(len(ex.responseHeaders) > 0, "Response headers not populated");   
-
+            self.assertTrue(ex.httpStatusCode > 0, "Status code should not be 0")
+            self.assertIsNotNone(ex.responseHeaders, "Response headers not populated")
+            self.assertTrue(len(ex.responseHeaders) > 0, "Response headers not populated")
