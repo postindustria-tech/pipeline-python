@@ -25,6 +25,7 @@ from fiftyone_pipeline_core.basiclist_evidence_keyfilter import BasicListEvidenc
 from fiftyone_pipeline_engines.engine import Engine
 from fiftyone_pipeline_engines.aspectdata_dictionary import AspectDataDictionary
 from .requestclient import RequestClient
+from .cloudrequestexception import CloudRequestException
 from .constants import Constants
 import warnings
 import json
@@ -165,7 +166,7 @@ class CloudRequestEngine(Engine):
                
         return flowElementProperties
 
-    def validate_response(self, cloudResponse):
+    def validate_response(self, cloudResponse, checkForErrorMessages = True):
 
         """!
         Validate the JSON response from the cloud service.
@@ -179,11 +180,11 @@ class CloudRequestEngine(Engine):
         hasData = cloudResponse.text and cloudResponse.text.strip()
         messages = []
 
-        if hasData:
+        if hasData and checkForErrorMessages:
             try:
                 jsonResponse = json.loads(cloudResponse.content)
             except:
-                raise Exception("Cloud request engine properties list request returned code '" + 
+                raise CloudRequestException("Cloud request engine properties list request returned code '" + 
                     str(cloudResponse.status_code) + "' with content '" + cloudResponse.content+ "'")
 
             hasErrors = "errors" in jsonResponse and len(jsonResponse["errors"])
@@ -203,23 +204,28 @@ class CloudRequestEngine(Engine):
             message = Constants.MESSAGE_NO_DATA_IN_RESPONSE.format(cloudResponse.url)
             messages.append(message)
 
-        # If there are any errors returned from the cloud service
-        # then throw an exception
-
-        if (len(messages) > 1):
-            exceptionList = [Constants.EXCEPTION_CLOUD_ERRORS_MULTIPLE]
-            exceptionList = exceptionList + messages
-            raise Exception(exceptionList)
-        elif (len(messages) == 1):
-            message = Constants.EXCEPTION_CLOUD_ERROR.format(messages[0])
-            raise Exception(message)
-
         # If there were no errors returned but the response code was non
         # success then throw an exception.
 
         if (len(messages) == 0 and cloudResponse.status_code != 200):
-            raise Exception("Cloud request engine properties list request returned " + \
-                            str(cloudResponse.status_code))
+            message = Constants.MESSAGE_ERROR_CODE_RETURNED.format(self.baseURL, cloudResponse.status_code, json.loads(cloudResponse.content))
+            messages.append(message)
+
+        # If there are any errors returned from the cloud service
+        # then throw an exception
+
+        headers = None
+        if (len(messages) > 0):
+            # Get the response headers.
+            headers =  ', '.join(cloudResponse.headers)
+
+        if (len(messages) > 1):
+            exceptionList = [Constants.EXCEPTION_CLOUD_ERRORS_MULTIPLE]
+            exceptionList = exceptionList + messages
+            raise CloudRequestException(exceptionList, cloudResponse.status_code, headers)
+        elif (len(messages) == 1):
+            message = Constants.EXCEPTION_CLOUD_ERROR.format(messages[0])
+            raise CloudRequestException(message, cloudResponse.status_code, headers)
 
     def make_cloud_request(self, type, url, content = None):
 

@@ -22,6 +22,7 @@
 
 from classes.cloudrequestengine_testbase import CloudRequestEngineTestsBase
 from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
+from fiftyone_pipeline_cloudrequestengine.cloudrequestexception import CloudRequestException
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
 from classes.constants import *
 import json
@@ -101,7 +102,7 @@ class TestCloudResponse(CloudRequestEngineTestsBase):
                 "resource_key" : Constants.invalidKey,
                 "http_client" : httpClient
             })
-        except Exception as ex:
+        except CloudRequestException as ex:
             exception = ex
 
         self.assertIsNotNone("Expected exception to occur", exception)
@@ -124,7 +125,7 @@ class TestCloudResponse(CloudRequestEngineTestsBase):
                 "resource_key" : Constants.noDataKey,
                 "http_client" : httpClient
             })
-        except Exception as ex:
+        except CloudRequestException as ex:
             exception = ex
 
         self.assertIsNotNone("Expected exception to occur", exception)
@@ -147,7 +148,7 @@ class TestCloudResponse(CloudRequestEngineTestsBase):
                 "resource_key" : Constants.noErrorNoSuccessKey,
                 "http_client" : httpClient
             })
-        except Exception as ex:
+        except CloudRequestException as ex:
             exception = ex
 
         self.assertIsNotNone("Expected exception to occur", exception)

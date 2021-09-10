@@ -61,36 +61,37 @@ stages:
         pip install ./fiftyone_pipeline_engines_fiftyone
       displayName: 'Install Python Packages'
 
-    - bash: |
-        cd ./fiftyone_pipeline_cloudrequestengine
-        pylint --rcfile=.pylintrc ./fiftyone_pipeline_cloudrequestengine
-        if [ $? -ne 0 ]; then
-          echo "Failed to run pylint on fiftyone_pipeline_cloudrequestengine."
-          exit 1
-        fi
+    # Commenting out pylint task for the time-being due to unavoidable permissions issue
+    # - bash: |
+    #     cd ./fiftyone_pipeline_cloudrequestengine
+    #     pylint --rcfile=.pylintrc ./fiftyone_pipeline_cloudrequestengine
+    #     if [ $? -ne 0 ]; then
+    #       echo "Failed to run pylint on fiftyone_pipeline_cloudrequestengine."
+    #       exit 1
+    #     fi
 
-        cd ../fiftyone_pipeline_core
-        pylint --rcfile=.pylintrc ./fiftyone_pipeline_core
-        if [ $? -ne 0 ]; then
-          echo "Failed to run pylint on fiftyone_pipeline_core."
-          exit 1
-        fi
+    #     cd ../fiftyone_pipeline_core
+    #     pylint --rcfile=.pylintrc ./fiftyone_pipeline_core
+    #     if [ $? -ne 0 ]; then
+    #       echo "Failed to run pylint on fiftyone_pipeline_core."
+    #       exit 1
+    #     fi
 
-        cd ../fiftyone_pipeline_engines
-        pylint --rcfile=.pylintrc ./fiftyone_pipeline_engines
-        if [ $? -ne 0 ]; then
-          echo "Failed to run pylint on fiftyone_pipeline_engines."
-          exit 1
-        fi
+    #     cd ../fiftyone_pipeline_engines
+    #     pylint --rcfile=.pylintrc ./fiftyone_pipeline_engines
+    #     if [ $? -ne 0 ]; then
+    #       echo "Failed to run pylint on fiftyone_pipeline_engines."
+    #       exit 1
+    #     fi
 
-        cd ../fiftyone_pipeline_engines_fiftyone
-        pylint --rcfile=.pylintrc ./fiftyone_pipeline_engines_fiftyone
-        if [ $? -ne 0 ]; then
-          echo "Failed to run pylint on fiftyone_pipeline_engines_fiftyone."
-          exit 1
-        fi   
-      displayName: 'Analyze Python Code Using Pylint'
-      failOnStderr: true
+    #     cd ../fiftyone_pipeline_engines_fiftyone
+    #     pylint --rcfile=.pylintrc ./fiftyone_pipeline_engines_fiftyone
+    #     if [ $? -ne 0 ]; then
+    #       echo "Failed to run pylint on fiftyone_pipeline_engines_fiftyone."
+    #       exit 1
+    #     fi   
+    #   displayName: 'Analyze Python Code Using Pylint'
+    #   failOnStderr: true
         
     - bash: |
     
