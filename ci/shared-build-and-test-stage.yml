@@ -61,37 +61,49 @@ stages:
         pip install ./fiftyone_pipeline_engines_fiftyone
       displayName: 'Install Python Packages'
 
-    # Commenting out pylint task for the time-being due to unavoidable permissions issue
-    # - bash: |
-    #     cd ./fiftyone_pipeline_cloudrequestengine
-    #     pylint --rcfile=.pylintrc ./fiftyone_pipeline_cloudrequestengine
-    #     if [ $? -ne 0 ]; then
-    #       echo "Failed to run pylint on fiftyone_pipeline_cloudrequestengine."
-    #       exit 1
-    #     fi
+    - bash: |
+        # TODO: This is workaround for permission issue found on Windows when pylint
+        # try to create 'Cache' folder in 'AppData' folder. This will needs to be
+        # resolved by permission settings when the issue is determined in the future.
+        if [ "$(echo ${{ parameters.imageName }} | grep -i win)" != "" ]; then
+            echo "Is Windows. Create AppData Cache folder for pylint."
+            echo $LOCALAPPDATA
+            pylintAppPath=$LOCALAPPDATA/pylint/pylint/Cache
+            if [ ! -d "$pylintAppPath" ]; then
+                echo "Local AppData pylint folder does not exist. Create one."
+                mkdir -p $LOCALAPPDATA/pylint/pylint/Cache
+            fi
+        fi
+        
+        cd ./fiftyone_pipeline_cloudrequestengine
+        pylint --rcfile=.pylintrc ./fiftyone_pipeline_cloudrequestengine
+        if [ $? -ne 0 ]; then
+          echo "Failed to run pylint on fiftyone_pipeline_cloudrequestengine."
+          exit 1
+        fi
 
-    #     cd ../fiftyone_pipeline_core
-    #     pylint --rcfile=.pylintrc ./fiftyone_pipeline_core
-    #     if [ $? -ne 0 ]; then
-    #       echo "Failed to run pylint on fiftyone_pipeline_core."
-    #       exit 1
-    #     fi
+        cd ../fiftyone_pipeline_core
+        pylint --rcfile=.pylintrc ./fiftyone_pipeline_core
+        if [ $? -ne 0 ]; then
+          echo "Failed to run pylint on fiftyone_pipeline_core."
+          exit 1
+        fi
 
-    #     cd ../fiftyone_pipeline_engines
-    #     pylint --rcfile=.pylintrc ./fiftyone_pipeline_engines
-    #     if [ $? -ne 0 ]; then
-    #       echo "Failed to run pylint on fiftyone_pipeline_engines."
-    #       exit 1
-    #     fi
+        cd ../fiftyone_pipeline_engines
+        pylint --rcfile=.pylintrc ./fiftyone_pipeline_engines
+        if [ $? -ne 0 ]; then
+          echo "Failed to run pylint on fiftyone_pipeline_engines."
+          exit 1
+        fi
 
-    #     cd ../fiftyone_pipeline_engines_fiftyone
-    #     pylint --rcfile=.pylintrc ./fiftyone_pipeline_engines_fiftyone
-    #     if [ $? -ne 0 ]; then
-    #       echo "Failed to run pylint on fiftyone_pipeline_engines_fiftyone."
-    #       exit 1
-    #     fi   
-    #   displayName: 'Analyze Python Code Using Pylint'
-    #   failOnStderr: true
+        cd ../fiftyone_pipeline_engines_fiftyone
+        pylint --rcfile=.pylintrc ./fiftyone_pipeline_engines_fiftyone
+        if [ $? -ne 0 ]; then
+          echo "Failed to run pylint on fiftyone_pipeline_engines_fiftyone."
+          exit 1
+        fi   
+      displayName: 'Analyze Python Code Using Pylint'
+      failOnStderr: true
         
     - bash: |
     
