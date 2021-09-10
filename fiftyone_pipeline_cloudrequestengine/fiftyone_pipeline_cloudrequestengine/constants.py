@@ -58,3 +58,6 @@ class Constants:
     
     # warning message to be shown for conflicted evidences
     WARNING_MESSAGE = "WARNING: '{}:{}' evidence conflicts with "
+    
+    # error message when non-success status is returned.
+    MESSAGE_ERROR_CODE_RETURNED = "Cloud service at '{}' returned status code '{}' with content {}"

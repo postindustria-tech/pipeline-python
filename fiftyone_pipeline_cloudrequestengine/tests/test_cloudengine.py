@@ -21,6 +21,7 @@
  # ********************************************************************
 
 from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
+from fiftyone_pipeline_cloudrequestengine.cloudrequestexception import CloudRequestException
 from fiftyone_pipeline_cloudrequestengine.cloudengine import CloudEngine
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
 from urllib.parse import urlencode
@@ -159,6 +160,27 @@ class CloudEngineTests(unittest.TestCase):
         except Exception as ex:
             self.assertTrue("Sequence number not present in evidence. this is mandatory" in str(ex))
 
-        # Following statement should be uncommented once error
+        # Following statements should be uncommented once error
         # is fixed in cloud
+        # jsonResponse = cloud.make_cloud_request('GET', url, content=None)
         # self.assertTrue(len(jsonResponse["errors"]) == 0)
+
+    def test_HttpDataSetInException(self):
+    
+        """!
+        Check that errors from the cloud service will cause the
+        appropriate data to be set in the CloudRequestException.
+        """
+
+        resource_key = "resource_key"
+        
+        pipeline = PipelineBuilder()
+
+        try:
+            cloud = CloudRequestEngine({"resource_key" : resource_key})       
+            pipeline = pipeline.add(cloud).build()
+            self.assertFalse("Expected exception did not occur")
+        except CloudRequestException as ex:
+            self.assertTrue(ex.httpStatusCode > 0, "Status code should not be 0")
+            self.assertIsNotNone(ex.responseHeaders, "Response headers not populated")
+            self.assertTrue(len(ex.responseHeaders) > 0, "Response headers not populated")

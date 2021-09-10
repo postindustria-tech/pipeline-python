@@ -40,7 +40,7 @@ class Constants():
         "from cloud service at https://cloud.51degrees.com/api/v4/accessibleProperties?resource=nodatakey'"
     noErrorNoSuccessKey = "noErrorNoSuccessKey"
     noErrorNoSuccessResponse = {'device': {'value': 'abc'}}
-    noErrorNoSuccessMessage= "Cloud request engine properties list request returned 400"
+    noErrorNoSuccessMessage= "Error returned from 51Degrees cloud service: 'Cloud service at 'https://cloud.51degrees.com/api/v4/' returned status code '400' with content {'device': {'value': 'abc'}}'"
     accessibleSubPropertiesResponse = \
             { \
                 'Products': { \

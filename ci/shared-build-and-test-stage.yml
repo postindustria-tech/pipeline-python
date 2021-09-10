@@ -62,6 +62,19 @@ stages:
       displayName: 'Install Python Packages'
 
     - bash: |
+        # TODO: This is workaround for permission issue found on Windows when pylint
+        # try to create 'Cache' folder in 'AppData' folder. This will needs to be
+        # resolved by permission settings when the issue is determined in the future.
+        if [ "$(echo ${{ parameters.imageName }} | grep -i win)" != "" ]; then
+            echo "Is Windows. Create AppData Cache folder for pylint."
+            echo $LOCALAPPDATA
+            pylintAppPath=$LOCALAPPDATA/pylint/pylint/Cache
+            if [ ! -d "$pylintAppPath" ]; then
+                echo "Local AppData pylint folder does not exist. Create one."
+                mkdir -p $LOCALAPPDATA/pylint/pylint/Cache
+            fi
+        fi
+        
         cd ./fiftyone_pipeline_cloudrequestengine
         pylint --rcfile=.pylintrc ./fiftyone_pipeline_cloudrequestengine
         if [ $? -ne 0 ]; then
