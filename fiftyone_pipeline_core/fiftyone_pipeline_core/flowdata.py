@@ -21,8 +21,10 @@
 # ********************************************************************
 
 from .evidence import Evidence
+from .flowerror import FlowError
+from .messages import Messages	
 import traceback
-
+import sys
 
 class FlowData:
 
@@ -73,17 +75,24 @@ class FlowData:
                         flow_element.process(self)
 
                     except Exception:
-
-                        self.set_error(flow_element.datakey, traceback.format_exc())
+	
+                        flow_error = FlowError(flow_element.datakey, sys.exc_info()[1], traceback.format_exc())
+                        self.set_error(flow_error)
 
             # Set processed flag to true. flowdata can only be processed once
 
             self.processed = True
-            return self
 
         else:
-            self.setError("error", "FlowData already processed")
+            flow_error = FlowError("global", Exception(Messages.FLOW_DATA_PROCESSED), Messages.FLOW_DATA_PROCESSED)
+            self.set_error(flow_error)
 
+        if self.errors and self.pipeline.suppress_process_exceptions is False:
+            errored_flow_element_key = next(iter(self.errors))
+            flowErrorObj = self.errors[errored_flow_element_key]             
+            raise flowErrorObj.exception_instance 
+
+        return self
 
     def get_from_element(self, flow_element):
 
@@ -169,25 +178,25 @@ class FlowData:
         self.data[element_data.flow_element.datakey] = element_data
 
 
-    def set_error(self, key, error):
-
+    def set_error(self, flow_error):
+    
         """!
         Set error (should be keyed by flowElement datakey)
 
-        @type key: string
-        @param key: a flowElement.datakey
-
-        @type error: string
-        @param error: Error message
+        @type error: FlowError
+        @param error: Flow Error
 
         """
 
-        if key not in self.errors:
-            self.errors[key] = list()
+        self.errors[flow_error.flow_element] = flow_error
 
-        self.errors[key].append(error)
+        log_message = "Error occurred during processing"
 
-        self.pipeline.log("error", error)
+        if flow_error.flow_element:
+            
+            log_message = log_message + " of " + flow_error.flow_element + ". \n" + flow_error.exception_traceback
+
+        self.pipeline.log("error", log_message)
 
 
     def get_evidence_datakey(self):

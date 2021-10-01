@@ -13,7 +13,7 @@ from .apvflowelement import APVFlowElement
 # Test Pipeline builder for use with unit tests
 class TestPipeline():
 
-    def __init__(self):
+    def __init__(self, suppressException = True):
 
         logger = MemoryLogger("info")
         self.flowElement1 = ExampleFlowElement1()
@@ -25,6 +25,8 @@ class TestPipeline():
             .add(ExampleFlowElement2())\
             .add_logger(logger)\
             .build()
+            
+        self.pipeline.suppress_process_exceptions = suppressException
         self.flowdata = self.pipeline.create_flowdata()
         self.flowdata.evidence.add("header.user-agent", "test")
         self.flowdata.evidence.add("some.other-evidence", "test")

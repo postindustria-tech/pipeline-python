@@ -44,3 +44,6 @@ class Messages():
     # and property names as format arguments.
     PROPERTY_NOT_FOUND = \
         "Property '{}' is not present in the FlowData against '{}' ElementData. "
+
+    # FlowData already processed.
+    FLOW_DATA_PROCESSED = "FlowData already processed"
