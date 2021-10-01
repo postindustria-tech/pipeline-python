@@ -31,7 +31,6 @@ from classes.exampleflowelement2 import ExampleFlowElement2
 from classes.stopflowdata import StopFlowData
 from classes.errorflowdata import ErrorFlowData
 
-
 ######################################
 # The Tests
 
@@ -62,7 +61,7 @@ class CoreTests(unittest.TestCase):
         self.assertTrue(nullEvidence == None)
 
 
-    # # Test Getter methods
+    # Test Getter methods
     def testGet(self):
  
         testPipeline = TestPipeline()
@@ -96,15 +95,44 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(message, "There is no element data for example2 against this flow data. Available element data keys are: ['example1', 'error', 'apv', 'stop', 'example2']")
    
 
+    # Test exception is thrown when not suppressed.
+    def testErrors_dont_suppress_exception(self):
+
+        try:
+            testPipeline = TestPipeline(False)
+            self.assertFalse("Exception is expected.")
+        except Exception as e:
+            self.assertTrue(str(e) is not None)
+
     # Test errors are returned
     def testErrors(self):
 
         testPipeline = TestPipeline()
         getValue = testPipeline.flowdata.errors["error"]
-        self.assertTrue(getValue is not None)
+        self.assertTrue(getValue.flow_element == "error")
+        self.assertTrue(getValue.exception_instance is not None)
+        self.assertTrue(getValue.exception_traceback is not None)
+
+    # Test Already Processed FlowData
+    def testErrors_already_processed(self):
+
+        flowElement1 = ExampleFlowElement1()
+        logger = MemoryLogger("info")
+        pipeline = (PipelineBuilder())\
+            .add(flowElement1)\
+            .add_logger(logger)\
+            .build()
+        flowdata = pipeline.create_flowdata()
+        flowdata.process()
+
+        try:
+            flowdata.process()
+            self.assertFalse("Exception is expected.")
+        except Exception as e:
+            self.assertEqual("FlowData already processed", str(e))
+        
 
     # Test aspectPropertyValue wrapper
-
     def testAPV(self):
 
         testPipeline = TestPipeline()
@@ -144,5 +172,4 @@ class CoreTests(unittest.TestCase):
 
         getValue = fd.get("example1").get("integer")
         self.assertTrue(getValue == 5)
-
         

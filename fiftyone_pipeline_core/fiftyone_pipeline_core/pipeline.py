@@ -33,7 +33,7 @@ class Pipeline:
 
     """
 
-    def __init__(self, flow_elements, logger=Logger()):
+    def __init__(self, flow_elements, logger=Logger(), suppress_process_exceptions = False):
 
         """!
         Pipeline constructor.
@@ -43,6 +43,11 @@ class Pipeline:
 
         @type logger: Logger
         @param logger: A logger to attach to the pipeline
+
+        @type suppress_process_exceptions: boolean
+        @param suppress_process_exceptions: If true then pipeline will suppress 
+        exceptions added to FlowData.errors otherwise will throw the exception
+        occurred during the processing of first element.
 
         @rtype: Pipeline
         @return: Returns a Pipeline
@@ -57,6 +62,8 @@ class Pipeline:
 
         self.flow_elements_display_list = []
 
+        self.suppress_process_exceptions = suppress_process_exceptions
+        
         for flow_element in flow_elements:
 
             # Notify element that it has been registered in the pipeline
