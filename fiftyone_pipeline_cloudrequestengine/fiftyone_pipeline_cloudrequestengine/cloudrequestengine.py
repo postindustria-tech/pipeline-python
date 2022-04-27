@@ -288,7 +288,6 @@ class CloudRequestEngine(Engine):
         queryData = {}
 
         evidence = flowData.evidence.get_all()
-        print(evidence)
         # Add evidence in reverse alphabetical order, excluding special keys. 
         self.add_query_data(queryData, evidence, self.get_selected_evidence(evidence, Constants.EVIDENCE_OTHER))
         # Add cookie evidence.
@@ -297,7 +296,6 @@ class CloudRequestEngine(Engine):
         self.add_query_data(queryData, evidence, self.get_selected_evidence(evidence, Constants.EVIDENCE_HTTPHEADER_PREFIX))
         # Add query evidence.
         self.add_query_data(queryData, evidence, self.get_selected_evidence(evidence, Constants.EVIDENCE_QUERY_PREFIX))
-        print(queryData)
         return queryData
 
     def add_query_data(self, query_data, all_evidence, evidence):
