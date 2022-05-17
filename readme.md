@@ -16,10 +16,10 @@ This repository contains 3 modules:
 - **fiftyone_pipeline_engines** - Functionality for a specialized type of flow element called an engine.
 - **fiftyone_pipeline_cloudrequestengine** - An engine used to make requests to the 51Degrees cloud service.
 
-## Requirements
+## Dependencies
 
-* Python 3.5+
-* The `flask` python library to run the web examples 
+For runtime dependencies, see our [dependencies](http://51degrees.com/documentation/_info__dependencies.html) page.
+The [tested versions](https://51degrees.com/documentation/_info__tested_versions.html) page shows the Python versions that we currently test against. The software may run fine against other versions, but additional caution should be applied.
 
 ## Installation
 
@@ -38,7 +38,7 @@ Generally, you will want to be installing one of the engines such as [device det
 * Run `pipenv install` in the root of the folder
 * Launch the environment shell by running `pipenv shell`
 
-## Running tests and examples
+## Tests
 
 If you've cloned the repository from GitHub, you can run the tests 
 and examples that are available. To run tests:
@@ -46,12 +46,20 @@ and examples that are available. To run tests:
 * Go to each directory (for example `fiftyone_pipeline_core`)
 * Run `python -m unittest discover -s tests -p test*.py`
 
-To run the web examples navigate into Examples folder:
+## Examples
 
-#### Linux
+There are several examples available that demonstrate how to make use of the Pipeline API in isolation. These are described in the table below.
+If you want examples that demonstrate how to use 51Degrees products such as device detection, then these are available in the corresponding [repository](https://github.com/51Degrees/device-detection-python) and on our [website](http://51degrees.com/documentation/_examples__device_detection__index.html).
 
-Execute `export FLASK_APP=web` where `web` is the example file, and start your application via `flask run`.
+| Example                                | Description |
+| fiftyone_pipeline_code/examples/client_side_evidence_custom_flow_element.py | Demonstrates how to create a custom flow element, which can then be included in a pipeline. |
+| fiftyone_pipeline_engines_fiftyone/examples/usagesharing | Shows how to share usage with 51Degrees. This helps us to keep our products up to date and accurate. |
 
-#### Windows
+To run the custom flow element example, you will need to use flask:
+### Linux
 
-Execute `$env:FLASK_APP = "web"` where `web` is the example file, and start your application via `flask run`.
+Execute `export FLASK_APP=client_side_evidence_custom_flow_element.py`, then start your application with `flask run`.
+
+### Windows
+
+Execute `$env:FLASK_APP = "client_side_evidence_custom_flow_element.py"`, then start your application with `flask run`.
