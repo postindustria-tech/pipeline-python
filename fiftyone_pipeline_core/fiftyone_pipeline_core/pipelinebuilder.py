@@ -68,6 +68,10 @@ class PipelineBuilder(object):
         else:
             self.use_setheader_properties = True
 
+        if "data_file_update_service" in settings:
+            self.data_file_update_service = settings["data_file_update_service"]
+        else:
+            self.data_file_update_service = None
 
     def get_javascript_elements(self):
         """
@@ -135,7 +139,7 @@ class PipelineBuilder(object):
         self.flow_elements.extend(self.get_javascript_elements())
         self.flow_elements.extend(self.get_setheader_elements())
         
-        return Pipeline(self.flow_elements, logger=self.logger)
+        return Pipeline(self.flow_elements, logger=self.logger, data_file_update_service=self.data_file_update_service)
 
     def add_logger(self, logger):
         """
