@@ -33,7 +33,7 @@ class Pipeline:
 
     """
 
-    def __init__(self, flow_elements, logger=Logger(), suppress_process_exceptions = False):
+    def __init__(self, flow_elements, logger=Logger(), suppress_process_exceptions = False, data_file_update_service = None):
 
         """!
         Pipeline constructor.
@@ -63,7 +63,11 @@ class Pipeline:
         self.flow_elements_display_list = []
 
         self.suppress_process_exceptions = suppress_process_exceptions
-        
+  
+        if data_file_update_service != None:
+            self.data_file_update_service = data_file_update_service
+            self.data_file_update_service.register_pipeline(self)
+      
         for flow_element in flow_elements:
 
             # Notify element that it has been registered in the pipeline
