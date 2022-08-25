@@ -133,6 +133,14 @@ stages:
           exit 1
         fi  
         cp .coverage ../.coverage.engines
+
+        cd ../fiftyone_pipeline_engines_fiftyone
+        coverage run -m xmlrunner discover -s tests -p test*.py -o test-results
+        if [ $? -ne 0 ]; then
+          echo "Failed to run test cases and coverage for fiftyone_pipeline_engines_fiftyone."
+          exit 1
+        fi  
+        cp .coverage ../.coverage.engines.fiftyone
         cd ..
         coverage combine 
         coverage xml

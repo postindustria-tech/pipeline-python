@@ -153,3 +153,8 @@ class FlowElement(object):
         """
 
         return {k.lower(): v for k, v in self.properties.items()}
+
+    def _log(self, level, message):
+        if self.pipelines:
+            for pipeline in self.pipelines:
+                pipeline.log(level, message)
