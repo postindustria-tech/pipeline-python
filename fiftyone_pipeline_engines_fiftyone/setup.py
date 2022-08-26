@@ -51,6 +51,7 @@ setuptools.setup(
           'requests',
           'cachetools'
     ],
+    extras_require={ "testing": ['flask'] },
     packages=["fiftyone_pipeline_engines_fiftyone"],
     license="EUPL-1.2",
     classifiers=[

@@ -49,6 +49,13 @@ class ShareUsageEvidenceKeyFilter(BasicListEvidenceKeyFilter):
 
         self.cookie = cookie
 
+        if cookie is None and \
+            (query_whitelist is None or len(query_whitelist) == 0) and \
+            (header_blacklist is None or len(header_blacklist) == 0):
+            self.share_all = True
+        else:
+            self.share_all = False
+
     
     def filter_evidence_key(self, key):
 
@@ -62,39 +69,42 @@ class ShareUsageEvidenceKeyFilter(BasicListEvidenceKeyFilter):
         @return: Is this key in the filter's keys list?
 
         """
-
         #  get prefix and key of evidence
-
         key_parts = key.lower().split(".")
 
         prefix = key_parts[0]
-        body = key_parts[1]
+        suffix = key_parts[1]
 
-        # First filter out prefixes not in allowed list
+        result = self.share_all
 
-        allowed = ['header', 'cookie', 'query']
+        if not self.share_all:
+            if prefix == "header":
+                # Add the header to the list if the header name does not
+                # appear in the list of blocked headers
+                result = suffix not in self.header_blacklist
+            elif prefix == "cookie":
+                # Only add cookies that start with the 51Degrees cookie
+                # prefix
+                result = suffix.startswith("51d_") or \
+                    (self.include_session and suffix == self.cookie)
+            elif prefix == "session":
+                # Only session values that start with the 51Degrees 
+                # cookie prefix
+                result = suffix.startswith("51d_")
+            elif prefix == "query":
+                # If no query string parameter filter was specified 
+                # then share all of them.
+                # Otherwise, only include query string parameters that 
+                # start with 51d_ or that have been specified in 
+                # the constructor.
+                result = self.query_whitelist is None or \
+                    len(self.query_whitelist) == 0 or \
+                    suffix.startswith("51d_") or \
+                    suffix in self.query_whitelist
+            else:
+                # Add anything that is not a cookie, header, session
+                # variable or query parameter
+                result = True
 
-        if prefix not in allowed:
-            return False
-        
-        # Filter out cookies that aren't 51D or the tracking cookie
-
-        if prefix == "cookie":
-            if "51D" not in prefix or body != self.cookie:
-                return False
-
-        # Filter out any query evidence not in the whitelist
-
-        if prefix == "query":
-            if body not in self.query_whitelist:
-                return False
-
-        # Filter out any header evidence in blacklist
-
-        if prefix == "header":
-            if body in self.header_blacklist:
-                return False
-                
-        # Passed through filter, should be tracked
-        
-        return True
+        return result
+            
