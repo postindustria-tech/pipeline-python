@@ -26,7 +26,7 @@ import threading
 from time import sleep
 import unittest
 from wsgiref.simple_server import make_server
-import zlib
+import gzip
 
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
 from fiftyone_pipeline_engines_fiftyone.share_usage import ShareUsage
@@ -62,7 +62,7 @@ app.received = []
 
 @app.route('/', methods=['POST'])
 def server():
-    data = zlib.decompress(request.data).decode("utf8")
+    data = gzip.decompress(request.data).decode("utf8")
     str(app.received.append(data))
     return ""
 
