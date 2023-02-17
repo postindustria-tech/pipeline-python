@@ -30,7 +30,7 @@ from .share_usage_tracker import ShareUsageTracker
 
 import json
 import requests
-import zlib
+import gzip
 import sys
 import platform
 import datetime
@@ -189,7 +189,7 @@ class ShareUsage(Engine):
         thread.start()
 
     def send_thread(self, endpoint, data):
-        data = zlib.compress(bytearray(data, encoding='utf8'))
+        data = gzip.compress(bytearray(data, encoding='utf8'))
 
         requests.post(endpoint, headers={"Content-Encoding": "gzip", "Content-Type": "text/xml"}, data=data)
 
