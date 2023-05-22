@@ -1,4 +1,0 @@
-variables:
-# Python Version used to create packages
-- name: pythonVersionDefault
-  value: '3.7'
