@@ -3,6 +3,7 @@ param (
     [string]$RepoName
 )
 
-./python/build-project.ps1 -RepoName $RepoName
+$packages = "fiftyone_pipeline_core", "fiftyone_pipeline_engines", "fiftyone_pipeline_engines_fiftyone", "fiftyone_pipeline_cloudrequestengine"
+./python/build-project.ps1 -RepoName $RepoName -Packages $packages
 
 exit $LASTEXITCODE
