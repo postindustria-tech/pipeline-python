@@ -4,6 +4,7 @@
     "Image": "ubuntu-latest",
     "Language": "python",
     "LanguageVersion": "3.11",
-    "RunPerformance": true
+    "RunPerformance": true,
+    "PackageRequirement": true
   }
 ]
