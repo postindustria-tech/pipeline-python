@@ -10,7 +10,7 @@ on:
     #   - cron: '0 1 * * *'
 
 jobs:
-  Nightly_PRs_to_Main:
+  Nightly_Publish_Main:
     uses: postindustria-tech/common-ci/.github/workflows/nightly-publish-main.yml@main
     with:
       repo-name: ${{ github.event.repository.name }}

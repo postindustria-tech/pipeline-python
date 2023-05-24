@@ -6,5 +6,13 @@
     "LanguageVersion": "3.11",
     "RunPerformance": true,
     "PackageRequirement": true
+  },
+  {
+    "Name": "Windows_Python_3.11",
+    "Image": "windows-latest",
+    "Language": "python",
+    "LanguageVersion": "3.11",
+    "RunPerformance": true,
+    "PackageRequirement": true
   }
 ]
