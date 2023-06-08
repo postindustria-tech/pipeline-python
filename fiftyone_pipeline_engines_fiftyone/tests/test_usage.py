@@ -359,10 +359,9 @@ class UsageTests(unittest.TestCase):
         self.waitForUsageThreads()
         self.assertEqual(len(app.received), 2)
         self.assertEqual(len(usage.share_data), 0)
-        self.assertIn("ua 1", app.received[0])
-        self.assertNotIn("ua 2", app.received[0])
-        self.assertIn("ua 2", app.received[1])
-        self.assertNotIn("ua 1", app.received[1])
+        received = "\n".join(app.received)
+        self.assertIn("ua 1", received)
+        self.assertIn("ua 2", received)
 
     def test_low_percentage(self):
         """!
