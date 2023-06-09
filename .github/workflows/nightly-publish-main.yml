@@ -18,6 +18,6 @@ jobs:
       dryrun: ${{ inputs.dryrun }}
       build-platform: ubuntu-latest
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.ACCESS_TOKEN }}
       asset-keys: '{"TestResourceKey": "${{ secrets.SUPER_RESOURCE_KEY}}", "PypiToken": "${{ secrets.PYPI_TOKEN }}"}'
 
