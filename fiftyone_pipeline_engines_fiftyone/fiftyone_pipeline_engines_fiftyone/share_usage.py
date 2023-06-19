@@ -35,6 +35,7 @@ import sys
 import platform
 import datetime
 import pkg_resources
+from concurrent.futures import ThreadPoolExecutor
 
 # The maximum length of a piece of evidence's value which can be
 # added to the usage data being sent.
@@ -42,6 +43,8 @@ SHARE_USAGE_MAX_EVIDENCE_LENGTH = 512
 
 SHARE_USAGE_VERSION = '1.1'
 
+# The default number of seconds to wait for the server connection before failing the request when sending usage data
+REQUEST_TIMEOUT = 60
 
 class ShareUsage(Engine):
     def __init__(
@@ -52,7 +55,8 @@ class ShareUsage(Engine):
         query_whitelist = [],
         header_blacklist = [],
         share_percentage = 1,
-        endpoint = "https://devices-v4.51degrees.com/new.ashx"):
+        endpoint = "https://devices-v4.51degrees.com/new.ashx",
+        request_timeout=REQUEST_TIMEOUT):
         """!
         Constructor for ShareUsage element
         
@@ -99,6 +103,7 @@ class ShareUsage(Engine):
         self.cookie = cookie
         self.share_percentage = share_percentage
         self.endpoint = endpoint
+        self.request_timeout = request_timeout
 
         # Add the share usage tracker which detects when
         # to send up sharing data
@@ -109,7 +114,16 @@ class ShareUsage(Engine):
         self.share_data = []
 
         self.constant_xml = None
-    
+
+        # Reusable thread pool for sending usage in background
+        # According to the doc on ThreadPoolExecutor - all threads will be joined before the interpreter can exit
+        # this ensures that all the data will be sent correctly before the actual exit happens
+
+        self.thread_pool = ThreadPoolExecutor(thread_name_prefix='ShareUsage')
+
+    def __del__(self):
+        self.thread_pool.shutdown(wait=True)
+
     def get_constant_xml(self):
         if self.constant_xml is None:
             coreVersion = pkg_resources.get_distribution("fiftyone_pipeline_core").version
@@ -181,17 +195,21 @@ class ShareUsage(Engine):
 
         data = f'<Devices version="{SHARE_USAGE_VERSION}">{"".join(share_data)}</Devices>'
 
-        thread = threading.Thread(
-            target=self.send_thread,
-            args=[self.endpoint, data],
-            daemon=True,
-            name="ShareUsage POST")
-        thread.start()
+        self.thread_pool.submit(self.send_thread, self.endpoint, data)
 
     def send_thread(self, endpoint, data):
         data = gzip.compress(bytearray(data, encoding='utf8'))
 
-        requests.post(endpoint, headers={"Content-Encoding": "gzip", "Content-Type": "text/xml"}, data=data)
+        # setting a reasonable time out and catching any exceptions
+        try:
+            requests.post(endpoint, headers={"Content-Encoding": "gzip", "Content-Type": "text/xml"}, data=data,
+                          timeout=self.request_timeout)
+        except Exception as e:
+            print(e)
+            self._log(
+                "error",
+                f"ShareUsage failed sending {len(data)} bytes of data: {e}"
+            )
 
 
     def add_to_share_usage(self, data):

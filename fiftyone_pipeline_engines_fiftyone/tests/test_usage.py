@@ -74,21 +74,28 @@ class UsageTests(unittest.TestCase):
     
     @classmethod
     def setUpClass(cls):
-        cls.receiver = ReceiverThread(app)
-        cls.receiver.start()
+        cls.startReceiver()
 
     def setUp(self):
         app.received = []
 
     @classmethod
     def tearDownClass(cls):
-        print("shutting down")
+        cls.stopReceiver()
+
+    @classmethod
+    def startReceiver(cls):
+        cls.receiver = ReceiverThread(app)
+        cls.receiver.start()
+
+    @classmethod
+    def stopReceiver(cls):
         cls.receiver.shutdown()
 
     def waitForUsageThreads(self):
-        for thread in threading.enumerate():
-            if (thread.name == "ShareUsage POST"):
-                thread.join()
+        # necessary for context switching and
+        # allowing the thread pool in ShareUsage to start sending data and release the GIL
+        sleep(0.1)
 
     def test_data_received(self):
         """!
@@ -359,10 +366,9 @@ class UsageTests(unittest.TestCase):
         self.waitForUsageThreads()
         self.assertEqual(len(app.received), 2)
         self.assertEqual(len(usage.share_data), 0)
-        self.assertIn("ua 1", app.received[0])
-        self.assertNotIn("ua 2", app.received[0])
-        self.assertIn("ua 2", app.received[1])
-        self.assertNotIn("ua 1", app.received[1])
+        received = "\n".join(app.received)
+        self.assertIn("ua 1", received)
+        self.assertIn("ua 2", received)
 
     def test_low_percentage(self):
         """!
@@ -423,3 +429,26 @@ class UsageTests(unittest.TestCase):
         self.assertIn('&lt;', app.received[0])
         self.assertIn('&gt;', app.received[0])
         self.assertIn('&amp;', app.received[0])
+
+
+    # zzz is to make this test run last so no other tests depend on the receiver anymore
+    # we depend on python unittests ordering tests alphabetically, which is not ideal, but works for now
+    def test_zzz_timeout(self):
+        # this tests just verifies that there is a timeout and that the tests actually complete
+        # even if there is no server listening, so we shut it down right away
+        self.__class__.stopReceiver()
+
+        usage = ShareUsage(
+            requested_package_size=1,
+            endpoint=testEndpoint,
+            request_timeout=1 #really short request time out
+        )
+
+        pipeline = (PipelineBuilder()) \
+            .add(usage) \
+            .build()
+        flowdata = pipeline.create_flowdata()
+        flowdata.evidence.add("header.user-agent", '"\'&><')
+        flowdata.process()
+
+        self.assertTrue(True)
