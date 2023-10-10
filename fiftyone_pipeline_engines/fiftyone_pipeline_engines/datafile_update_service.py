@@ -28,11 +28,9 @@ import random
 import threading
 import time
 import requests
-
 # gzip decompress alternative for python 2
+from io import StringIO
 
-if not hasattr(gzip, "decompress"):
-    from io import StringIO
 
 class UpdateStatus(Enum):
     # Update completed successfully.

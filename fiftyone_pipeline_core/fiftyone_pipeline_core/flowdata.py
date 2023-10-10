@@ -200,22 +200,23 @@ class FlowData:
 
 
     def get_evidence_datakey(self):
-
         """!
         Get a list of evidence stored in the flowdata, filtered by
         its flowElements' evidenceKeyFilters
 
         @rtype: list
         @return: Returns filtered evidence
-
         """
-        requestedEvidence = list()
+        # TODO: Research and fix this method. It is probably not working as expected.
+        #   Temp. fix is introduced at the end of this method.
 
-        for flow_element in self.pipeline.flow_elements:
-            requested_evidence = requestedEvidence.extend(flow_element.filter_evidence(self))
-
-        return requested_evidence
-
+        # requestedEvidence = list()
+        #
+        # for flow_element in self.pipeline.flow_elements:
+        #     requested_evidence = requestedEvidence.extend(flow_element.filter_evidence(self))
+        #
+        # return requested_evidence
+        return [fe.filter_evidence(self) for fe in self.pipeline.flow_elements]
 
     def stop(self):
 
