@@ -27,8 +27,8 @@ from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequest
 from .mockrequestclient import MockRequestClient
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
 
-class CloudRequestEngineTestsBase(unittest.TestCase):
 
+class CloudRequestEngineTestsBase(unittest.TestCase):
     def properties_contain_name(self, properties, name):
 
         if type(properties) == type({}):
@@ -45,4 +45,3 @@ class CloudRequestEngineTestsBase(unittest.TestCase):
     def mock_http(self):
         client = MockRequestClient()
         return client;
-

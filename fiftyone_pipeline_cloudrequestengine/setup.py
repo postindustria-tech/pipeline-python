@@ -24,9 +24,9 @@ import setuptools
 import os
 import io
 
+
 # Read a text file and return the content as a string.
 def read(file_name):
-
     """Read a text file and return the content as a string."""
     try:
         with io.open(
@@ -35,7 +35,8 @@ def read(file_name):
             return f.read()
     except:
         return ""
-    
+
+
 setuptools.setup(
     name="fiftyone_pipeline_cloudrequestengine",
     version=read("version.txt"),

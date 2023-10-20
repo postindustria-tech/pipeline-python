@@ -20,16 +20,18 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from classes.cloudrequestengine_testbase import CloudRequestEngineTestsBase
+
+import json
+
 from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
 from fiftyone_pipeline_cloudrequestengine.cloudrequestexception import CloudRequestException
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
-from classes.constants import *
-import json
-import unittest
+
+from .classes.cloudrequestengine_testbase import CloudRequestEngineTestsBase
+from .classes.constants import *
+
 
 class TestCloudResponse(CloudRequestEngineTestsBase):
-
     def test_process(self):
     
         """

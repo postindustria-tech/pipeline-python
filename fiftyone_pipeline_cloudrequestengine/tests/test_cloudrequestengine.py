@@ -18,21 +18,20 @@
 # including the attribution notice(s) required under Article 5 of the EUPL
 # in the end user terms of the application under an appropriate heading,
 # such notice(s) shall fulfill the requirements of that article.
-# ********************************************************************* 
+# *********************************************************************
 
-import unittest
+import os
+import warnings
+from requests import Response
+from parameterized import parameterized
 
-from classes.cloudrequestengine_testbase import CloudRequestEngineTestsBase
 from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
 from fiftyone_pipeline_cloudrequestengine.requestclient import RequestClient
 from fiftyone_pipeline_cloudrequestengine.constants import Constants
-from classes.constants import Constants as TestConstants
-from unittest.mock import Mock
-from requests import Response
-from parameterized import parameterized
-import warnings
-import os
+
+from .classes.constants import Constants as TestConstants
+from .classes.cloudrequestengine_testbase import CloudRequestEngineTestsBase
 
 class TestCloudRequestEngine(CloudRequestEngineTestsBase):
 
