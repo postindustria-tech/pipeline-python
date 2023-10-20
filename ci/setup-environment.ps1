@@ -9,7 +9,7 @@ if ($env:GITHUB_JOB -eq "PreBuild") {
     exit 0
 }
 
-$dependencies = "pylint", "unittest-xml-reporting", "coverage", "parameterized", "requests-mock", "flask"
+$dependencies = "tox", "pylint", "unittest-xml-reporting", "coverage", "parameterized", "requests-mock", "flask"
 ./python/setup-environment.ps1 -LanguageVersion $LanguageVersion -Dependencies $dependencies
 
 exit $LASTEXITCODE
