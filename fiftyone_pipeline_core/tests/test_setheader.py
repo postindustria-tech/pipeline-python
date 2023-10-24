@@ -20,17 +20,18 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-import unittest
 import requests_mock
 import requests
+import unittest
 from parameterized import parameterized
 
-from classes.testpipeline import TestPipeline
-from classes.constants import Constants
 from fiftyone_pipeline_core.messages import Messages
 from fiftyone_pipeline_core.web import *
 from fiftyone_pipeline_core.aspectproperty_value import AspectPropertyValue
 from fiftyone_pipeline_core.setheaderelement import SetHeaderElement
+
+from .classes.testpipeline import TestPipeline
+from .classes.constants import Constants
 
 
 unknown_value = AspectPropertyValue(value = Constants.UNKNOWN)
@@ -40,10 +41,9 @@ hardware_value = AspectPropertyValue(value = Constants.ACCEPTCH_HARDWARE_VALUE)
 
 setHeader_properties_dict = {'device': ['SetHeaderBrowserAccept-CH', 'SetHeaderHardwareAccept-CH', 'SetHeaderPlatformAccept-CH']}
 
+
 class SetHeaderUACHTests(unittest.TestCase):
-
     # Test response header value to be set for UACH
-
     @parameterized.expand([
         ({"device" : { "setheaderbrowseraccept-ch": unknown_value}}, ""),
         ({"device" : { "setheaderbrowseraccept-ch": browser_value}}, "SEC-CH-UA,SEC-CH-UA-Full-Version"),
@@ -52,7 +52,6 @@ class SetHeaderUACHTests(unittest.TestCase):
         ({"device" : { "setheaderbrowseraccept-ch": browser_value, "setheaderplatformaccept-ch": platform_value, "setheaderhardwareaccept-ch": hardware_value}}, "SEC-CH-UA,SEC-CH-UA-Full-Version,SEC-CH-UA-Model,SEC-CH-UA-Mobile,SEC-CH-UA-Arch,SEC-CH-UA-Platform,SEC-CH-UA-Platform-Version")
     ])
     def test_get_response_header_value(self, device, expected_value):
-    
         testPipeline = TestPipeline()
         setHeaderElement = SetHeaderElement()
         flowdata = testPipeline.flowdata

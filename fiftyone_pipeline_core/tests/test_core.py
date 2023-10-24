@@ -24,18 +24,18 @@ import unittest
 
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
 
-from classes.testpipeline import TestPipeline
-from classes.memorylogger import MemoryLogger
-from classes.exampleflowelement1 import ExampleFlowElement1
-from classes.exampleflowelement2 import ExampleFlowElement2
-from classes.stopflowdata import StopFlowData
-from classes.errorflowdata import ErrorFlowData
+from .classes.testpipeline import TestPipeline
+from .classes.memorylogger import MemoryLogger
+from .classes.exampleflowelement1 import ExampleFlowElement1
+# from .classes.exampleflowelement2 import ExampleFlowElement2
+# from .classes.stopflowdata import StopFlowData
+# from .classes.errorflowdata import ErrorFlowData
 
 ######################################
 # The Tests
 
-class CoreTests(unittest.TestCase):
 
+class CoreTests(unittest.TestCase):
     # Test logging works
     def testLogger(self):
     
@@ -43,7 +43,6 @@ class CoreTests(unittest.TestCase):
 
         loggerMessage = testPipeline.logger.memory_log[0]["message"]
         self.assertTrue(loggerMessage == "test")
- 
 
     # Test getting evidence
     def testEvidence(self):
@@ -52,7 +51,6 @@ class CoreTests(unittest.TestCase):
         userAgent = testPipeline.flowdata.evidence.get("header.user-agent")
         self.assertTrue(userAgent == "test")
 
-
     # Test filtering evidence
     def testEvidenceKeyFilter(self):
 
@@ -60,32 +58,27 @@ class CoreTests(unittest.TestCase):
         nullEvidence = testPipeline.flowdata.evidence.get("header.other-evidence")
         self.assertTrue(nullEvidence == None)
 
-
     # Test Getter methods
     def testGet(self):
  
         testPipeline = TestPipeline()
         getValue = testPipeline.flowdata.get("example1").get("integer")
         self.assertTrue(getValue == 5)
-  
 
     def testGetWhere(self):
 
         testPipeline = TestPipeline()
         getValue = len(testPipeline.flowdata.get_where("type", "int"))
         self.assertTrue(getValue == 1)
-        
- 
+
     def testGetFromElement(self):
 
         testPipeline = TestPipeline()
         getValue = testPipeline.flowdata.get_from_element(testPipeline.flowElement1).get("integer")
         self.assertTrue(getValue == 5)
 
-
     # # Test check stop FlowData works
     def testStopFlowData(self):
- 
         testPipeline = TestPipeline()
         try:
             testPipeline.flowdata.get("example2")
@@ -93,11 +86,9 @@ class CoreTests(unittest.TestCase):
             message = str(e)
 
         self.assertEqual(message, "There is no element data for example2 against this flow data. Available element data keys are: ['example1', 'error', 'apv', 'stop', 'example2']")
-   
 
     # Test exception is thrown when not suppressed.
     def testErrors_dont_suppress_exception(self):
-
         try:
             testPipeline = TestPipeline(False)
             self.assertFalse("Exception is expected.")
@@ -106,7 +97,6 @@ class CoreTests(unittest.TestCase):
 
     # Test errors are returned
     def testErrors(self):
-
         testPipeline = TestPipeline()
         getValue = testPipeline.flowdata.errors["error"]
         self.assertTrue(getValue.flow_element == "error")
@@ -115,7 +105,6 @@ class CoreTests(unittest.TestCase):
 
     # Test Already Processed FlowData
     def testErrors_already_processed(self):
-
         flowElement1 = ExampleFlowElement1()
         logger = MemoryLogger("info")
         pipeline = (PipelineBuilder())\
@@ -130,11 +119,9 @@ class CoreTests(unittest.TestCase):
             self.assertFalse("Exception is expected.")
         except Exception as e:
             self.assertEqual("FlowData already processed", str(e))
-        
 
     # Test aspectPropertyValue wrapper
     def testAPV(self):
-
         testPipeline = TestPipeline()
         yes = testPipeline.flowdata.get("apv").get("yes")
 
@@ -147,13 +134,12 @@ class CoreTests(unittest.TestCase):
         self.assertTrue(no.no_value_message() == "no")
 
     def test_build_from_config(self):
-
         config = {
             "PipelineOptions": {
                 "Elements": [
                     {
                         "elementName": "ExampleFlowElement1",
-                        "elementPath": "classes.exampleflowelement1",
+                        "elementPath": "tests.classes.exampleflowelement1",
                         "elementParameters": {
                             "example_param": "hello"
                         }
@@ -172,4 +158,3 @@ class CoreTests(unittest.TestCase):
 
         getValue = fd.get("example1").get("integer")
         self.assertTrue(getValue == 5)
-        

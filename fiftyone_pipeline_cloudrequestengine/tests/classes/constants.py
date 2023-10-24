@@ -20,9 +20,9 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-class Constants():
 
-    expectedUrl = "https://cloud\51degrees\com/api/v4/resource_key\json"
+class Constants():
+    # expectedUrl = "https://cloud.51degrees.com/api/v4/resource_key.json"
     resourceKey = "resource_key"
     userAgent = "iPhone"
     jsonResponse = '{"device":{"value": 1}}'
@@ -83,5 +83,4 @@ class Constants():
                     } \
                 } \
             }
-    PRECENDENCE_WARNING = "WARNING: '{}:{}' evidence conflicts with {}:{}" 
-
+    PRECENDENCE_WARNING = "WARNING: '{}:{}' evidence conflicts with {}:{}"

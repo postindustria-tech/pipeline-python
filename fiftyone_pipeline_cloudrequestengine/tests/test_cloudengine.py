@@ -20,22 +20,22 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
+import os
+import unittest
+from urllib.parse import urlencode
+
 from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
 from fiftyone_pipeline_cloudrequestengine.cloudrequestexception import CloudRequestException
 from fiftyone_pipeline_cloudrequestengine.cloudengine import CloudEngine
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
-from urllib.parse import urlencode
-import unittest
-import json
-import os
 
 if "resource_key" in os.environ:
     resource_key = os.environ["resource_key"]
 else:
     resource_key = "!!YOUR_RESOURCE_KEY!!"
 
-class CloudEngineTests(unittest.TestCase):
 
+class CloudEngineTests(unittest.TestCase):
     def test_cloud_engine(self):
 
         """!
