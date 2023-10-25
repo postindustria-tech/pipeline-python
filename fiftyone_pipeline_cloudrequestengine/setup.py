@@ -47,7 +47,7 @@ setuptools.setup(
     "This package extends the flow element class created by the fiftyone-pipeline-core package into a specialized type of flow element called an engine."),
     long_description=read("readme.md"),
     long_description_content_type='text/markdown',
-    python_requires='>=3.5',
+    python_requires=">=3.8",
     packages=["fiftyone_pipeline_cloudrequestengine"],
     install_requires=[
           'fiftyone_pipeline_engines',

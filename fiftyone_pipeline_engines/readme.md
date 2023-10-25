@@ -10,7 +10,7 @@ The Pipeline is a generic web request intelligence and data processing solution 
 
 ## Requirements
 
-* Python 3.5+
+* Python 3.8+
 
 ## This package fiftyone_pipeline_engines
 
@@ -27,6 +27,6 @@ Engines created by 51Degrees:
 
 ## Requirements 
 
-* Python 3.5+
+* Python 3.8+
 * The gitversion lib using `python -m pip install gitversion`
 

@@ -45,7 +45,7 @@ setuptools.setup(
     "It includes a ShareUsage engine that sends usage data to 51Degrees in zipped batches."),
     long_description=read("readme.md"),
     long_description_content_type='text/markdown',
-    python_requires='>=3.5',
+    python_requires=">=3.8",
     install_requires=[
           'fiftyone_pipeline_engines',
           'requests',
