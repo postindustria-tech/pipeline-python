@@ -20,11 +20,14 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from fiftyone_pipeline_cloudrequestengine.requestclient import RequestClient
-from .constants import *
-from unittest.mock import Mock
-from requests import Response
 import json
+from unittest.mock import Mock
+
+from requests import Response
+from fiftyone_pipeline_cloudrequestengine.requestclient import RequestClient
+
+from .constants import Constants
+
 
 class MockRequestClient(RequestClient):
 
