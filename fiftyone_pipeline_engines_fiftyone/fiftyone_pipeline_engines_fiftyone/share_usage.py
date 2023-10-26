@@ -20,22 +20,19 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from __future__ import absolute_import
 import random
-import threading
+import json
+import gzip
+import platform
+import datetime
+from concurrent.futures import ThreadPoolExecutor
+from importlib.metadata import version
+
+import requests
 from fiftyone_pipeline_engines.engine import Engine
 
 from .share_usage_evidencekeyfilter import ShareUsageEvidenceKeyFilter
 from .share_usage_tracker import ShareUsageTracker
-
-import json
-import requests
-import gzip
-import sys
-import platform
-import datetime
-import pkg_resources
-from concurrent.futures import ThreadPoolExecutor
 
 # The maximum length of a piece of evidence's value which can be
 # added to the usage data being sent.
@@ -45,6 +42,7 @@ SHARE_USAGE_VERSION = '1.1'
 
 # The default number of seconds to wait for the server connection before failing the request when sending usage data
 REQUEST_TIMEOUT = 60
+
 
 class ShareUsage(Engine):
     def __init__(
@@ -126,7 +124,7 @@ class ShareUsage(Engine):
 
     def get_constant_xml(self):
         if self.constant_xml is None:
-            coreVersion = pkg_resources.get_distribution("fiftyone_pipeline_core").version
+            coreVersion = version("fiftyone_pipeline_core")
             osVersion = f"{ReplacedString(platform.system()).result} {ReplacedString(platform.release()).result}"
             pyVersion = ReplacedString(platform.python_version()).result
 
@@ -211,7 +209,6 @@ class ShareUsage(Engine):
                 f"ShareUsage failed sending {len(data)} bytes of data: {e}"
             )
 
-
     def add_to_share_usage(self, data):
         """!
         Internal method which adds to the share usage bundle (generating XML)
@@ -233,7 +230,6 @@ class ShareUsage(Engine):
         xml += f"<Sequence>{data.sequence}</Sequence>"
         # The client IP of the request
         xml += f"<ClientIP>{data.client_ip}</ClientIP>"
-
 
         # The UTC date/time this entry was written
         date = datetime.datetime.now().isoformat() 
