@@ -14,4 +14,4 @@ It includes a ShareUsage engine that sends usage data to 51Degrees in zipped bat
 
 ## Requirements 
 
-* Python 3.5+
+* Python 3.8+

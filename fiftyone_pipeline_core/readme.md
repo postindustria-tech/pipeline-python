@@ -23,5 +23,5 @@ Engines created by 51Degrees:
 
 ## Requirements
 
-* Python 3.5+
+* Python 3.8+
 * The `flask` python library to run the web examples 
