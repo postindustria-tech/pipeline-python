@@ -24,12 +24,14 @@ import os
 import warnings
 from parameterized import parameterized
 
+from fiftyone_pipeline_cloudrequestengine.cloudrequestexception import CloudRequestException
 from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
 from fiftyone_pipeline_cloudrequestengine.constants import Constants
 
 from .classes.constants import Constants as TestConstants
 from .classes.cloudrequestengine_testbase import CloudRequestEngineTestsBase
+
 
 class TestCloudRequestEngine(CloudRequestEngineTestsBase):
 
@@ -208,3 +210,43 @@ class TestCloudRequestEngine(CloudRequestEngineTestsBase):
             "resource_key": TestConstants.resourceKey,
             "http_client": self.mock_http(server_unavailable=True),
         })
+
+    def test_exception_on_server_down_without_suppression(self):
+        evidence = {"query.User-Agent": "query-iPhone", "header.User-Agent": "header-iPhone"}
+
+        engine = CloudRequestEngine({
+            "resource_key": TestConstants.resourceKey,
+            "http_client": self.mock_http(server_unavailable=True),
+        })
+
+        builder = PipelineBuilder()
+        pipeline = builder.add(engine).build()
+        pipeline.suppress_process_exceptions = False
+
+        data = pipeline.create_flowdata()
+
+        for key, value in evidence.items():
+            with self.assertRaises(CloudRequestException):
+                data.evidence.add(key, value)
+
+    def test_no_exception_on_server_down_with_suppression(self):
+        evidence = {"query.User-Agent": "query-iPhone", "header.User-Agent": "header-iPhone"}
+        expected_value = "query-iPhone"
+
+        engine = CloudRequestEngine({
+            "resource_key": TestConstants.resourceKey,
+            "http_client": self.mock_http(server_unavailable=True),
+        })
+
+        builder = PipelineBuilder()
+        pipeline = builder.add(engine).build()
+        pipeline.suppress_process_exceptions = True
+
+        data = pipeline.create_flowdata()
+
+        for key, value in evidence.items():
+            data.evidence.add(key, value)
+
+        result = engine.get_content(data)
+
+        self.assertEqual(expected_value, result["user-agent"])
