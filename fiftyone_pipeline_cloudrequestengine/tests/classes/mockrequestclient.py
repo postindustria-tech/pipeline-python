@@ -30,13 +30,20 @@ from .constants import Constants
 
 
 class MockRequestClient(RequestClient):
+    def __init__(self, **kwargs):
+        self.server_unavailable = kwargs.get("server_unavailable", False)
 
     def request(self, type, url, content, originHeader):
         response = Mock(spec=Response)
         response.status_code = 200
         response.json = lambda: json.loads(response.text)
 
-        if "accessibleProperties" in url:
+        if self.server_unavailable:
+            response.status_code = 503
+            response.reason = "Service Unavailable"
+            response.text = "503 Service Unavailable"
+
+        elif "accessibleProperties" in url:
             if "subpropertieskey" in url:
                 response.text = json.dumps(Constants.accessibleSubPropertiesResponse)
             elif Constants.invalidKey in url: 

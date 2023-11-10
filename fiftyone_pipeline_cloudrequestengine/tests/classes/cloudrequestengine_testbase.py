@@ -42,6 +42,8 @@ class CloudRequestEngineTestsBase(unittest.TestCase):
 
         return False;
     
-    def mock_http(self):
-        client = MockRequestClient()
-        return client;
+    def mock_http(self, server_unavailable=False, **kwargs):
+        return MockRequestClient(
+            server_unavailable=server_unavailable,
+            **kwargs,
+        )
