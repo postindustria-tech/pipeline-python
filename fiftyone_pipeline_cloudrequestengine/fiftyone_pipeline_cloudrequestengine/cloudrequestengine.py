@@ -25,6 +25,7 @@ from __future__ import absolute_import
 import json
 import os
 import warnings
+from functools import cached_property
 from json import JSONDecodeError
 
 import requests
@@ -95,14 +96,17 @@ class CloudRequestEngine(Engine):
             self.cloud_request_origin = settings["cloud_request_origin"]
         else:
             self.cloud_request_origin = None
-			
-        # Initialise evidencekeys and properties from the cloud service
-     
-        self.flow_element_properties = self.get_engine_properties()
-
-        self.evidence_keys = self.get_evidence_keys()
 
         self.exclude_from_messages = True
+
+    @cached_property
+    def flow_element_properties(self):
+        # Initialise evidence keys and properties from the cloud service
+        return self.get_engine_properties()
+
+    @cached_property
+    def evidence_keys(self):
+        return self.get_evidence_keys()
 
     def get_evidence_keys(self):
         """!

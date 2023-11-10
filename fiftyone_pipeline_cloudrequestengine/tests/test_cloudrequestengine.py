@@ -198,3 +198,13 @@ class TestCloudRequestEngine(CloudRequestEngineTestsBase):
 
         self.assertEqual(expected_value, result["user-agent"])
 
+    def test_no_exception_on_cloud_request_engine_init(self):
+        """
+        Test no exception is thrown when cloud request engine is
+        initialised and server is down
+        """
+
+        CloudRequestEngine({
+            "resource_key": TestConstants.resourceKey,
+            "http_client": self.mock_http(server_unavailable=True),
+        })
