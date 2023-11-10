@@ -32,44 +32,39 @@ from .constants import Constants
 class MockRequestClient(RequestClient):
 
     def request(self, type, url, content, originHeader):
-
         response = Mock(spec=Response)
         response.status_code = 200
+        response.json = lambda: json.loads(response.text)
 
         if "accessibleProperties" in url:
             if "subpropertieskey" in url:
                 response.text = json.dumps(Constants.accessibleSubPropertiesResponse)
-                response.content = json.dumps(Constants.accessibleSubPropertiesResponse)
             elif Constants.invalidKey in url: 
-                response.content =  json.dumps(Constants.invalidKeyResponse) 
+                response.text = json.dumps(Constants.invalidKeyResponse)
                 response.status_code = 400
                 response.headers = {'header': 'value'}
             elif Constants.noDataKey in url: 
-                response.content =  json.dumps(Constants.noDataKeyResponse)
+                response.text = json.dumps(Constants.noDataKeyResponse)
                 response.url = url
                 response.status_code = 400
                 response.headers = {'header': 'value'} 
             elif Constants.noErrorNoSuccessKey in url:
-                response.content = json.dumps(Constants.noErrorNoSuccessResponse) 
+                response.text = json.dumps(Constants.noErrorNoSuccessResponse)
                 response.status_code = 400
                 response.headers = {'header': 'value'}             
             else:
                 response.text = json.dumps(Constants.accessiblePropertiesResponse)
-                response.content = json.dumps(Constants.accessiblePropertiesResponse)
 
         elif "evidencekeys" in url:
-            response.text =  Constants.evidenceKeysResponse
-            response.content =  Constants.evidenceKeysResponse
+            response.text = Constants.evidenceKeysResponse
 
         elif "resource_key.json" in url:
             response.text = Constants.jsonResponse
-            response.content = Constants.jsonResponse
 
         else:
-            response.text = "this should not have been called with the URL '" + \
-                    url + "'"
-            response.content = "this should not have been called with the URL '" + \
-                    url + "'"
+            response.text = f"this should not have been called with the URL '{url}'"
             response.status_code = 404
+
+        response.content = response.text.encode("utf-8")
 
         return response

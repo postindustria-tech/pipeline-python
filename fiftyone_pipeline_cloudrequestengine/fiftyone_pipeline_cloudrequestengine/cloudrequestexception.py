@@ -20,26 +20,25 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-"""!
-    Exception that can be thrown when the available data does not match that
-    which is expected.
-"""
-class CloudRequestException(Exception):
 
+class CloudRequestException(Exception):
     """!
-        Constructor for CloudRequestException
-        @type message: string
-        @param message: Exception message string
-        @type httpStatusCode: int
-        @param httpStatusCode: the status code returned in the HTTP response
-        @type responseHeaders: dict
-        @param responseHeaders: the HTTP headers returned in the response 
+        Exception that can be thrown when the available data does not match that
+        which is expected.
     """
+
+    # TODO: remove/implement additional arguments, currently unused
     def __init__(self, message, httpStatusCode = 0, responseHeaders = {}):
-        
+        """!
+            Constructor for CloudRequestException
+            @type message: string
+            @param message: Exception message string
+            @type httpStatusCode: int
+            @param httpStatusCode: the status code returned in the HTTP response
+            @type responseHeaders: dict
+            @param responseHeaders: the HTTP headers returned in the response
+        """
         self.message = message
         self.httpStatusCode = httpStatusCode
         self.responseHeaders = responseHeaders
         super().__init__(self.message)
-
-
