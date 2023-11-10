@@ -22,12 +22,10 @@
 
 import os
 import warnings
-from requests import Response
 from parameterized import parameterized
 
 from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
-from fiftyone_pipeline_cloudrequestengine.requestclient import RequestClient
 from fiftyone_pipeline_cloudrequestengine.constants import Constants
 
 from .classes.constants import Constants as TestConstants
