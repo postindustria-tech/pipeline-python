@@ -22,22 +22,18 @@
 
 
 class Evidence:
-
     def __init__(self, flowdata):
-
         """!
         Constructor for Evidence container on a FlowData
 
         @type flowdata: FlowData
         @param flowdata: Parent FlowData
-
         """
         self.evidence = {}
-
+        self.evidence_filtered = False
         self.flowdata = flowdata
 
     def add(self, key, value):
-
         """!
         Add a single piece of evidence by its element and value
 
@@ -46,27 +42,16 @@ class Evidence:
 
         @type value: mixed
         @param value: a piece of evidence
-
         """
 
-        keep = False
-
-        for flow_element in self.flowdata.pipeline.flow_elements:
-
-            if flow_element.filter_evidence_key(key):
-                keep = True
-
-        if keep:
-            self.evidence[key] = value
+        self.evidence[key] = value
 
     def add_from_dict(self, evidence_dictionary):
-
         """!
         Helper function to set multiple pieces of evidence from a dict
 
         @type evidence_dictionary: dict
         @param evidence_dictionary: Dict of evidence
-
         """
 
         if not type(evidence_dictionary) is dict:
@@ -76,7 +61,6 @@ class Evidence:
             self.add(key, value)
 
     def get(self, key):
-
         """!
         Get a piece of evidence by key
 
@@ -85,7 +69,6 @@ class Evidence:
 
         @rtype: dict
         @return: A piece of evidence
-
         """
 
         if key in self.evidence:
@@ -97,7 +80,6 @@ class Evidence:
             return
 
     def get_all(self):
-
         """!
         Get all evidence
 
@@ -107,3 +89,21 @@ class Evidence:
 
         return self.evidence
 
+    def filter(self) -> None:
+        """!
+        Filter evidence using `filter_evidence_key` and
+        `filter_evidence` methods of each FlowElement in the pipeline
+        """
+
+        if self.evidence_filtered:
+            return
+
+        for key in self.evidence:
+            if not any([
+                flow_element.filter_evidence_key(key)
+                for flow_element
+                in self.flowdata.pipeline.flow_elements
+            ]):
+                del self.evidence[key]
+
+        self.evidence_filtered = True

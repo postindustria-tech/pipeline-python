@@ -27,7 +27,6 @@ import traceback
 import sys
 
 class FlowData:
-
     """!
     FlowData is created by a specific Pipeline
     It collects evidence set by the user
@@ -65,24 +64,25 @@ class FlowData:
         """
 
         if not self.processed:
+            # filter evidence before processing
+            try:
+                self.evidence.filter()
+            except Exception as e:
+                flow_error = FlowError("global", e, traceback.format_exc())
+                self.set_error(flow_error)
 
             for flow_element in self.pipeline.flow_elements:
                 if self.stopped is not True:
                     # All errors are caught and stored in an errors array keyed by the
                     # flowElement that set the error
-
                     try:
                         flow_element.process(self)
-
                     except Exception:
-	
                         flow_error = FlowError(flow_element.datakey, sys.exc_info()[1], traceback.format_exc())
                         self.set_error(flow_error)
 
             # Set processed flag to true. flowdata can only be processed once
-
             self.processed = True
-
         else:
             flow_error = FlowError("global", Exception(Messages.FLOW_DATA_PROCESSED), Messages.FLOW_DATA_PROCESSED)
             self.set_error(flow_error)

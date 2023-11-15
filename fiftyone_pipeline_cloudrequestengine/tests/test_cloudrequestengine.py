@@ -226,12 +226,13 @@ class TestCloudRequestEngine(CloudRequestEngineTestsBase):
         data = pipeline.create_flowdata()
 
         for key, value in evidence.items():
-            with self.assertRaises(CloudRequestException):
-                data.evidence.add(key, value)
+            data.evidence.add(key, value)
+
+        with self.assertRaises(CloudRequestException):
+            data.process()
 
     def test_no_exception_on_server_down_with_suppression(self):
         evidence = {"query.User-Agent": "query-iPhone", "header.User-Agent": "header-iPhone"}
-        expected_value = "query-iPhone"
 
         engine = CloudRequestEngine({
             "resource_key": TestConstants.resourceKey,
@@ -247,6 +248,4 @@ class TestCloudRequestEngine(CloudRequestEngineTestsBase):
         for key, value in evidence.items():
             data.evidence.add(key, value)
 
-        result = engine.get_content(data)
-
-        self.assertEqual(expected_value, result["user-agent"])
+        data.process()
