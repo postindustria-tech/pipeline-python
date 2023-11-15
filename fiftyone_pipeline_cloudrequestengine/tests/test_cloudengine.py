@@ -18,8 +18,9 @@
 # including the attribution notice(s) required under Article 5 of the EUPL
 # in the end user terms of the application under an appropriate heading,
 # such notice(s) shall fulfill the requirements of that article.
-# ********************************************************************* 
+# *********************************************************************
 
+import json
 import os
 import unittest
 from urllib.parse import urlencode
@@ -92,7 +93,7 @@ class CloudEngineTests(unittest.TestCase):
     def test_cloud_get_request_with_sequence_evidence(self):
         """!
         Verify that making GET request with SequenceElement evidence
-        in query params will return an error from cloud 
+        in query params will not return an error from cloud
         This is an integration test that uses the live cloud service
         so any problems with that service could affect the result
         of this test.
@@ -128,20 +129,9 @@ class CloudEngineTests(unittest.TestCase):
                 evidence_without_prefix[key_split[1]] = value
         url += urlencode(evidence_without_prefix)
 
-        # TODO: This part of the test should be refactored, because
-        #       its behaviour is not what described in the test docstring.
-
-        # Following try catch block should be removed once error
-        # is fixed in cloud
-        try:
-            cloud.make_cloud_request('GET', url, content=None)
-        except Exception as ex:
-            self.assertTrue("Sequence number not present in evidence. this is mandatory" in str(ex))
-
-        # Following statements should be uncommented once error
-        # is fixed in cloud
-        # jsonResponse = cloud.make_cloud_request('GET', url, content=None)
-        # self.assertTrue(len(jsonResponse["errors"]) == 0)
+        json_response = cloud.make_cloud_request('GET', url, content=None)
+        json_response = json.loads(json_response)
+        self.assertNotIn("errors", json_response)
 
     def test_HttpDataSetInException(self):
         """!
