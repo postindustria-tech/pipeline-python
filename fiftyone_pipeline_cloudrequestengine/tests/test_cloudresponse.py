@@ -32,19 +32,20 @@ from .classes.constants import *
 
 
 class TestCloudResponse(CloudRequestEngineTestsBase):
+    def setUp(self):
+        self.http_client = self.mock_http()
+
     def test_process(self):
-    
         """
             Test cloud request engine adds correct information to post request
             and returns the response in the ElementData
         """
-        
-        httpClient = self.mock_http()
-        
-        engine = CloudRequestEngine({"resource_key": Constants.resourceKey,
-            "http_client" : httpClient})
+        engine = CloudRequestEngine({
+            "resource_key": Constants.resourceKey,
+            "http_client": self.http_client,
+        })
 
-        builder= PipelineBuilder();
+        builder = PipelineBuilder()
         pipeline = builder.add(engine).build()
 
         data = pipeline.create_flowdata()
@@ -56,102 +57,89 @@ class TestCloudResponse(CloudRequestEngineTestsBase):
 
         self.assertEqual(Constants.jsonResponse, result)
 
-        jsonObj = json.loads(result)
-        self.assertEqual(1, jsonObj["device"]["value"])
+        json_obj = json.loads(result)
+        self.assertEqual(json_obj["device"]["value"], 1)
 
     def test_sub_properties(self):
-        
         """
             Verify that the CloudRequestEngine can correctly parse a
             response from the accessible properties endpoint that contains
             meta-data for sub-properties.
         """
-
-        httpClient = self.mock_http()
-
         engine = CloudRequestEngine({
-            "resource_key" : "subpropertieskey",
-            "http_client" : httpClient
+            "resource_key": "subpropertieskey",
+            "http_client": self.http_client,
         })
 
-        self.assertEqual(2, len(engine.flow_element_properties))     
-        deviceProperties = engine.flow_element_properties["device"]
-        self.assertEqual(2, len(deviceProperties));
-        self.assertTrue(self.properties_contain_name(deviceProperties, "IsMobile"));
-        self.assertTrue(self.properties_contain_name(deviceProperties, "IsTablet"));
-        devicesProperties = engine.flow_element_properties["devices"]
-        self.assertFalse(devicesProperties is None)
-        self.assertEqual(1, len(devicesProperties))
-        self.assertTrue(self.properties_contain_name(devicesProperties["Devices"]["itemproperties"], "IsMobile"))
-        self.assertTrue(self.properties_contain_name(devicesProperties["Devices"]["itemproperties"], "IsTablet"))
+        self.assertEqual(len(engine.flow_element_properties), 2)
+
+        device_properties = engine.flow_element_properties["device"]
+        self.assertEqual(len(device_properties), 2)
+        self.assertTrue(self.properties_contain_name(device_properties, "IsMobile"))
+        self.assertTrue(self.properties_contain_name(device_properties, "IsTablet"))
+
+        devices_properties = engine.flow_element_properties["devices"]
+        self.assertFalse(devices_properties is None)
+        self.assertEqual(len(devices_properties), 1)
+        self.assertTrue(
+            self.properties_contain_name(
+                devices_properties["Devices"]["itemproperties"],
+                "IsMobile",
+            )
+        )
+        self.assertTrue(
+            self.properties_contain_name(
+                devices_properties["Devices"]["itemproperties"],
+                "IsTablet",
+            )
+        )
 
     def test_validate_error_handling_invalid_resourceKey(self):
-    
         """ 
             Test cloud request engine handles errors from the cloud service 
             as expected.
             An exception should be thrown by the cloud request engine
             containing the errors from the cloud service when resource key
             is invalid.
-        """ 
-
-        httpClient = self.mock_http()
-
-        exception = None
-
-        try:
+        """
+        with self.assertRaises(CloudRequestException) as context:
             engine = CloudRequestEngine({
-                "resource_key" : Constants.invalidKey,
-                "http_client" : httpClient
+                "resource_key": Constants.invalidKey,
+                "http_client": self.http_client,
             })
-        except CloudRequestException as ex:
-            exception = ex
+            # trigger the lazy load of the properties
+            engine.flow_element_properties  # noqa
 
-        self.assertIsNotNone("Expected exception to occur", exception)
-        self.assertEqual(str(exception), Constants.invalidKeyMessageComplete)
+        self.assertEqual(Constants.invalidKeyMessageComplete, context.exception.message)
 
     def test_validate_error_handling_nodata(self):
-        
         """ 
             Test cloud request engine handles a lack of data from the 
             cloud service as expected.
             An exception should be thrown by the cloud request engine.
-        """ 
-
-        httpClient = self.mock_http()
-
-        exception = None
-
-        try:
+        """
+        with self.assertRaises(CloudRequestException) as context:
             engine = CloudRequestEngine({
-                "resource_key" : Constants.noDataKey,
-                "http_client" : httpClient
+                "resource_key": Constants.noDataKey,
+                "http_client": self.http_client,
             })
-        except CloudRequestException as ex:
-            exception = ex
+            # trigger the lazy load of the properties
+            engine.flow_element_properties  # noqa
 
-        self.assertIsNotNone("Expected exception to occur", exception)
-        self.assertEqual(str(exception), Constants.noDataKeyMessageComplete)
+        self.assertEqual(Constants.noDataKeyMessageComplete, context.exception.message)
 
     def test_validate_error_handling_noerror_nosuccess(self):
-        
         """ 
             Test cloud request engine handles no success error from the 
             cloud service as expected.
             An exception should be thrown by the cloud request engine.
         """ 
-
-        httpClient = self.mock_http()
-
-        exception = None
-
-        try:
+        with self.assertRaises(CloudRequestException) as context:
             engine = CloudRequestEngine({
-                "resource_key" : Constants.noErrorNoSuccessKey,
-                "http_client" : httpClient
+                "resource_key": Constants.noErrorNoSuccessKey,
+                "http_client": self.http_client,
             })
-        except CloudRequestException as ex:
-            exception = ex
+            # trigger the lazy load of the properties
+            engine.flow_element_properties  # noqa
 
-        self.assertIsNotNone("Expected exception to occur", exception)
-        self.assertEqual(str(exception), Constants.noErrorNoSuccessMessage)
+        self.assertEqual(Constants.noErrorNoSuccessMessage, context.exception.message)
