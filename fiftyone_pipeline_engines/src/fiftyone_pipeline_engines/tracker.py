@@ -20,30 +20,46 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from typing import Type
-import unittest
+from .datakeyed_cache import DataKeyedCache
 
-from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
-from .mockrequestclient import MockRequestClient
-from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
-
-
-class CloudRequestEngineTestsBase(unittest.TestCase):
-    def properties_contain_name(self, properties, name):
-
-        if type(properties) == type({}):
-            for propertyKey, property in properties.items():
-                if (property["name"].lower() == name.lower()):
-                    return True
-        else:
-            for property in properties:
-                if (property["Name"].lower() == name.lower()):
-                    return True
-
-        return False;
+class Tracker(DataKeyedCache):
     
-    def mock_http(self, server_unavailable=False, **kwargs):
-        return MockRequestClient(
-            server_unavailable=server_unavailable,
-            **kwargs,
-        )
+    """!
+    A tracker is an instance of datakeyed cache which,
+    if a result is found in the cache, calls an additional
+    boolean match method
+    """
+    
+    def track(self, key):
+
+        """!
+        The track method calls the DataKeyedCache get method,
+        if it receives a result it sends it onto a match function
+        
+        @type key : cache key to run through tracker
+        @rtype bool 
+        @return result of tracking
+
+        """
+
+        if self.get_cache_value(key) is None:
+
+            return True
+
+        else:
+
+            return self.match(key, self.get_cache_value(key)) # pylint: disable=E1121
+
+    def match(self, result):
+
+        """!
+        If object is found in cache, the match function is called
+        
+        @type key : result of the track function
+        @rtype bool 
+        @return whether a match has been made
+
+        """
+
+        return True
+

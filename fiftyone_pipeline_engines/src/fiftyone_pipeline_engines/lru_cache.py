@@ -20,30 +20,26 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from typing import Type
-import unittest
+from .datakeyed_cache import DataKeyedCache
 
-from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
-from .mockrequestclient import MockRequestClient
-from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
+from cachetools import LRUCache
 
+class LRUEngineCache(DataKeyedCache):
+    """!
+     An instance of DataKeyed cache using a least recently used (LRU) method
+    """
+    def __init__(self, size = 1000):
+        """!
+        Constructor for LRUCache
+        @type size: int
+        @param size: maximum entries in the cache
+        """
 
-class CloudRequestEngineTestsBase(unittest.TestCase):
-    def properties_contain_name(self, properties, name):
+        self.cache = LRUCache(maxsize=size)
 
-        if type(properties) == type({}):
-            for propertyKey, property in properties.items():
-                if (property["name"].lower() == name.lower()):
-                    return True
-        else:
-            for property in properties:
-                if (property["Name"].lower() == name.lower()):
-                    return True
+    def get_cache_value (self, cache_key):
 
-        return False;
-    
-    def mock_http(self, server_unavailable=False, **kwargs):
-        return MockRequestClient(
-            server_unavailable=server_unavailable,
-            **kwargs,
-        )
+        return self.cache.get(cache_key)
+
+    def set_cache_value(self, key, value):
+        self.cache.__setitem__(key, value)

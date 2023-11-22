@@ -20,30 +20,22 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from typing import Type
-import unittest
+class FlowError:
 
-from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
-from .mockrequestclient import MockRequestClient
-from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
+    """!
+    An error that occurred during the processing of an element.
+    """
 
+    def __init__(self, flow_element, exception_instance, exception_traceback ):
 
-class CloudRequestEngineTestsBase(unittest.TestCase):
-    def properties_contain_name(self, properties, name):
+        """!
+        FlowError constructor.
 
-        if type(properties) == type({}):
-            for propertyKey, property in properties.items():
-                if (property["name"].lower() == name.lower()):
-                    return True
-        else:
-            for property in properties:
-                if (property["Name"].lower() == name.lower()):
-                    return True
-
-        return False;
-    
-    def mock_http(self, server_unavailable=False, **kwargs):
-        return MockRequestClient(
-            server_unavailable=server_unavailable,
-            **kwargs,
-        )
+        * @param {string} The FlowElement at which the exception occurred.
+        * @param {Exception} Exception Instance
+        * @param {String} Exception Backtrace
+        """
+        
+        self.flow_element = flow_element
+        self.exception_instance = exception_instance
+        self.exception_traceback = exception_traceback

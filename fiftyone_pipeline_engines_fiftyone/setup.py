@@ -31,9 +31,9 @@ def read(file_name):
         with io.open(
             os.path.join(os.path.dirname(__file__), file_name), encoding="utf-8"
         ) as f:
-            return f.read()
+            return f.read().strip()
     except:
-        return ""
+        return "0.0.0"
         
 setuptools.setup(
     name="fiftyone_pipeline_engines_fiftyone",
@@ -53,6 +53,7 @@ setuptools.setup(
     ],
     extras_require={ "testing": ['flask'] },
     packages=["fiftyone_pipeline_engines_fiftyone"],
+    package_dir={"": "src"},
     license="EUPL-1.2",
     classifiers=[
         "Development Status :: 5 - Production/Stable",

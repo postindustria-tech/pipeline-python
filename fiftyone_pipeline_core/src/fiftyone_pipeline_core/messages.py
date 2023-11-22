@@ -20,30 +20,30 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from typing import Type
-import unittest
+ # Messages which may be reused for various property exceptions.
 
-from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
-from .mockrequestclient import MockRequestClient
-from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
+class Messages():
 
+    # Property does not start with SetHeader. This takes the name of a property
+    # as a format argument.
 
-class CloudRequestEngineTestsBase(unittest.TestCase):
-    def properties_contain_name(self, properties, name):
+    PROPERTY_NOT_SET_HEADER = "Property Name '{}' does not start with 'SetHeader'."
 
-        if type(properties) == type({}):
-            for propertyKey, property in properties.items():
-                if (property["name"].lower() == name.lower()):
-                    return True
-        else:
-            for property in properties:
-                if (property["Name"].lower() == name.lower()):
-                    return True
+    # Property Name is not in the valid format. This takes the property name 
+    # as format argument.
 
-        return False;
+    WRONG_PROPERTY_FORMAT = \
+        "Property Name '{}' is not in the expected format i.e. SetHeader[Component][HeaderName]. "
     
-    def mock_http(self, server_unavailable=False, **kwargs):
-        return MockRequestClient(
-            server_unavailable=server_unavailable,
-            **kwargs,
-        )
+    # Element not found in flowData. This takes the element datakey 
+    # as format argument.
+    ELEMENT_NOT_FOUND = \
+        "Element '{}' is not present in the FlowData. "
+
+    # Property not found in flowData. This takes the element datakey
+    # and property names as format arguments.
+    PROPERTY_NOT_FOUND = \
+        "Property '{}' is not present in the FlowData against '{}' ElementData. "
+
+    # FlowData already processed.
+    FLOW_DATA_PROCESSED = "FlowData already processed"

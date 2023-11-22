@@ -20,30 +20,44 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from typing import Type
-import unittest
-
-from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
-from .mockrequestclient import MockRequestClient
-from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
+from .evidence_keyfilter import EvidenceKeyFilter
 
 
-class CloudRequestEngineTestsBase(unittest.TestCase):
-    def properties_contain_name(self, properties, name):
+class BasicListEvidenceKeyFilter(EvidenceKeyFilter):
 
-        if type(properties) == type({}):
-            for propertyKey, property in properties.items():
-                if (property["name"].lower() == name.lower()):
-                    return True
+    """!
+    An instance of EvidenceKeyFilter that uses a simple array of keys
+    Evidence not using these keys is filtered out
+
+    """
+
+    def __init__(self, keys_list):
+        
+        """!
+        BasicListEvidenceKeyFilter constructor
+
+        @type keysList: dict 
+        @param keysList: a list of keys to keep.
+
+        """
+
+        # lowercase keys list
+        self.list = [item.lower() for item in keys_list]
+
+    def filter_evidence_key(self, key):
+
+        """!
+        Check if an evidence key is present in a filter list.
+
+        @type key: string
+        @param key: to check in the filter
+
+        @rtype: bool
+        @return: Is this key in the filter's keys list?
+
+        """
+        
+        if key.lower() in self.list:
+            return True
         else:
-            for property in properties:
-                if (property["Name"].lower() == name.lower()):
-                    return True
-
-        return False;
-    
-    def mock_http(self, server_unavailable=False, **kwargs):
-        return MockRequestClient(
-            server_unavailable=server_unavailable,
-            **kwargs,
-        )
+            return False

@@ -20,30 +20,41 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from typing import Type
-import unittest
 
-from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
-from .mockrequestclient import MockRequestClient
-from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
+class DataKeyedCache(object):
 
-
-class CloudRequestEngineTestsBase(unittest.TestCase):
-    def properties_contain_name(self, properties, name):
-
-        if type(properties) == type({}):
-            for propertyKey, property in properties.items():
-                if (property["name"].lower() == name.lower()):
-                    return True
-        else:
-            for property in properties:
-                if (property["Name"].lower() == name.lower()):
-                    return True
-
-        return False;
+    """!
     
-    def mock_http(self, server_unavailable=False, **kwargs):
-        return MockRequestClient(
-            server_unavailable=server_unavailable,
-            **kwargs,
-        )
+    A data keyed cache is the base class for caches used in the pipeline
+    It does nothing on its own and should be extended by a specific cache
+        
+    """
+
+    def get_cache_value(self, cachekey):
+
+        """!
+        Get data from the cache
+        @type key : string
+        @param key : The cache key to lookup
+        @type value : mixed
+        @param key : None , or the stored data
+        """
+
+        return None
+
+
+    def set_cache_value(self, cachekey, value):
+
+        """!
+        Place data in the cache
+        @type key : string
+        @param key : The cache key to store data under
+        @type value : mixed
+        @param key : The value to save in the cache
+        """
+
+        return None
+
+
+    
+

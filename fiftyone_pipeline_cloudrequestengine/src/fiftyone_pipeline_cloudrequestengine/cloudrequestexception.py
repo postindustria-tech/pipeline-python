@@ -20,30 +20,25 @@
 # such notice(s) shall fulfill the requirements of that article.
 # ********************************************************************* 
 
-from typing import Type
-import unittest
 
-from fiftyone_pipeline_cloudrequestengine.cloudrequestengine import CloudRequestEngine
-from .mockrequestclient import MockRequestClient
-from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
+class CloudRequestException(Exception):
+    """!
+        Exception that can be thrown when the available data does not match that
+        which is expected.
+    """
 
-
-class CloudRequestEngineTestsBase(unittest.TestCase):
-    def properties_contain_name(self, properties, name):
-
-        if type(properties) == type({}):
-            for propertyKey, property in properties.items():
-                if (property["name"].lower() == name.lower()):
-                    return True
-        else:
-            for property in properties:
-                if (property["Name"].lower() == name.lower()):
-                    return True
-
-        return False;
-    
-    def mock_http(self, server_unavailable=False, **kwargs):
-        return MockRequestClient(
-            server_unavailable=server_unavailable,
-            **kwargs,
-        )
+    # TODO: remove/implement additional arguments, currently unused
+    def __init__(self, message, httpStatusCode = 0, responseHeaders = {}):
+        """!
+            Constructor for CloudRequestException
+            @type message: string
+            @param message: Exception message string
+            @type httpStatusCode: int
+            @param httpStatusCode: the status code returned in the HTTP response
+            @type responseHeaders: dict
+            @param responseHeaders: the HTTP headers returned in the response
+        """
+        self.message = message
+        self.httpStatusCode = httpStatusCode
+        self.responseHeaders = responseHeaders
+        super().__init__(self.message)
