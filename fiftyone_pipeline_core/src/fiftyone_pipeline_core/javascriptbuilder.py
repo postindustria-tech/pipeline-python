@@ -21,12 +21,8 @@
 # ********************************************************************* 
 
 
-from .flowelement import FlowElement
-from .evidence_keyfilter import EvidenceKeyFilter
-from .elementdata_dictionary import ElementDataDictionary
-import os
 import json
-
+from pathlib import Path
 try:
     #python2
     from urllib import urlencode
@@ -36,6 +32,10 @@ except ImportError:
 
 import chevron
 from jsmin import jsmin
+
+from .flowelement import FlowElement
+from .evidence_keyfilter import EvidenceKeyFilter
+from .elementdata_dictionary import ElementDataDictionary
 
 
 class JavaScriptBuilderEvidenceKeyFilter(EvidenceKeyFilter):
@@ -103,7 +103,12 @@ class JavascriptBuilderElement(FlowElement):
 
         # Load template file contents into memory
 
-        template = os.path.dirname(os.path.abspath(__file__)) + "/JavaScriptResource.mustache"
+        template = Path(__file__).absolute().parent / "js_templates" / "JavaScriptResource.mustache"
+        if not template.is_file():
+            raise FileNotFoundError(
+                "JavaScriptResource.mustache not found in js_templates directory"
+                " (have you initialised the submodule?)"
+            )
 
         f = open(template, "r")
         self.template = f.read()

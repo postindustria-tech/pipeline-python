@@ -1,2 +1,2 @@
-include src/fiftyone_pipeline_core/JavaScriptResource.mustache
+include src/fiftyone_pipeline_core/js_templates/JavaScriptResource.mustache
 include version.txt

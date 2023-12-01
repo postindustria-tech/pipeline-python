@@ -1,0 +1,3 @@
+[submodule "JavaScriptTemplates"]
+	path = fiftyone_pipeline_core/src/fiftyone_pipeline_core/js_templates
+	url = ../javascript-templates
