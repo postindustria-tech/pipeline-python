@@ -21,12 +21,8 @@
 # ********************************************************************* 
 
 
-from .flowelement import FlowElement
-from .evidence_keyfilter import EvidenceKeyFilter
-from .elementdata_dictionary import ElementDataDictionary
-import os
 import json
-
+from pathlib import Path
 try:
     #python2
     from urllib import urlencode
@@ -36,6 +32,10 @@ except ImportError:
 
 import chevron
 from jsmin import jsmin
+
+from .flowelement import FlowElement
+from .evidence_keyfilter import EvidenceKeyFilter
+from .elementdata_dictionary import ElementDataDictionary
 
 
 class JavaScriptBuilderEvidenceKeyFilter(EvidenceKeyFilter):
@@ -103,7 +103,12 @@ class JavascriptBuilderElement(FlowElement):
 
         # Load template file contents into memory
 
-        template = os.path.dirname(os.path.abspath(__file__)) + "/JavaScriptResource.mustache"
+        template = Path(__file__).absolute().parent / "js_templates" / "JavaScriptResource.mustache"
+        if not template.is_file():
+            raise FileNotFoundError(
+                "JavaScriptResource.mustache not found in js_templates directory"
+                " (have you initialised the submodule?)"
+            )
 
         f = open(template, "r")
         self.template = f.read()
@@ -151,7 +156,6 @@ class JavascriptBuilderElement(FlowElement):
             
         if not protocol:
             protocol = "https"
-      
 
         if not host:
             # Check if host is provided in evidence
@@ -162,13 +166,22 @@ class JavascriptBuilderElement(FlowElement):
         variables["_host"] = host
         variables["_protocol"] = protocol
 
+        query_params = self.get_evidence_key_filter().filter_evidence(flowdata.evidence.get_all())
+        variables["_sessionId"] = query_params["query.session-id"] if "query.session-id" in query_params else None
+        variables["_sequence"] = query_params["query.sequence"] if "query.sequence" in query_params else None
+
+        variables["_parameters"] = dict([
+            (param.split(".")[1], query_params[param])
+            for param in query_params.keys()
+            if param.startswith("query.")
+        ])
+        variables["_parameters"] = json.dumps(variables["_parameters"])
+
         if variables["_host"] and variables["_protocol"] and variables["_endpoint"]:
 
             variables["_url"] = variables["_protocol"] + "://" + variables["_host"] + variables["_endpoint"]
 
             # Add query parameters to the URL
-
-            query_params = self.get_evidence_key_filter().filter_evidence(flowdata.evidence.get_all())
 
             query = {}
  
@@ -196,15 +209,25 @@ class JavascriptBuilderElement(FlowElement):
 
         # Use results from device detection if available to determine
         # if the browser supports promises.
-        
         try:
-            flowdata.get("device").get("promise")
-            variables["_supportsPromises"] = flowdata.device.promise.value == True
+            variables["_supportsPromises"] = (
+                flowdata.device.promise
+                and flowdata.device.promise.has_value()
+                and bool(flowdata.device.promise.value())
+            )
         except Exception:
             variables["_supportsPromises"] = False
+
+        try:
+            variables["_supportsFetch"] = (
+                flowdata.device.fetch
+                and flowdata.device.fetch.has_value()
+                and bool(flowdata.device.fetch.value())
+            )
+        except Exception:
+            variables["_supportsFetch"] = False
        
         # Check if any delayedproperties exist in the json
-
         variables["_hasDelayedProperties"] = True if "delayexecution" in variables["_jsonObject"] else False
          
         output = chevron.render(self.template, variables)
