@@ -129,7 +129,7 @@ class DataFileUpdateService():
 
             data_file.updating = False
             self.__emit(status, data_file)
-            self.check_next_update(data_file)
+            self.check_next_update(data_file, run_after_error = True)
             return False
 
         # Verify MD5 hash if enabled
@@ -220,7 +220,7 @@ class DataFileUpdateService():
         thread.start()
         return thread
     
-    def check_next_update(self, data_file):
+    def check_next_update(self, data_file, run_after_error = False):
         """!
         Function to periodically check if a datafile needs updating
         also updates the datafile on start if it is set with the update_on_start option
@@ -228,7 +228,7 @@ class DataFileUpdateService():
         @param data_file: Datafile to check updates for
         """
 
-        if data_file.update_on_start and not data_file.updated_on_start:
+        if data_file.update_on_start and not data_file.updated_on_start and not run_after_error:
             self.update_data_file(data_file)
 
         elif data_file.auto_update:
