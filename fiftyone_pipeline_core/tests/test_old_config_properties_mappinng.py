@@ -56,10 +56,10 @@ class OldConfigPropertiesMappingTest(unittest.TestCase):
             config
         )
 
-        self.assertTrue("data_update_verify_md5" in result)
-        self.assertTrue("data_update_url" in result)
-        self.assertFalse("verify_md5" in result)
-        self.assertFalse("data_file_update_base_url" in result)
+        self.assertIn("data_update_verify_md5", result)
+        self.assertIn("data_update_url", result)
+        self.assertNotIn("verify_md5", result)
+        self.assertNotIn("data_file_update_base_url", result)
 
     def test_success_mapping_args_passed_as_kwargs(self):
         def check(**kwargs):
@@ -71,19 +71,10 @@ class OldConfigPropertiesMappingTest(unittest.TestCase):
                 kwargs
             )
 
-            self.assertTrue("data_update_verify_md5" in result)
-            self.assertTrue("data_update_url" in result)
-            self.assertFalse("verify_md5" in result)
-            self.assertFalse("data_file_update_base_url" in result)
-
-        config = {
-            "data_file_path": "path",
-            "usage_sharing": False,
-            "licence_keys": "test",
-            "update_on_start": True,
-            "verify_md5": True,
-            "data_file_update_base_url": "http://127.0.0.1/"
-        }
+            self.assertIn("data_update_verify_md5", result)
+            self.assertIn("data_update_url", result)
+            self.assertNotIn("verify_md5", result)
+            self.assertNotIn("data_file_update_base_url", result)
 
         check(
             data_file_path = "path",
@@ -119,7 +110,7 @@ class OldConfigPropertiesMappingTest(unittest.TestCase):
             config
         )
 
-        self.assertTrue(result is None)
+        self.assertIsNone(result)
 
     def _map_properties_names(self, mappings, arguments):
         if arguments is None:
