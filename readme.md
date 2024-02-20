@@ -59,8 +59,30 @@ If you want examples that demonstrate how to use 51Degrees products such as devi
 To run the custom flow element example, you will need to use flask:
 ### Linux
 
-Execute `export FLASK_APP=client_side_evidence_custom_flow_element.py`, then start your application with `flask run`.
+Install packages
+```shell
+pwsh ./setup.ps1
+```
+Set path to the script
+```sh
+export FLASK_APP=client_side_evidence_custom_flow_element.py
+```
+then start your application with
+```sh
+flask run
+```
 
 ### Windows
 
-Execute `$env:FLASK_APP = "client_side_evidence_custom_flow_element.py"`, then start your application with `flask run`.
+Install packages
+```shell
+pwsh ./setup.ps1
+```
+Set path to the script
+```pwsh
+$env:FLASK_APP = "client_side_evidence_custom_flow_element.py"
+```
+then start your application with 
+```pwsh
+flask run
+```
