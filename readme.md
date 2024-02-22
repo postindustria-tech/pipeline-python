@@ -51,15 +51,38 @@ and examples that are available. To run tests:
 There are several examples available that demonstrate how to make use of the Pipeline API in isolation. These are described in the table below.
 If you want examples that demonstrate how to use 51Degrees products such as device detection, then these are available in the corresponding [repository](https://github.com/51Degrees/device-detection-python) and on our [website](http://51degrees.com/documentation/_examples__device_detection__index.html).
 
-| Example                                | Description |
-| fiftyone_pipeline_code/examples/client_side_evidence_custom_flow_element.py | Demonstrates how to create a custom flow element, which can then be included in a pipeline. |
-| fiftyone_pipeline_engines_fiftyone/examples/usagesharing | Shows how to share usage with 51Degrees. This helps us to keep our products up to date and accurate. |
+| Example                                                                     | Description                                                                                          |
+|-----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| fiftyone_pipeline_code/examples/client_side_evidence_custom_flow_element.py | Demonstrates how to create a custom flow element, which can then be included in a pipeline.          |
+| fiftyone_pipeline_engines_fiftyone/examples/usagesharing                    | Shows how to share usage with 51Degrees. This helps us to keep our products up to date and accurate. |
 
 To run the custom flow element example, you will need to use flask:
 ### Linux
 
-Execute `export FLASK_APP=client_side_evidence_custom_flow_element.py`, then start your application with `flask run`.
+Install packages
+```shell
+pwsh ./setup.ps1
+```
+Set path to the script
+```sh
+export FLASK_APP=client_side_evidence_custom_flow_element.py
+```
+then start your application with
+```sh
+flask run
+```
 
 ### Windows
 
-Execute `$env:FLASK_APP = "client_side_evidence_custom_flow_element.py"`, then start your application with `flask run`.
+Install packages
+```shell
+pwsh ./setup.ps1
+```
+Set path to the script
+```pwsh
+$env:FLASK_APP = "client_side_evidence_custom_flow_element.py"
+```
+then start your application with 
+```pwsh
+flask run
+```
