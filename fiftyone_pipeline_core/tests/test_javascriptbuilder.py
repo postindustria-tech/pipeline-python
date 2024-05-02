@@ -26,6 +26,8 @@ from fiftyone_pipeline_core.flowelement import FlowElement
 from fiftyone_pipeline_core.pipelinebuilder import PipelineBuilder
 from fiftyone_pipeline_core.elementdata_dictionary import ElementDataDictionary
 from fiftyone_pipeline_core.aspectproperty_value import AspectPropertyValue
+from fiftyone_pipeline_core.constants import Constants
+from parameterized import parameterized
 
 
 class TestEngine(FlowElement):
@@ -82,6 +84,30 @@ class TestPipeline():
             .add(TestEngine())\
             .build()
 
+class CookieEngine(FlowElement):
+
+    def __init__(self):
+
+        super(CookieEngine, self).__init__()
+
+        self.datakey = "cookie"
+
+        self.properties = { 
+            "javascript" : {
+                "type" : "javascript"
+            }
+        }
+
+
+    def process_internal(self, flowdata):
+ 
+        contents = {}
+
+        contents["javascript"] = "document.cookie =  \"some cookie value\""
+
+        data =  ElementDataDictionary(self, contents)
+
+        flowdata.set_element_data(data)
 
 class DelayedExecutionEngine1(FlowElement):
 
@@ -312,3 +338,36 @@ class JavaScriptBundlerTests(unittest.TestCase):
 
         actual = flowdata.jsonbundler.json["delayedexecutiontest3"]
         self.assertEqual(actual, expected)
+
+    """!
+    Test various configurations for enabling cookies to verify
+    that cookies are/aren't written for each configuration.
+    
+    The source JavaScript contains code to set a cookie. The JSBuilder
+    element should replace this if the config says that cookies are not
+    enabled.
+    """
+    @parameterized.expand([
+        [False, False, False],
+        [True, False, False],
+        [False, True, True],
+        [True, True, True]
+    ])
+    def testJavaScriptBuilder_Cookies(self, enableInConfig, enableInEvidence, expectCookie):
+   
+        # Generate minified javascript
+    
+        jsSettings = {'enable_cookies' : enableInConfig}
+        pipelineSettings = {'javascript_builder_settings' : jsSettings}
+        Pipeline = PipelineBuilder(pipelineSettings)\
+            .add(CookieEngine())\
+            .build()
+        FlowData = Pipeline.create_flowdata()
+        FlowData.evidence.add(Constants.EVIDENCE_ENABLE_COOKIES, str(enableInEvidence))
+        FlowData.process()
+        js = FlowData.javascriptbuilder.javascript
+
+        if expectCookie:
+            self.assertEqual(2, js.count("document.cookie"))
+        else:
+            self.assertEqual(1, js.count("document.cookie")) 
