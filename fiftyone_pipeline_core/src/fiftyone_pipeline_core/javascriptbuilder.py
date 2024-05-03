@@ -36,6 +36,7 @@ from jsmin import jsmin
 from .flowelement import FlowElement
 from .evidence_keyfilter import EvidenceKeyFilter
 from .elementdata_dictionary import ElementDataDictionary
+from .constants import Constants
 
 
 class JavaScriptBuilderEvidenceKeyFilter(EvidenceKeyFilter):
@@ -80,7 +81,11 @@ class JavascriptBuilderElement(FlowElement):
         * callback url. This can be overriden with header.host evidence.
         * @param {string} options.endpoint The endpoint of the client side
         * callback url
-        * @param {boolean} options.enable_cookies whether cookies should be enabled
+        * @param {boolean} options.enable_cookies Whether the client JavaScript
+        * stored results of client side processing in cookies. This can also 
+        * be set per request, using the "query.fod-js-enable-cookies" evidence key.
+        * For more details on personal data policy,
+        * see http://51degrees.com/terms/client-services-privacy-policy/
         * @param {boolean} options.minify Whether to minify the JavaScript
 
         """
@@ -166,6 +171,12 @@ class JavascriptBuilderElement(FlowElement):
         variables["_host"] = host
         variables["_protocol"] = protocol
 
+        enableCookiesVal = flowdata.evidence.get(Constants.EVIDENCE_ENABLE_COOKIES)
+        if enableCookiesVal:
+            variables["_enableCookies"] = enableCookiesVal.lower() == "true"
+
+        variables["_enableCookies"]
+
         query_params = self.get_evidence_key_filter().filter_evidence(flowdata.evidence.get_all())
         variables["_sessionId"] = query_params["query.session-id"] if "query.session-id" in query_params else None
         variables["_sequence"] = query_params["query.sequence"] if "query.sequence" in query_params else None
@@ -187,7 +198,7 @@ class JavascriptBuilderElement(FlowElement):
  
             for param, paramvalue in query_params.items():
 
-                paramkey = param.split(".")[1] 
+                paramkey = param.split(".")[1]
 
                 query[paramkey] = paramvalue
   
